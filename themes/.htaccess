@@ -2,10 +2,11 @@
 RewriteEngine On
 
 # Installation directory
-RewriteBase /kohana/
+RewriteBase /
 
 # Protect application and system files from being viewed
-RewriteRule ^(application|modules|system) - [F,L]
+RewriteRule ^(config|extensions|hooks|classes) - [F,L]
+RewriteRule ^(.*/html) - [F,L]
 
 # Allow any files or directories that exist to be displayed directly
 RewriteCond %{REQUEST_FILENAME} !-f
