@@ -1,4 +1,5 @@
 <?php
+
 class Dispatch_Core{
 
         protected $controller;

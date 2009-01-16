@@ -20,7 +20,7 @@
 			<h1>Theme Test</h1>
         </div>
         <div class="grid_4">
-			<?php echo (isset($theme_selection))? $theme_selection: null; ?>
+			<?php echo widget::get('theme'); ?>
 			<p>
 				<a href="http://validator.w3.org/check?uri=referer" class="noicon">
 				<img
