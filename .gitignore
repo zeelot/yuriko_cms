@@ -3,3 +3,4 @@ nbproject
 Icon?
 .svn
 .directory
+logs/*.php
