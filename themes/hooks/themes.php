@@ -1,6 +1,6 @@
 <?php
 
-class themes {
+class themes_hook {
 
   public function __construct()
   {
@@ -19,4 +19,4 @@ class themes {
       );
   }
 }
-new themes;
+new themes_hook;

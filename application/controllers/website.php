@@ -12,6 +12,14 @@ abstract class Website_Controller extends Template_Controller {
 	{
 	  parent::__construct();
 	  $this->template->theme = Kohana::config('themes.active');
+	  //css and js that will load on all themes
+	  assets::add_script('jquery-1.3.min', 'global');
+	  assets::add_stylesheet('styles', 'global');
+	  assets::add_stylesheet('reset', 'global');
+	  //css that will load on any theme that wants to use this framework
+	  assets::add_stylesheet('960', '960_framework');
+	  //basic typography
+	  assets::add_stylesheet('typography', 'global_typography');
 	}
 
 	/**

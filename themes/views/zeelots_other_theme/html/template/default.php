@@ -6,10 +6,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<?php echo html::stylesheet('media/reset'); ?>
-<?php echo html::stylesheet('media/960'); ?>
-<?php echo html::stylesheet('media/typography'); ?>
-<?php echo html::stylesheet('media/styles'); ?>
+<?php assets::get_stylesheets(FALSE, 'global', TRUE); ?>
+<?php assets::get_stylesheets(FALSE, '960_framework', TRUE); ?>
+<?php assets::get_stylesheets(FALSE, 'global_typography', TRUE); ?>
+
+<?php assets::get_scripts(FALSE, 'global', TRUE); ?>
+
 <?php echo html::stylesheet('themes/views/'.$theme['dir'].'/styles'); ?>
 <title>Zeelot's Special Sandbox!</title>
 </head>

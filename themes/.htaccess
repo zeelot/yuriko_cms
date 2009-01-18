@@ -5,7 +5,7 @@ RewriteEngine On
 RewriteBase /
 
 # Protect application and system files from being viewed
-RewriteRule ^(config|extensions|hooks|controllers|classes|helpers|libraries) - [F,L]
+RewriteRule ^(config|extensions|hooks|controllers|classes|helpers|libraries|logs|i18n|vendor|fonts) - [F,L]
 RewriteRule ^(.*/html) - [F,L]
 
 # Allow any files or directories that exist to be displayed directly
