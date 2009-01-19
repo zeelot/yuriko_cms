@@ -25,7 +25,8 @@
             <?php echo (isset($content))? $content : null; ?>
         </div>
 		<div class="grid_4">
-			<?php echo widget::get('theme'); ?>
+			<?php echo widget::get('theme_selection'); ?>
+			<?php echo widget::get('user_info'); ?>
 			<p>
 				<a href="http://validator.w3.org/check?uri=referer" class="noicon">
 				<img

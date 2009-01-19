@@ -22,7 +22,8 @@
 			<h1>Theme Test</h1>
         </div>
         <div class="grid_16">
-			<?php echo widget::get('theme'); ?>
+			<?php echo widget::get('theme_selection'); ?>
+			<?php echo widget::get('user_info'); ?>
             <?php echo (isset($content))? $content : null; ?>
 			<p>
 				<a href="http://validator.w3.org/check?uri=referer" class="noicon">

@@ -1,0 +1,15 @@
+label{display:block;}
+
+/* START USER INFO */
+.user_info{
+	border:1px solid #CCC;
+	padding:0px; margin-bottom:10px;
+}
+.user_info h4{
+	padding:5px 0px; margin:0px; text-indent:5px;
+	border-bottom:1px solid #CCC;
+}
+.user_info ul{
+	padding:0px; margin:0px;
+}
+/* END USER INFO */

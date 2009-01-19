@@ -1,14 +1,10 @@
 <?php
-/**
- * 
- *
- * @author          Zeelot
- * @copyright       (c) 2008 OffbeatVentures Team
- * @license         http://www.offbeatventures.com/license.html
- */
 
 ?>
+
+<!-- START THEME SELECTION FORM -->
 <?php echo form::open(); ?>
+	<input type="hidden" name="theme_selection_form" value="TRUE" />
     <fieldset>
 		<?php if($changed): ?>
 		<div class="success">Theme Set Successfully!</div>
@@ -22,3 +18,4 @@
         <button name="Submit" type="submit" value="Submit">Submit</button>
     </fieldset>
 <?php echo form::close(); ?>
+<!-- END THEME SELECTION FORM -->

@@ -41,7 +41,7 @@ class Auth_ORM_Driver extends Auth_Driver {
 					{
 						if ( ! is_object($role_iteration))
 						{
-							$role_iteration = ORM::factory('role', $role_iteration);
+							$role_iteration = ORM::factory('role')->find($role_iteration);
 						}
 						// If the user doesn't have the role
 						if( ! $user->has($role_iteration))
@@ -58,7 +58,7 @@ class Auth_ORM_Driver extends Auth_Driver {
 					if ( ! is_object($role))
 					{
 						// Load the role
-						$role = ORM::factory('role', $role);
+						$role = ORM::factory('role')->find($role);
 					}
 
 					// Check that the user has the given role
@@ -83,11 +83,11 @@ class Auth_ORM_Driver extends Auth_Driver {
 		if ( ! is_object($user))
 		{
 			// Load the user
-			$user = ORM::factory('user', $user);
+			$user = ORM::factory('user')->find($user);
 		}
 
 		// If the passwords match, perform a login
-		if ($user->has(ORM::factory('role', 'login')) AND $user->password === $password)
+		if ($user->has(ORM::factory('role')->find('login')) AND $user->password === $password)
 		{
 			if ($remember === TRUE)
 			{
@@ -124,7 +124,7 @@ class Auth_ORM_Driver extends Auth_Driver {
 		if ( ! is_object($user))
 		{
 			// Load the user
-			$user = ORM::factory('user', $user);
+			$user = ORM::factory('user')->find($user);
 		}
 
 		// Mark the session as forced, to prevent users from changing account information
@@ -144,7 +144,7 @@ class Auth_ORM_Driver extends Auth_Driver {
 		if ($token = cookie::get('authautologin'))
 		{
 			// Load the token and user
-			$token = ORM::factory('user_token', $token);
+			$token = ORM::factory('user_token')->find($token);
 
 			if ($token->loaded AND $token->user->loaded)
 			{
@@ -199,7 +199,7 @@ class Auth_ORM_Driver extends Auth_Driver {
 		if ( ! is_object($user))
 		{
 			// Load the user
-			$user = ORM::factory('user', $user);
+			$user = ORM::factory('user')->find($user);
 		}
 
 		return $user->password;

@@ -64,9 +64,10 @@ class Component {
 		}
 
 		// If class is not defined already, load controller file
-		$controller_class = ucfirst($controller).'_Controller';
+		$controller_class = ucfirst(str_replace('/', '_', $controller)).'_Controller';
+
 		if (!class_exists($controller_class, false)) {
-			$controller_file = $controller;
+			$controller_file = str_replace('_', '/', $controller);
 
 			// If the component file doesn't exist, fire exception
 			$filepath = Kohana::find_file('controllers', $controller_file, true);
