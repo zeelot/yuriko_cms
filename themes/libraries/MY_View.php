@@ -9,8 +9,6 @@ class View extends View_Core{
 	
 	public function __construct($name = NULL, $data = NULL, $type = NULL, $theme = NULL)
 	{
-		//($this->theme === NULL) AND $this->theme = Theme::intance();
-
 		if (is_string($name) AND $name !== '')
 		{
 			// Set the filename

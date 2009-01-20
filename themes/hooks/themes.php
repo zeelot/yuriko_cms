@@ -11,12 +11,21 @@ class themes_hook {
 
   public function load_themes()
   {
-      $themes = Kohana::config('themes.available');
-      Kohana::config_set
-      (
-          'themes.active',
-          $themes[$this->session->get( 'theme', Kohana::config('themes.active.name'))]
-      );
+      if(Auth::instance()->logged_in())
+	  {
+		  $user_theme = Session::instance()->get('auth_user')->profile->theme;
+		  if($user_theme->id > 0)
+		  {
+			  Kohana::config_set
+			  ( 'themes.active', array
+				  (
+					  'name'    => $user_theme->name,
+					  'dir'     => $user_theme->dir,
+				  )
+			  );
+		  }
+	  }
   }
 }
 new themes_hook;
+

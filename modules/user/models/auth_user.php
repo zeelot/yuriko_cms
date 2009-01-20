@@ -32,7 +32,6 @@ class Auth_User_Model extends ORM {
 	{
 		$array = Validation::factory($array)
 			->pre_filter('trim')
-			->add_rules('email', 'required', 'length[4,127]', 'valid::email')
 			->add_rules('username', 'required', 'length[4,32]', 'chars[a-zA-Z0-9_.]', array($this, 'username_exists'))
 			->add_rules('password', 'required', 'length[5,42]')
 			->add_rules('password_confirm', 'matches[password]');
@@ -52,8 +51,8 @@ class Auth_User_Model extends ORM {
 	{
 		$array = Validation::factory($array)
 			->pre_filter('trim')
-			->add_rules('username', 'required')
-			->add_rules('password', 'required');
+			->add_rules('username', 'required', 'length[4,32]', 'chars[a-zA-Z0-9_.]')
+			->add_rules('password', 'required', 'length[4,42]');
 
 		// Login starts out invalid
 		$status = FALSE;
@@ -63,7 +62,7 @@ class Auth_User_Model extends ORM {
 			// Attempt to load the user
 			$this->find($array['username']);
 
-			if ($this->loaded AND Auth::instance()->login($this, $array['password']))
+			if ($this->loaded AND Auth::instance()->login($this, $array['password'], isset($array['remember'])))
 			{
 				if (is_string($redirect))
 				{

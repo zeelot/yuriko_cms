@@ -1,5 +1,8 @@
 label{display:block;}
 
+.message{
+	margin:5px 0px;
+}
 /* START USER INFO */
 .user_info{
 	border:1px solid #CCC;
@@ -13,3 +16,13 @@ label{display:block;}
 	padding:0px; margin:0px;
 }
 /* END USER INFO */
+/* START PROFILE */
+.profile input{
+	position:absolute; right:0px;
+}
+.profile label{
+	border-bottom:1px solid #CCC;
+	position:relative;
+	margin:5px 0px;padding:5px 0px;
+}
+/* END PROFILE */

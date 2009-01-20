@@ -1,13 +1,9 @@
 <?php
 
-abstract class Controller_Admin extends Controller_Website{
+abstract class Admin_Controller extends Website_Controller{
     
     public function  __construct() {
         parent::__construct();
     }
     
-    public function login()
-    {
-        
-    }
 }

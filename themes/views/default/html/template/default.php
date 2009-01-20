@@ -18,11 +18,7 @@
 
 <body>
     <div class="container_16" id="main_frame">
-        <div class="grid_16">
-			<h1>Theme Test</h1>
-        </div>
         <div class="grid_4">
-			<?php echo widget::get('theme_selection'); ?>
 			<?php echo widget::get('user_info'); ?>
 			<p>
 				<a href="http://validator.w3.org/check?uri=referer" class="noicon">
