@@ -28,10 +28,10 @@ class User_Controller extends Website_Controller{
 				}
 				if(isset($_POST['password']) AND ($_POST['password'] != ''))
 				{
-					if($user->change_password($_POST->as_array(), TRUE))
-					{
-						url::redirect('user/profile');
-					}
+					//if($user->change_password($_POST->as_array(), TRUE))
+					//{
+					//	url::redirect('user/profile');
+					//}
 				}
 				else
 				{

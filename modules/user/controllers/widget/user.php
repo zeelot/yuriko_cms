@@ -33,7 +33,11 @@ class Widget_User_Controller extends Widget_Controller{
 			// Load the user
 			$user = ORM::factory('user')->find($_POST['username']);
 			// orm user object or $form['username'] could be used
-			$user->login($_POST, Router::$current_uri);
+			if($user->login($_POST))
+			{
+				notice::add('Login Successfull!', 'success');
+				url::redirect(Router::$current_uri);
+			}
 		}
 		if ( ! Auth::instance()->logged_in())
 		{

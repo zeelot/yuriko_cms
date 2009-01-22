@@ -18,6 +18,9 @@
 
 <body>
     <div class="container_16" id="main_frame">
+		<div class="grid_16">
+			<?php echo notice::render(); ?>
+		</div>
         <div class="grid_4">
 			<?php echo widget::get('user_info'); ?>
 			<p>
