@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<acl>
+  <aro>
+    <role>admin</role>
+    <role>editor</role>
+  </aro>
+  <aco>
+    <resource>console</resource>
+    <resource>news</resource>
+    <resource>users</resource>
+    <resource>acl</resource></aco>
+  <rules>
+    <rule>
+      <agent>admin</agent>
+      <allowed>
+        <object>console</object>
+        <object>news</object>
+        <object>users</object>
+        <object>acl</object>
+      </allowed>
+    </rule>
+    <rule>
+      <agent>editor</agent>
+      <allowed>
+        <object>news</object>
+        <object>console</object>
+      </allowed>
+      <denied>
+        <object>users</object>
+        <object>acl</object>
+      </denied>
+    </rule>
+  </rules>
+</acl>
