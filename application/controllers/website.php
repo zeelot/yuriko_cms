@@ -11,7 +11,7 @@ abstract class Website_Controller extends Template_Controller {
 	public function __construct()
 	{
 	  parent::__construct();
-	  $this->template->theme = Kohana::config('themes.active');
+	  $this->template->theme = Kohana::config('themes.active', FALSE, FALSE);
 	  //css and js that will load on all themes
 	  assets::add_script('jquery-1.3.min', 'global');
 	  assets::add_stylesheet('reset', 'global');

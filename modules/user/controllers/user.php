@@ -39,8 +39,7 @@ class User_Controller extends Website_Controller{
 				}
 			}
 			$this->template->content = View::factory('content/user/profile')
-				->set('user', $user)
-				->set('themes', ORM::factory('theme')->find_all());
+				->set('user', $user);
 		}
 		else
 		{
