@@ -4,3 +4,4 @@ Icon?
 .svn
 .directory
 */logs/*.php
+*/cache/*
