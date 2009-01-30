@@ -7,13 +7,12 @@ class simple_acl_hook{
 
 	protected $acl;
 	protected $cache;
-	protected $user_roles;
+	protected $user_roles = array();
 
 	public function __construct()
 	{
 		$this->cache = new Cache;
-		$this->user_roles = ($user = Auth::instance()->get_user())?
-			(array) $user->roles : array('guest');
+		$user = Session::instance()->get('auth_user', FALSE);
 
 		$acl = $this->cache->get('ACL');
 		if($acl)
@@ -24,49 +23,26 @@ class simple_acl_hook{
 			// Define the ACL roles
 			$this->acl->addRole(new Acl_Role('guest'))
 					  ->addRole(new Acl_Role('login'))
-					  ->addRole(new Acl_Role('admin'), 'login');
+					  ->addRole(new Acl_Role('admin'));
 			//key = role required, values = routes allowed
-			$controllerResources	= array('guest'	=>array('default',),
-											'login'	=>array('profile'),
-											'admin'	=>array('admin'));
+			$controllerResources	= array(
+											'guest'	=>array
+												(
+													'default',
+												),
+											'login'	=>array
+												(
+													'profile'
+												),
+											'admin'	=>array
+												(
+													'admin'
+												)
+											);
+			$this->acl->add(new Acl_Resource('default'));
+			$this->acl->add(new Acl_Resource('profile'));
+			$this->acl->add(new Acl_Resource('admin'));
 
-			/*
-			 * The below loops may be redundant, but, it helps to keep
-			 * it as readable as possible until somone de-couples the
-			 * ACL definitions into a lib/helper - for now this will work
-			 * just fine.
-			 */
-
-			// Define the ACL resources (CONTROLLER NAMES!!!)
-			foreach($controllerResources as $resourceGroup)
-			{
-				foreach($resourceGroup as $resourceItem)
-					$this->acl->add(new Acl_Resource($resourceItem));
-			}
-
-			// Allow the 'user' and 'admin' roles SOME console controllers listed
-			foreach($controllerResources as $resourceKey => $resourceValue)
-			{
-			// Don't forget, above, we defined superuser as inheriting the admin role permissions
-				if($resourceKey=='guest')
-				{
-					foreach($resourceValue as $resourceItem)
-						$this->acl->allow(NULL, $resourceItem);
-				} elseif($resourceKey=='login') {
-					foreach($resourceValue as $resourceItem)
-					{
-						$this->acl->deny('guest', $resourceItem);
-						$this->acl->allow('login', $resourceItem);
-					}
-				}
-				elseif($resourceKey=='admin') {
-					foreach($resourceValue as $resourceItem)
-					{
-						$this->acl->deny('login', $resourceItem);
-						$this->acl->allow('admin', $resourceItem);
-					}
-				}
-			}
 			// Put the ACL into memcache if we are in production!
 			$setCache = $this->cache->set('ACL', serialize($this->acl));
 		}
@@ -88,7 +64,7 @@ class simple_acl_hook{
 		}
 		if (!$allowed)
 		{
-			Event::run('system.403');
+			//Event::run('system.403');
 		}
 	}
 }
