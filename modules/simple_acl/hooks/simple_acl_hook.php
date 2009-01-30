@@ -30,11 +30,11 @@ class simple_acl_hook{
 			$this->acl	= unserialize($acl);
 		} else {
 			$this->acl	= new Zend_Acl;
-			// Define the ACL roles (guest role for non logged in users)
+			//create the acl roles and add the guest role
 			$this->acl->addRole(new Zend_Acl_Role('guest'));
-			foreach ($this->user_roles as $role)
+			foreach (ORM::factory('role')->find_all() as $role)
 			{
-				$this->acl->addRole(new Zend_Acl_Role($role));
+				$this->acl->addRole(new Zend_Acl_Role($role->name));
 			}
 			//load route-based permissions
 			foreach(Kohana::config('routes') as $resource => $info)
