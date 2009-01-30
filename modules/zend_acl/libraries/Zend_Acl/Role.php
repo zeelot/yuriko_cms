@@ -1,7 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
-
+<?php
 /**
- * Zend Frameworks
+ * Zend Framework
  *
  * LICENSE
  *
@@ -15,52 +14,52 @@
  *
  * @category   Zend
  * @package    Zend_Acl
- * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Resource.php 2797 2007-01-16 01:35:30Z bkarwin $
+ * @version    $Id: Role.php 901 2008-12-22 23:41:46Z parnells $
  */
 
 
 /**
- * Zend_Acl_Resource_Interface
+ * @see Zend_Acl_Role_Interface
  */
-require_once 'Acl/Resource/Interface.php';
+require_once 'Role/Interface.php';
 
 
 /**
  * @category   Zend
  * @package    Zend_Acl
- * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Acl_Resource_Core implements Zend_Acl_Resource_Interface
+class Zend_Acl_Role implements Zend_Acl_Role_Interface
 {
     /**
-     * Unique id of Resource
+     * Unique id of Role
      *
      * @var string
      */
-    protected $_resourceId;
+    protected $_roleId;
 
     /**
-     * Sets the Resource identifier
+     * Sets the Role identifier
      *
      * @param  string $id
      * @return void
      */
-    public function __construct($resourceId)
+    public function __construct($roleId)
     {
-        $this->_resourceId = (string) $resourceId;
+        $this->_roleId = (string) $roleId;
     }
 
     /**
-     * Defined by Zend_Acl_Resource_Interface; returns the Resource identifier
+     * Defined by Zend_Acl_Role_Interface; returns the Role identifier
      *
      * @return string
      */
-    public function getResourceId()
+    public function getRoleId()
     {
-        return $this->_resourceId;
+        return $this->_roleId;
     }
 
 }

@@ -29,34 +29,31 @@ class simple_acl_hook{
 		{
 			$this->acl	= unserialize($acl);
 		} else {
-			$this->acl	= new Acl;
-			// Define the ACL roles
-			$this->acl->addRole(new Acl_Role('guest'))
-					  ->addRole(new Acl_Role('login'))
-					  ->addRole(new Acl_Role('admin'));
-			//key = role required, values = routes allowed
-			$controllerResources	= array(
-											'guest'	=>array
-												(
-													'default',
-												),
-											'login'	=>array
-												(
-													'profile'
-												),
-											'admin'	=>array
-												(
-													'admin'
-												)
-											);
-			$this->acl->add(new Acl_Resource('default'));
-			$this->acl->add(new Acl_Resource('profile'));
-			$this->acl->add(new Acl_Resource('admin'));
-
-			$this->acl->allow(NULL, 'default');
-			$this->acl->deny('guest', 'profile');
-			$this->acl->allow('login', 'profile');
-
+			$this->acl	= new Zend_Acl;
+			// Define the ACL roles (guest role for non logged in users)
+			$this->acl->addRole(new Zend_Acl_Role('guest'));
+			foreach (ORM::factory('role')->find_all() as $role)
+			{
+				$this->acl->addRole(new Zend_Acl_Role($role->name));
+			}
+			//load route-based permissions
+			foreach(Kohana::config('routes') as $resource => $info)
+			{
+				$this->acl->add(new Zend_Acl_Resource($resource));
+				if(((!isset($info['allowed_roles']))
+					OR $info['allowed_roles'] === NULL))
+				{
+					//everyone is allowed
+					$this->acl->allow(NULL, $resource);
+				}
+				else
+				{
+					foreach($info['allowed_roles'] as $role)
+					{
+						$this->acl->allow($role, $resource);
+					}
+				}
+			}
 
 			// Put the ACL into memcache if we are in production!
 			$setCache = $this->cache->set('ACL', serialize($this->acl));

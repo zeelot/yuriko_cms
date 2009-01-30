@@ -1,9 +1,8 @@
-<?php defined('SYSPATH') or die('No direct script access.');
-
+<?php
 /**
  * Zend Framework
  *
- * LICENSES
+ * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
@@ -15,52 +14,52 @@
  *
  * @category   Zend
  * @package    Zend_Acl
- * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Role.php 2797 2007-01-16 01:35:30Z bkarwin $
+ * @version    $Id: Resource.php 901 2008-12-22 23:41:46Z parnells $
  */
 
 
 /**
- * Zend_Acl_Role_Interface
+ * @see Zend_Acl_Resource_Interface
  */
-require_once 'Acl/Role/Interface.php';
+require_once 'Resource/Interface.php';
 
 
 /**
  * @category   Zend
  * @package    Zend_Acl
- * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Acl_Role_Core implements Zend_Acl_Role_Interface
+class Zend_Acl_Resource implements Zend_Acl_Resource_Interface
 {
     /**
-     * Unique id of Role
+     * Unique id of Resource
      *
      * @var string
      */
-    protected $_roleId;
+    protected $_resourceId;
 
     /**
-     * Sets the Role identifier
+     * Sets the Resource identifier
      *
-     * @param  string $id
+     * @param  string $resourceId
      * @return void
      */
-    public function __construct($roleId)
+    public function __construct($resourceId)
     {
-        $this->_roleId = (string) $roleId;
+        $this->_resourceId = (string) $resourceId;
     }
 
     /**
-     * Defined by Zend_Acl_Role_Interface; returns the Role identifier
+     * Defined by Zend_Acl_Resource_Interface; returns the Resource identifier
      *
      * @return string
      */
-    public function getRoleId()
+    public function getResourceId()
     {
-        return $this->_roleId;
+        return $this->_resourceId;
     }
 
 }

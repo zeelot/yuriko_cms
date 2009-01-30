@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Zend Framework
  *
@@ -15,24 +14,23 @@
  *
  * @category   Zend
  * @package    Zend_Acl
- * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Interface.php 2797 2007-01-16 01:35:30Z bkarwin $
+ * @version    $Id: Exception.php 901 2008-12-22 23:41:46Z parnells $
  */
+
+
+/**
+ * @see Zend_Acl_Exception
+ */
+require_once(Kohana::find_file('libraries/Zend_Acl', 'Exception'));
 
 
 /**
  * @category   Zend
  * @package    Zend_Acl
- * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Zend_Acl_Role_Interface
-{
-    /**
-     * Returns the string identifier of the Role
-     *
-     * @return string
-     */
-    public function getRoleId();
-}
+class Zend_Acl_Role_Registry_Exception extends Zend_Acl_Exception
+{}

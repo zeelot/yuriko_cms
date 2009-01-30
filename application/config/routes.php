@@ -3,10 +3,25 @@
 // Remove the standard default route
 unset($configuration['_default'], $config['_default']);
 
+$config['user'] = array
+(
+	'uri' => 'user/:method',
+	'allowed_roles' => array
+	(
+		'login',
+		'admin',
+	),
+	'defaults' => array
+	(
+		'controller' => 'user',
+		'method' => 'profile',
+	),
+);
+
 $config['default'] = array
 (
 	'uri' => ':controller/:method/:id',
-
+	'allowed_roles' => NULL,
 	'defaults' => array
 	(
 		'controller' => 'main',
