@@ -12,7 +12,17 @@ class simple_acl_hook{
 	public function __construct()
 	{
 		$this->cache = new Cache;
-		$user = Session::instance()->get('auth_user', FALSE);
+		if($user = Session::instance()->get('auth_user', FALSE))
+		{
+			foreach($user->roles as $role)
+			{
+				$this->user_roles[] = $role->name;
+			}
+		}
+		else
+		{
+			$this->user_roles[] = 'guest';
+		}
 
 		$acl = $this->cache->get('ACL');
 		if($acl)
@@ -43,6 +53,11 @@ class simple_acl_hook{
 			$this->acl->add(new Acl_Resource('profile'));
 			$this->acl->add(new Acl_Resource('admin'));
 
+			$this->acl->allow(NULL, 'default');
+			$this->acl->deny('guest', 'profile');
+			$this->acl->allow('login', 'profile');
+
+
 			// Put the ACL into memcache if we are in production!
 			$setCache = $this->cache->set('ACL', serialize($this->acl));
 		}
@@ -64,7 +79,7 @@ class simple_acl_hook{
 		}
 		if (!$allowed)
 		{
-			//Event::run('system.403');
+			Event::run('system.403');
 		}
 	}
 }
