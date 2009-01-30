@@ -12,7 +12,7 @@
 
 <?php assets::get_scripts(FALSE, 'global', TRUE); ?>
 
-<?php echo html::stylesheet('themes/views/'.$theme['dir'].'/styles'); ?>
+<?php echo html::stylesheet('themes/views/default/styles'); ?>
 <title>Zeelot's Special Sandbox!</title>
 </head>
 
@@ -22,6 +22,7 @@
 			<?php echo notice::render(); ?>
 		</div>
         <div class="grid_4">
+			<?php echo View::factory('menu/main'); ?>
 			<?php echo widget::get('user_info'); ?>
 			<p>
 				<a href="http://validator.w3.org/check?uri=referer" class="noicon">
