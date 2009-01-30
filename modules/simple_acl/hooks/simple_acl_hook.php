@@ -27,7 +27,7 @@ class simple_acl_hook{
 					  ->addRole(new Acl_Role('admin'), 'login');
 			//key = role required, values = routes allowed
 			$controllerResources	= array('guest'	=>array('default',),
-											'login'	=>array('user'),
+											'login'	=>array('profile'),
 											'admin'	=>array('admin'));
 
 			/*
@@ -87,7 +87,9 @@ class simple_acl_hook{
 			}
 		}
 		if (!$allowed)
-			Event::run('system.404');
+		{
+			Event::run('system.403');
+		}
 	}
 }
 new simple_acl_hook;

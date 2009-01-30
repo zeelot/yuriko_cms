@@ -12,7 +12,7 @@
 
 <?php assets::get_scripts(FALSE, 'global', TRUE); ?>
 
-<?php echo html::stylesheet('themes/views/'.$theme['dir'].'/styles'); ?>
+<?php echo html::stylesheet('themes/views/default/styles'); ?>
 <title>Zeelot's Special Sandbox!</title>
 </head>
 
