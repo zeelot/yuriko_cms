@@ -18,6 +18,18 @@ $config['user'] = array
 	),
 );
 
+$config['documentation'] = array
+(
+	'uri' => 'docs/:name',
+	'allowed_roles' => NULL,
+	'defaults' => array
+	(
+		'controller' => 'documentation',
+		'method' => 'load',
+		'name' => FALSE,
+	),
+);
+
 $config['default'] = array
 (
 	'uri' => ':controller/:method/:id',

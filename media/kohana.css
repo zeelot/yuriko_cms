@@ -1,0 +1,97 @@
+div#framework_error { background:#fff; border:solid 1px #ccc; font-family:sans-serif; color:#111; font-size:14px; line-height:130%; }
+div#framework_error h3 { color:#fff; font-size:16px; padding:8px 6px; margin:0 0 8px; background:#f15a00; text-align:center; }
+div#framework_error a { color:#228; text-decoration:none; }
+div#framework_error a:hover { text-decoration:underline; }
+div#framework_error strong { color:#900; }
+div#framework_error p { margin:0; padding:4px 6px 10px; }
+div#framework_error tt,
+div#framework_error pre,
+div#framework_error code { font-family:monospace; padding:2px 4px; font-size:12px; color:#333;
+	white-space:pre-wrap; /* CSS 2.1 */
+
+}
+div#framework_error tt { font-style:italic; }
+div#framework_error tt:before { content:">"; color:#aaa; }
+div#framework_error code tt:before { content:""; }
+div#framework_error pre,
+div#framework_error code { background:#eaeee5; border:solid 0 #D6D8D1; border-width:0 1px 1px 0; }
+div#framework_error .block { display:block; text-align:left; }
+div#framework_error .stats { padding:4px; background: #eee; border-top:solid 1px #ccc; text-align:center; font-size:10px; color:#888; }
+div#framework_error .backtrace { margin:0; padding:0 6px; list-style:none; line-height:12px; }#kohana-profiler
+{
+	font-family: Monaco, 'Courier New';
+	background-color: #F8FFF8;
+	margin-top: 20px;
+	clear: both;
+	padding: 10px 10px 0;
+	border: 1px solid #E5EFF8;
+	text-align: left;
+}
+#kohana-profiler pre
+{
+	margin: 0;
+	font: inherit;
+}
+#kohana-profiler .kp-meta
+{
+	margin: 0 0 10px;
+	padding: 4px;
+	background: #FFF;
+	border: 1px solid #E5EFF8;
+	color: #A6B0B8;
+	text-align: center;
+}
+
+#kohana-profiler .kp-table
+{
+	font-size: 1.0em;
+	color: #4D6171;
+	width: 100%;
+	border-collapse: collapse;
+	border-top: 1px solid #E5EFF8;
+	border-right: 1px solid #E5EFF8;
+	border-left: 1px solid #E5EFF8;
+	margin-bottom: 10px;
+}
+#kohana-profiler .kp-table td
+{
+	background-color: #FFFFFF;
+	border-bottom: 1px solid #E5EFF8;
+	padding: 3px;
+	vertical-align: top;
+}
+#kohana-profiler .kp-table .kp-title td
+{
+	font-weight: bold;
+	background-color: inherit;
+}
+#kohana-profiler .kp-table .kp-altrow td
+{
+	background-color: #F7FBFF;
+}
+#kohana-profiler .kp-table .kp-totalrow td
+{
+	background-color: #FAFAFA;
+	border-top: 1px solid #D2DCE5;
+	font-weight: bold;
+}
+#kohana-profiler .kp-table .kp-column
+{
+	width: 100px;
+	border-left: 1px solid #E5EFF8;
+	text-align: center;
+}
+#kohana-profiler .kp-table .kp-data, #kohana-profiler .kp-table .kp-name
+{
+	background-color: #FAFAFB;
+	vertical-align: top;
+}
+#kohana-profiler .kp-table .kp-name
+{
+	width: 200px;
+	border-right: 1px solid #E5EFF8;
+}
+#kohana-profiler .kp-table .kp-altrow .kp-data, #kohana-profiler .kp-table .kp-altrow .kp-name
+{
+	background-color: #F6F8FB;
+}

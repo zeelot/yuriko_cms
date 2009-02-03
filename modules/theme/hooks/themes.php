@@ -32,12 +32,12 @@ class themes_hook {
 
   public function add_form_module()
   {
-	  $user = $this->session->get('auth_user');
-	  $view = View::factory('form_modules/user_profile/theme_selection')
+	$user = $this->session->get('auth_user');
+	$view = View::factory('form_modules/user_profile/theme_selection')
 			->set('themes', ORM::factory('theme')->find_all())
 			->set('user', $user);
-
-	  form_module::set('user_profile', $view);
+	//add the themes dropdown to the user_profile form (found in the profile page)
+	form_module::set('user_profile', $view);
   }
 }
 new themes_hook;
