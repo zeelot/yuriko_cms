@@ -5,6 +5,7 @@
 	<ul>
 		<li><?php echo html::anchor('main/home', 'Home'); ?></li>
 		<li><?php echo html::anchor('main/about', 'About'); ?></li>
+		<li><?php echo html::anchor('main/home', 'Admin'); ?></li>
 	</ul>
 	<h3>Module Documentation</h3>
 	<ul>
