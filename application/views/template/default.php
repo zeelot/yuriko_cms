@@ -10,6 +10,7 @@
 <link rel="stylesheet" type="text/css" href="/media/styles.css" />
 <link rel="stylesheet" type="text/css" href="/media/960.css" />
 <link rel="stylesheet" type="text/css" href="/media/typography.css" />
+<link rel="stylesheet" type="text/css" href="/media/kohana.css" />
 
 <script type="text/javascript" src="/media/js/jquery-1.3.min.js"></script>
 
