@@ -14,23 +14,4 @@ class Content_Partial_Model extends ORM {
 	(
 		'sections'		=>'content_sections',
 	);
-	protected $has_one = array
-	(
-		//dynamically added based on type of partial
-		'module'	=> NULL,
-	);
-
-	public function __get($column)
-	{
-		if ( ! array_key_exists($column, $this->object))
-		{
-			if($column == $this->type)
-			{
-				//switch which module this model is for
-				$this->has_one['module'] = 'content_'.$column;
-				return parent::__get('module');
-			}
-		}
-		return parent::__get($column);
-	}
 } // End Content Partial Model
