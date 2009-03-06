@@ -27,3 +27,4 @@ class Dummy_Users{
 		$user->save();
 	}
 }
+new Dummy_Users;

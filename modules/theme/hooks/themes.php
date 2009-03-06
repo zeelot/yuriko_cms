@@ -5,8 +5,8 @@ class themes_hook {
   public function __construct()
   {
     // Hook into routing
-    Event::add('system.pre_controller', array($this, 'load_themes'));
-	//Event::add('system.pre_controller', array($this, 'add_form_module'));
+    Event::add('system.ready', array($this, 'load_themes'));
+	Event::add('system.pre_controller', array($this, 'add_form_module'));
     $this->session = Session::instance();
   }
 
