@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 // markItUp! Universal MarkUp Engine, JQuery plugin
-// v 1.1.4
+// v 1.1.5
 // Dual licensed under the MIT and GPL licenses.
 // ----------------------------------------------------------------------------
 // Copyright (C) 2007-2008 Jay Salvat
@@ -146,7 +146,7 @@
 			function dropMenus(markupSet) {
 				var ul = $('<ul></ul>'), i = 0;
 				$('li:hover > ul', ul).css('display', 'block');
-				$(markupSet).each(function() {
+				$.each(markupSet, function() {
 					var button = this, t = '', title, li, j;
 					title = (button.key) ? (button.name||'')+' [Ctrl+'+button.key+']' : (button.name||'');
 					key   = (button.key) ? 'accesskey="'+button.key+'"' : '';
@@ -509,6 +509,9 @@
 						}
 					}
 					if (e.keyCode === 9) { // Tab key
+						if (shiftKey == true || ctrlKey == true || altKey == true) { // Thx Dr Floob.
+							return false; 
+						}
 						if (caretOffset !== -1) {
 							get();
 							caretOffset = $$.val().length - caretOffset;
