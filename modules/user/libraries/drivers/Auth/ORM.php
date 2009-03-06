@@ -87,7 +87,7 @@ class Auth_ORM_Driver extends Auth_Driver {
 		}
 
 		// If the passwords match, perform a login
-		if ($user->password === $password AND $user->has(ORM::factory('role', 'login')))
+		if ($user->password === $password)
 		{
 			if ($remember === TRUE)
 			{
