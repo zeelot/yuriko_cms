@@ -30,6 +30,19 @@ $config['documentation'] = array
 	),
 );
 
+$config['admin'] = array
+(
+	'uri' => 'admin/:controller/:method/:id',
+	'allowed_roles' => NULL,
+	'prefix' => array('controller' => 'admin_'),
+	'defaults' => array
+	(
+		'controller' => 'main',
+		'method' => 'home',
+		'id' => FALSE,
+	),
+);
+
 $config['default'] = array
 (
 	'uri' => ':controller/:method/:id',
