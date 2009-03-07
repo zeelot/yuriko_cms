@@ -21,7 +21,7 @@ $(document).ready(function()	{
 		<div class="grid_16">
 			<?php echo notice::render(); ?>
 		</div>
-        <div class="grid_4">
+        <div class="grid_4 side_panel">
 			<?php echo View::factory('menu/main'); ?>
 			<?php echo widget::get('user_info'); ?>
 			<p>
@@ -39,7 +39,7 @@ $(document).ready(function()	{
 				</a>
 			</p>
         </div>
-        <div class="grid_12">
+        <div class="grid_12 content">
             <?php echo (isset($content))? $content : null; ?>
         </div>
 		<div class="clear"></div>

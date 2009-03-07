@@ -2,7 +2,21 @@ body{
   background:#FFF4D7;
 }
 
+.preview {display:block;padding-top:20px;}
+
+.notices {margin:10px 0px;}
+.notices ul, .notices ul li {margin:0px; padding:0px;}
+
+label input, label select{display:block; width:15em;}
+
 #main_frame{
   border:2px solid #CCE8FB;
   background: #FFF; margin-top:20px;
+}
+
+/* FORMS */
+.side_panel label input{display:block; width:15em;}
+.content label textarea{width:50em}
+.markItUp  {
+	width:55em;
 }
