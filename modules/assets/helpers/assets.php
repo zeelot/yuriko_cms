@@ -11,39 +11,41 @@ class assets_Core
 	 */
 	static public function add($tag)
 	{
-		if ($files = Kohana::config('assets.groups.'.$tag))
+		if ($files = Kohana::config('assets.global.'.$tag))
 		{
+			$weight = $files['weight'];
 			if (isset($files['stylesheets']))
 			{
 				foreach($files['stylesheets'] as $file)
 				{
-					self::add_stylesheet($file);
+					self::add_stylesheet($file, $weight);
 				}
 			}
 			if (isset($files['scripts']))
 			{
 				foreach($files['scripts'] as $file)
 				{
-					self::add_script($file);
+					self::add_script($file, $weight);
 				}
 			}
 		}
 	}
 
-	static public function add_script($file)
+	static public function add_script($file, $weight = 0)
 	{
-		if (in_array($file, self::$scripts)) return;
-		self::$scripts[] = $file;
+		if (arr::in_array($file, self::$scripts)) return;
+		self::$scripts[$weight][] = $file;
 	}
 
-	static public function add_stylesheet($file)
+	static public function add_stylesheet($file, $weight = 0)
 	{
-		if (in_array($file, self::$stylesheets)) return;
-		self::$stylesheets[] = $file;
+		if (arr::in_array($file, self::$stylesheets)) return;
+		self::$stylesheets[$weight][] = $file;
 	}
 
 	static public function scripts()
 	{
+		ksort(self::$scripts);
 		$output = '';
 		foreach (self::$scripts as $script)
 		{
@@ -54,6 +56,7 @@ class assets_Core
 	
 	static public function stylesheets()
 	{
+		ksort(self::$stylesheets);
 		$output = '';
 		foreach (self::$stylesheets as $stylesheet)
 		{
@@ -64,6 +67,7 @@ class assets_Core
 
 	static public function all()
 	{
+		
 		self::load_dependencies();
 		return self::stylesheets().self::scripts();
 	}
@@ -76,25 +80,25 @@ class assets_Core
 			$required = Kohana::config('assets.views.'.$view);
 			if ($required)
 			{
-				if (isset($required['groups']))
+				if (isset($required['globals']))
 				{
-					foreach($required['groups'] as $group)
+					foreach($required['globals'] as $global)
 					{
-						self::add($group);
+						self::add($global);
 					}
 				}
 				if (isset($required['stylesheets']))
 				{
-					foreach($required['stylesheets'] as $stylesheet)
+					foreach($required['stylesheets'] as $stylesheet => $weight)
 					{
-						self::add_stylesheet($stylesheet);
+						self::add_stylesheet($stylesheet, $weight);
 					}
 				}
 				if (isset($required['scripts']))
 				{
-					foreach($required['scripts'] as $script)
+					foreach($required['scripts'] as $script => $weight)
 					{
-						self::add_script($script);
+						self::add_script($script, $weight);
 					}
 				}
 			}
