@@ -11,6 +11,7 @@ class Main_Controller extends Website_Controller {
 	public function home()
 	{
 		$this->template->content = View::factory('content/main/home');
+		$this->template->content->node = ORM::factory('basic_content', 'site_intro');
 	}
 	public function about()
 	{

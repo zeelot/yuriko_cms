@@ -2,7 +2,7 @@
 /**
  * Router
  *
- * $Id: Router.php 3875 2009-01-09 01:49:58Z zombor $
+ * $Id$
  *
  * @package    Core
  * @author     Kohana Team
@@ -61,7 +61,7 @@ class Router_Core {
 				// The request method is invalid
 				continue;
 			}
-			
+
 			// Compile the route into regex
 			$regex = self::compile($route);
 

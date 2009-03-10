@@ -18,5 +18,10 @@
 		<li><?php echo html::anchor('docs/theme', 'Theme'); ?></li>
 		<li><?php echo html::anchor('docs/user', 'User'); ?></li>
 	</ul>
+	<h3>ORM Content</h3>
+	<ul>
+		<li><?php echo html::anchor('content/basic/dual_boot_tutorial', 'Dual Booting Tutorial'); ?></li>
+		<li><?php echo html::anchor('admin/content/manage', 'Manage Basic Content'); ?></li>
+	</ul>
 </div>
 <!-- END MENUS -->

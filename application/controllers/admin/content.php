@@ -2,7 +2,7 @@
 /*
  * Manage Basic Content
  */
-class Basic_Controller extends Website_Controller {
+class Content_Controller extends Website_Controller {
 
 	public function __construct()
 	{
@@ -15,8 +15,10 @@ class Basic_Controller extends Website_Controller {
 	public function manage()
 	{
 		$nodes = ORM::factory('basic_content')->find_all();
-		$this->template->content = View::factory('content/admin/content/basic/manage');
+		$this->template->content = View::factory('content/admin/content/manage');
 		$this->template->content->nodes = $nodes;
+
+		
 	}
 	public function edit($id)
 	{
