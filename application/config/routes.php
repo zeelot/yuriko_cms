@@ -42,7 +42,17 @@ $config['admin'] = array
 		'id' => FALSE,
 	),
 );
-
+$config['pages'] = array
+(
+	'uri' => 'page/:name',
+	'allowed_roles' => NULL,
+	'defaults' => array
+	(
+		'controller' => 'pages',
+		'method' => 'load',
+		'name' => 'home',
+	),
+);
 $config['default'] = array
 (
 	'uri' => ':controller/:method/:id',

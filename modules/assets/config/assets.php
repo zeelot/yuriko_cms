@@ -34,6 +34,14 @@ $config['global'] = array
 			'media/css/typography',
 		),
 	),
+	'debug'	=> array
+	(
+		'weight'		=> 0,
+		'stylesheets'	=> array
+		(
+			'media/css/kohana',
+		),
+	),
 	'jquery'	=> array
 	(
 		'weight'		=> 0,

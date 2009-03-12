@@ -10,7 +10,7 @@ class Error_Controller extends Website_Controller {
 	public function _403()
 	{
 		$this->template->content = View::factory('errors/403');
-		widget::set('user_info', Component::factory('widget_user')->method('login'));
+		widget::set('user_info', Component::factory('widget_user')->method('info'));
 		$this->template->render(TRUE);
 	}
 
