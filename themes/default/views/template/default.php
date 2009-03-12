@@ -7,11 +7,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php echo assets::all(); ?>
-<script language="javascript">
-$(document).ready(function()	{
-    $('#markdown').markItUp(mySettings);
-});
-</script>
 
 <title>Zeelot's Special Sandbox!</title>
 </head>
