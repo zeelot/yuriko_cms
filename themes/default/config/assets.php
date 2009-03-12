@@ -30,6 +30,23 @@ $config['views'] = array
 
 		),
 	),
+	'templates/page/default' => array
+	(
+		'globals'			=> array
+		(
+			'960',			//the 960 css files
+			'common',		//the reset and typography stuff
+			'debug',		//the kohana.css
+		),
+		'stylesheets'		=> array
+		(
+			'themes/default/media/css/styles' => 100,
+		),
+		'scripts'			=> array
+		(
+
+		),
+	),
 	'content/admin/content/edit'		=> array
 	(
 		'globals'			=> array
