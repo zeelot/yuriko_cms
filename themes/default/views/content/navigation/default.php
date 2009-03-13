@@ -3,13 +3,14 @@
 	<?php $level = $node->level; ?>
 	<?php foreach($node->subtree()->find_all() as $child): ?>
 		<?php if($child->level > $level): ?>
-		<ul><li><?php echo $child->name; ?>
+		<ul><li><?php echo ($child->anchor)? html::anchor($child->anchor, $child->name) : $child->name; ?>
 		<?php $level++; ?>
 		<?php elseif($child->level < $level): ?>
-		<?php echo str_repeat('</li></ul>', $child->level < $level); ?><li><?php echo $child->name; ?>
+		<?php echo str_repeat('</li></ul>', $child->level < $level); ?>
+		<li><?php echo ($child->anchor)? html::anchor($child->anchor, $child->name) : $child->name; ?>
 		<?php $level = $child->level; ?>
 		<?php else: ?>
-		</li><li><?php echo $child->name; ?> 
+		</li><li><?php echo ($child->anchor)? html::anchor($child->anchor, $child->name) : $child->name; ?>
 		<?php endif; ?>
 	<?php endforeach; ?>
 	</ul>
