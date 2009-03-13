@@ -12,12 +12,9 @@
 <body>
     <div class="container_16" id="main_frame">
 		<div class="grid_16">
-			<?php echo notice::render(); ?>
-			<h1><?php echo $page->name; ?></h1>
+			<?php echo notice::render(); ?> 
 		</div>
-		<?php foreach($sections as $name => $section): ?>
-		<?php echo View::factory($section['object']->template)->set('nodes', $section['nodes'])->set('section', $section['object']); ?>
-		<?php endforeach; ?>
+		<?php echo $page->render_children(); ?>
 		<div class="clear"></div>
     </div>
 </body>

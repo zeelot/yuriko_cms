@@ -22,5 +22,38 @@ class Content_Node_Model extends Auto_Modeler_ORM {
 		'content_pages_sections_nodes',
 	);
 
+	public function __construct($id = NULL)
+	{
+		parent::__construct();
+		if ($id != NULL AND is_string($id))
+		{
+			// try and get a row with this name
+			$data = $this->db->orwhere(array('alias' => $id))->get($this->table_name)->result(FALSE);
+			// try and assign the data
+			if (count($data) == 1 AND $data = $data->current())
+			{
+				foreach ($data as $key => $value)
+				$this->data[$key] = $value;
+			}
+		}
+		elseif ($id != NULL AND (ctype_digit($id) OR is_int($id)))
+		{
+			// try and get a row with this id
+			$data = $this->db->getwhere($this->table_name, array('id' => $id))->result(FALSE);
+			// try and assign the data
+			if (count($data) == 1 AND $data = $data->current())
+			{
+				foreach ($data as $key => $value)
+				$this->data[$key] = $value;
+			}
+		}
+	}
+
+	public function find_content()
+	{
+		//return the model of the content related to this node
+		return Auto_Modeler::factory($this->content_type->name.'_content', $this->content_id);
+	}
+
 
 } // End Content Node Model

@@ -7,7 +7,8 @@ class Content_Page_Model extends Auto_Modeler_ORM {
 	protected $data = array
 	(
 		'id'   => '',
-		'name' => ''
+		'alias' => '',
+		'name' => '',
 	);
 
 	protected $aliases = array
@@ -15,7 +16,7 @@ class Content_Page_Model extends Auto_Modeler_ORM {
 		'sections'	=> 'content_pages_sections_nodes',
 		'nodes'		=> 'content_pages_sections_nodes',
 		'objects'	=> 'content_pages_sections_nodes',
-		
+		'content_pages' => 'pages',
 	);
 
 	protected $has_many = array
@@ -29,7 +30,7 @@ class Content_Page_Model extends Auto_Modeler_ORM {
 		if ($id != NULL AND is_string($id))
 		{
 			// try and get a row with this name
-			$data = $this->db->orwhere(array('name' => $id))->get($this->table_name)->result(FALSE);
+			$data = $this->db->orwhere(array('alias' => $id))->get($this->table_name)->result(FALSE);
 			// try and assign the data
 			if (count($data) == 1 AND $data = $data->current())
 			{
@@ -47,6 +48,29 @@ class Content_Page_Model extends Auto_Modeler_ORM {
 				foreach ($data as $key => $value)
 				$this->data[$key] = $value;
 			}
+		}
+	}
+
+	public function render_children()
+	{
+		$objects = $this->find_related('objects');
+		$sections = array();
+		$current_section = NULL;
+		$section = NULL;
+		
+		foreach($objects as $obj)
+		{
+			if ($current_section != $obj->section_id)
+			{
+				$section = $obj->section;
+				$current_section = $section->id;
+			}
+			$sections[$section->name]['object'] = $section;
+			$sections[$section->name]['nodes'][] = $obj->node;
+		}
+		foreach($sections as $name => $section)
+		{
+			echo View::factory($section['object']->template)->set('nodes', $section['nodes'])->set('section', $section['object']);
 		}
 	}
 

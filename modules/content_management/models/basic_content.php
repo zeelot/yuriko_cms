@@ -1,7 +1,7 @@
 <?php
 
 
-class Basic_Content_Model extends ORM{
+class Basic_Content_Model extends ORM implements Content_Model{
 
 	protected $belongs_to = array('format' => 'content_format');
 
@@ -35,6 +35,11 @@ class Basic_Content_Model extends ORM{
 			$this->html = $this->content;
 		}
 		return parent::save();
+	}
+
+	public function render()
+	{
+		echo View::factory($this->view)->set('node', $this);
 	}
 
 }

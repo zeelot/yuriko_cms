@@ -42,15 +42,34 @@ $config['admin'] = array
 		'id' => FALSE,
 	),
 );
+$config['nodes'] = array
+(
+	'uri' => 'node/:alias',
+	'allowed_roles' => NULL,
+	'defaults' => array
+	(
+		'controller' => 'pages',
+		'method' => 'load_node',
+		'alias' => FALSE,
+	),
+	'regex' => array
+	(
+		'alias' => '.*'
+	),
+);
 $config['pages'] = array
 (
-	'uri' => 'page/:name',
+	'uri' => ':alias',
 	'allowed_roles' => NULL,
 	'defaults' => array
 	(
 		'controller' => 'pages',
 		'method' => 'load',
-		'name' => 'home',
+		'alias' => 'home',
+	),
+	'regex' => array
+	(
+		'alias' => '.*'
 	),
 );
 $config['default'] = array

@@ -15,15 +15,12 @@ class Auto_Modeler_ORM extends Auto_Modeler
 
 	public function __get($key)
 	{
-	if (isset($this->aliases[$key]))
-			$key = $this->aliases[$key];
+		$table = isset($this->aliases[$key]) ? $this->aliases[$key] : $key;
 
 		// See if we are requesting a forgien key
 		if (isset($this->data[$key.'_id']))
-		{
 			// Get the row from the forgien table
-			return $this->db->from($key.'s')->where('id', $this->data[$key.'_id'])->get()->result(TRUE, inflector::singular(ucwords($key)).'_Model')->current();
-		}
+			return $this->db->from($table.'s')->where('id', $this->data[$key.'_id'])->get()->result(TRUE, inflector::singular(ucwords($table)).'_Model')->current();
 		else if (isset($this->data[$key]))
 			return $this->data[$key];
 	}
@@ -79,20 +76,15 @@ class Auto_Modeler_ORM extends Auto_Modeler
 	{
 		if (isset($this->aliases[$key]))
 			$key = $this->aliases[$key];
-
+		$table_name = isset($this->aliases[$this->table_name]) ? $this->aliases[$this->table_name] : $this->table_name;
 		$model = inflector::singular($key).'_Model';
 		$temp = new $model();
-		if ($temp->has_attribute(inflector::singular($this->table_name).'_id')) // Look for a one to many relationship
-		{
-			if (isset($this->aliases[$this->table_name]))
-			$this->table_name = $this->aliases[$this->table_name];
-
-			return $this->db->from($key)->where($where + array(inflector::singular($this->table_name).'_id' => $this->data['id']))->get()->result(TRUE, inflector::singular(ucwords($key)).'_Model');
-		}
+		if ($temp->has_attribute(inflector::singular($table_name).'_id')) // Look for a one to many relationship
+			return $this->db->from($key)->where($where + array(inflector::singular($table_name).'_id' => $this->data['id']))->get()->result(TRUE, inflector::singular(ucwords($key)).'_Model');
 		else // Get a many to many relationship
 		{
-			$join_table = $this->table_name.'_'.$key;
-			$this_key = inflector::singular($this->table_name).'_id';
+			$join_table = $table_name.'_'.$key;
+			$this_key = inflector::singular($table_name).'_id';
 			$f_key = inflector::singular($key).'_id';
 
 			return $this->db->select($key.'.*')->from($key)->where($where + array($join_table.'.'.$this_key => $this->data['id']))->join($join_table, $join_table.'.'.$f_key, $key.'.id')->get()->result(TRUE, inflector::singular(ucwords($key)).'_Model');
@@ -101,9 +93,13 @@ class Auto_Modeler_ORM extends Auto_Modeler
 
 	public function find_parent($key = NULL, $where = array())
 	{
+		if (isset($this->aliases[$key]))
+			$key = $this->aliases[$key];
+		$table_name = isset($this->aliases[$this->table_name]) ? $this->aliases[$this->table_name] : $this->table_name;
+
 		if ($this->has_attribute($key.'_id')) // Look for a one to many relationship
 		{
-			return $this->db->from(inflector::plural($key))->where($where + array('id' => $this->data[$key.'_id']))->get()->result(TRUE, ucwords($key).'_Model');
+			return $this->db->from(inflector::plural($table_name))->where($where + array('id' => $this->data[$key.'_id']))->get()->result(TRUE, ucwords($table_name).'_Model');
 		}
 		else
 		{
@@ -118,9 +114,13 @@ class Auto_Modeler_ORM extends Auto_Modeler
 	// Value is an ID
 	public function has($key, $value)
 	{
-		$join_table = $this->table_name.'_'.$key;
+		if (isset($this->aliases[$key]))
+			$key = $this->aliases[$key];
+		$table_name = isset($this->aliases[$this->table_name]) ? $this->aliases[$this->table_name] : $this->table_name;
+
+		$join_table = $table_name.'_'.$key;
 		$f_key = inflector::singular($key).'_id';
-		$this_key = inflector::singular($this->table_name).'_id';
+		$this_key = inflector::singular($table_name).'_id';
 
 		if (in_array($key, $this->has_many))
 		{
@@ -132,12 +132,18 @@ class Auto_Modeler_ORM extends Auto_Modeler
 	// Removes a relationship
 	public function remove($key, $id)
 	{
+		if (isset($this->aliases[$key]))
+			$key = $this->aliases[$key];
+
 		return $this->db->delete($this->table_name.'_'.inflector::plural($key), array($key.'_id' => $id));
 	}
 
 	// Removes all relationships of $key in the join table
 	public function remove_all($key)
 	{
+		if (isset($this->aliases[$key]))
+			$key = $this->aliases[$key];
+
 		if (in_array($key, $this->has_many))
 		{
 			return $this->db->delete($this->table_name.'_'.$key, array(inflector::singular($this->table_name).'_id' => $this->id));
@@ -151,6 +157,9 @@ class Auto_Modeler_ORM extends Auto_Modeler
 	// Removes all parent relationships of $key in the join table
 	public function remove_parent($key)
 	{
+		if (isset($this->aliases[$key]))
+			$key = $this->aliases[$key];
+
 		return $this->db->delete($key.'_'.$this->table_name, array(inflector::singular($this->table_name).'_id' => $this->id));
 	}
 

@@ -11,9 +11,9 @@ class Content_Pages_Sections_Nodes_Model extends Auto_Modeler_ORM {
 	protected $data = array
 	(
 		'id'         => '',
-		'content_page_id'    => '',
-		'content_section_id' => '',
-		'content_node_id'    => '',
+		'page_id'    => '',
+		'section_id' => '',
+		'node_id'    => '',
 	);
 
 	protected $aliases = array
