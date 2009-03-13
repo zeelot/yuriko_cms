@@ -1,12 +1,16 @@
 <div class="navigation">
-	<?php if(!$node->anchor): ?>
 	<h2><?php echo $node->name; ?></h2>
-	<?php else: ?>
-	<?php echo html::anchor($node->anchor, $node->name); ?>
-	<?php endif; ?>
-	<ul>
-		<?php foreach($node->children as $child): ?>
-			<li><?php echo $child->render(); ?></li>
-		<?php endforeach; ?> 
+	<?php $level = $node->level; ?>
+	<?php foreach($node->subtree()->find_all() as $child): ?>
+		<?php if($child->level > $level): ?>
+		<ul><li><?php echo $child->name; ?>
+		<?php $level++; ?>
+		<?php elseif($child->level < $level): ?>
+		<?php echo str_repeat('</li></ul>', $child->level < $level); ?><li><?php echo $child->name; ?>
+		<?php $level = $child->level; ?>
+		<?php else: ?>
+		</li><li><?php echo $child->name; ?> 
+		<?php endif; ?>
+	<?php endforeach; ?>
 	</ul>
 </div>

@@ -1,9 +1,12 @@
 <?php
 
 
-class Navigation_Content_Model extends ORM_Tree implements Content_Model{
+class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 
-	protected $children = "navigation_contents";
+	protected $left_column = 'lft';
+    protected $right_column = 'rgt';
+    protected $parent_column = 'parent_id';
+    protected $level_column = 'level';
 
 	public function unique_key($id)
 	{
@@ -16,7 +19,8 @@ class Navigation_Content_Model extends ORM_Tree implements Content_Model{
 
 	public function render()
 	{
-		echo View::factory($this->view)->set('node', $this);
+		echo View::factory($this->view)
+			->set('node', $this);
 	}
 
 }
