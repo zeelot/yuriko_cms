@@ -18,21 +18,9 @@ $config['user'] = array
 	),
 );
 
-$config['documentation'] = array
-(
-	'uri' => 'docs/:name',
-	'allowed_roles' => NULL,
-	'defaults' => array
-	(
-		'controller' => 'documentation',
-		'method' => 'load',
-		'name' => FALSE,
-	),
-);
-
 $config['admin'] = array
 (
-	'uri' => 'admin/:controller/:method/:id',
+	'uri' => 'admin/:controller/:method/:id/:ad',
 	'allowed_roles' => NULL,
 	'prefix' => array('controller' => 'admin_'),
 	'defaults' => array
@@ -40,6 +28,7 @@ $config['admin'] = array
 		'controller' => 'main',
 		'method' => 'home',
 		'id' => FALSE,
+		'ad' => FALSE,
 	),
 );
 $config['nodes'] = array
