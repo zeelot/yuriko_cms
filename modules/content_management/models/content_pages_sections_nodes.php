@@ -16,6 +16,13 @@ class Content_Pages_Sections_Nodes_Model extends Auto_Modeler_ORM {
 		'node_id'    => '',
 	);
 
+	protected $rules = array
+	(
+		'page_id'    => array('required', 'digit'),
+		'section_id' => array('required', 'digit'),
+		'node_id'    => array('required', 'digit'),
+	);
+
 	protected $aliases = array
 	(
 		'section' => 'content_section',

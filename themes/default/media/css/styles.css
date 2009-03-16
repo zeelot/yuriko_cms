@@ -8,6 +8,7 @@ body{
 .notices ul, .notices ul li {margin:0px; padding:0px;}
 
 label input, label select{display:block; width:15em;}
+button{margin-top:15px;}
 
 #main_frame{
   border:2px solid #CCE8FB;

@@ -2,7 +2,7 @@
 abstract class Website_Controller extends Template_Controller{
 
 	// Template view name
-	public $template = 'template/default';
+	public $template = 'templates/static/default';
 
 	public function __construct()
 	{

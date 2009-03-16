@@ -10,6 +10,14 @@ class Content_Node_Model extends Auto_Modeler_ORM {
 		'name' => ''
 	);
 
+	protected $rules = array
+	(
+		'alias' => array('required'),
+		'name' => array('required'),
+		'content_id' => array('required', 'digit'),
+		'content_type_id' => array('required', 'digit'),
+	);
+
 	protected $aliases = array
 	(
 		'page'    => 'content_pages_sections_nodes',

@@ -22,6 +22,7 @@ class Auto_Modeler extends Model implements ArrayAccess
 	protected $aliases = array();
 
 	protected $validated = FALSE;
+	public $validation = FALSE;
 
 	public function __construct($id = NULL)
 	{
@@ -83,7 +84,7 @@ class Auto_Modeler extends Model implements ArrayAccess
 			if (isset($this->aliases[$key]))
 				$key = $this->aliases[$key];
 
-			if (array_key_exists($this->data[$key]))
+			if (array_key_exists($key, $this->data))
 				$this->data[$key] = $value;
 		}
 	}
@@ -110,7 +111,8 @@ class Auto_Modeler extends Model implements ArrayAccess
 		else
 		{
 			$errors = View::factory('form_errors')->set(array('errors' => $data->errors('form_errors')));
-			return $errors->render();
+			$this->validation = $data;
+			return $errors;
 		}
 	}
 
@@ -194,7 +196,7 @@ class Auto_Modeler extends Model implements ArrayAccess
 	{
 		if (isset($this->aliases[$key]))
 			$key = $this->aliases[$key];
-			//die(kohana::debug($key));
+
 		return array_key_exists($key, $this->data);
 	}
 

@@ -8,7 +8,13 @@ class Content_Page_Model extends Auto_Modeler_ORM {
 	(
 		'id'   => '',
 		'alias' => '',
-		'name' => '',
+		'title' => '',
+	);
+
+	protected $rules = array
+	(
+		'alias' => array('required'),
+		'title' => array('required'),
 	);
 
 	protected $aliases = array

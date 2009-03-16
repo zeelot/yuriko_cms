@@ -14,12 +14,13 @@
  */
 $config['views'] = array
 (
-	'template/default'		=> array
+	'templates/static/admin/default'		=> array
 	(
 		'globals'			=> array
 		(
 			'960',			//the 960 css files
 			'common',		//the reset and typography stuff
+			'debug',		//the kohana.css
 		),
 		'stylesheets'		=> array
 		(
@@ -47,7 +48,7 @@ $config['views'] = array
 
 		),
 	),
-	'content/admin/content/edit'		=> array
+	'content/static/admin/basic/edit'		=> array
 	(
 		'globals'			=> array
 		(

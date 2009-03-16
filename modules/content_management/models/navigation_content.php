@@ -6,7 +6,8 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 	protected $left_column = 'lft';
     protected $right_column = 'rgt';
     protected $parent_column = 'parent_id';
-    protected $level_column = 'level';
+
+	protected $belongs_to = array('node' => 'content_node');
 
 	public function unique_key($id)
 	{

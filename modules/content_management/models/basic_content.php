@@ -18,7 +18,7 @@ class Basic_Content_Model extends ORM implements Content_Model{
 	{
 		$array = Validation::factory($array)
 			->pre_filter('trim')
-			->add_rules('name', 'required', 'length[4,32]', 'chars[a-zA-Z0-9_.]')
+			->add_rules('name', 'required', 'length[4,32]', 'chars[a-z A-Z0-9_.]')
 			->add_rules('format_id', 'required', 'valid::digit')
 			->add_rules('content', 'required');
 

@@ -48,3 +48,6 @@ miu = {
 		return '\n'+heading;
 	}
 }
+$(document).ready(function()	{
+    $('#markdown').markItUp(mySettings);
+});
