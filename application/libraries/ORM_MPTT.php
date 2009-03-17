@@ -182,7 +182,7 @@ class ORM_MPTT_Core extends ORM
 	protected function parent()
 	{
 		// Root node, can't possibly have a parent
-		if ($this->{$this->left_column} === 1)
+		if ($this->is_root())
 			return FALSE;
 		
 		// SELECT * FROM `table` WHERE `left` < 9 AND `right` > 10 ORDER BY `right` ASC LIMIT 1
@@ -194,23 +194,23 @@ class ORM_MPTT_Core extends ORM
 	 *
 	 * $parents = $this->parents();
 	 *
-	 * @access protected
+	 * @access public
 	 * @param $root Include the root node or not
-	 * @return ORM_Iterator
+	 * @return object
 	 **/
-	protected function parents($root = TRUE)
+	public function parents($root = TRUE)
 	{
 		// Root node, can't possibly have a parent
-		if ($this->{$this->left_column} === 1)
+		if ($this->is_root())
 			return FALSE;
 		
 		// SELECT * FROM `table` WHERE `lft` <= 9 AND `rgt` >= 10 AND id <> 6 ORDER BY `lft` ASC
-		$result = self::factory($this->object_name)->where('`'.$this->left_column.'` <= '.$this->{$this->left_column}.' AND `'.$this->right_column.'` >= '.$this->{$this->right_column})->orderby($this->left_column, 'ASC');
+		$result = self::factory($this->object_name)->where('`'.$this->left_column.'` <= '.$this->{$this->left_column}.' AND `'.$this->right_column.'` >= '.$this->{$this->right_column}.' AND '.$this->primary_key.' <> '.$this->{$this->primary_key})->orderby($this->left_column, 'ASC');
 		
 		if ( ! $root)
 			$result->where('`'.$this->left_column.'` != 1');
 			
-		return $result->find_all();
+		return $result;
 	}
 	
 	/**
@@ -222,11 +222,11 @@ class ORM_MPTT_Core extends ORM
 	 * @return object
 	 * @author Mathew Davies
 	 **/
-	protected function leaves()
+	public function leaves()
 	{
 		$result = self::factory($this->object_name)->where('`'.$this->left_column.'` = (`'.$this->right_column.'` - 1)	AND `'.$this->left_column.'` >= '.$this->{$this->left_column}.' AND `'.$this->right_column.'` <= '.$this->{$this->right_column})->orderby($this->left_column, 'ASC');
 		
-		return $result->find_all();
+		return $result;
 	}
 	
 	/**
@@ -793,11 +793,11 @@ class ORM_MPTT_Core extends ORM
 			case 'parent':
 				return $this->parent();
 			case 'parents':
-				return $this->parents();
+				return $this->parents()->find_all();
 			case 'root':
 				return $this->root();
 			case 'leaves':
-				return $this->leaves();
+				return $this->leaves()->find_all();
 			default:
 				return parent::__get($column);
 		}
@@ -818,6 +818,8 @@ class ORM_MPTT_Core extends ORM
 	/**
 	 * Verify the tree is in good order 
 	 * 
+	 * @todo Look for any nodes no longer contained by the root node.
+	 * @todo Ensure every node has a path to the root via ->parents();
 	 * @access public
 	 * @return boolean
 	 **/
