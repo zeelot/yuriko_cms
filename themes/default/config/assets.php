@@ -14,13 +14,20 @@
  */
 $config['views'] = array
 (
+	'kohana_profiler' => array
+	(
+		//load the debug css files anytime the profiler is loaded
+		'globals'			=> array
+		(
+			'debug',		//the kohana.css
+		),
+	),
 	'templates/static/admin/default'		=> array
 	(
 		'globals'			=> array
 		(
 			'960',			//the 960 css files
 			'common',		//the reset and typography stuff
-			'debug',		//the kohana.css
 		),
 		'stylesheets'		=> array
 		(
