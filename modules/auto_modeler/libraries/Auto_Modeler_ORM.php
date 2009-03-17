@@ -169,19 +169,20 @@ class Auto_Modeler_ORM extends Auto_Modeler
 		{
 			$this->db->delete($this->table_name, array('id' => $this->data['id']));
 
+			$table_name = isset($this->aliases[$this->table_name]) ? $this->aliases[$this->table_name] : $this->table_name;
 			foreach ($this->has_many as $table)
 			{
 				$model = inflector::singular($table).'_Model';
 				$temp = new $model();
-				if ($temp->has_attribute(inflector::singular($this->table_name).'_id')) // one to many relationship
+				if ($temp->has_attribute(inflector::singular($table_name).'_id')) // one to many relationship
 				{
-					$this->db->from($table)->where(inflector::singular($this->table_name).'_id', $this->data['id'])->delete();
+					$this->db->from($table)->where(inflector::singular($table_name).'_id', $this->data['id'])->delete();
 				}
 				else // many to many relationship
 				{
 					// Now delete everything from the join tables
-					$join_table = $this->table_name.'_'.$table;
-					$this_key = inflector::singular($this->table_name).'_id';
+					$join_table = $table_name.'_'.$table;
+					$this_key = inflector::singular($table_name).'_id';
 					$this->db->delete($join_table, array($this_key => $this->data['id']));
 				}
 			}
