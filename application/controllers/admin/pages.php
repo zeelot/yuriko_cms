@@ -2,15 +2,8 @@
 /*
  * Manage Pages
  */
-class Pages_Controller extends Website_Controller {
+class Pages_Controller extends Admin_Controller {
 
-	public $template = 'templates/static/admin/default';
-
-	public function __construct()
-	{
-		parent::__construct();
-		$this->session = Session::instance();
-	}
 	/**
 	 * List all the basic content nodes for editing
 	 */
