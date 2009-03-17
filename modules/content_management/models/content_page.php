@@ -55,11 +55,14 @@ class Content_Page_Model extends Auto_Modeler_ORM {
 				$this->data[$key] = $value;
 			}
 		}
+		return TRUE;
 	}
 
 	public function render_children()
 	{
 		$objects = $this->find_related('objects');
+		if(count($objects) == 0) return FALSE; //page has no content yet
+		echo kohana::debug((bool)count($objects));
 		$sections = array();
 		$current_section = NULL;
 		$section = NULL;

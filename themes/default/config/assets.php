@@ -22,6 +22,18 @@ $config['views'] = array
 			'debug',		//the kohana.css
 		),
 	),
+	'templates/static/default'	=> array
+	(
+		'globals'			=> array
+		(
+			'960',			//the 960 css files
+			'common',		//the reset and typography stuff
+		),
+		'stylesheets'		=> array
+		(
+			'themes/default/media/css/styles' => 100,
+		),
+	),
 	'templates/static/admin/default'		=> array
 	(
 		'globals'			=> array

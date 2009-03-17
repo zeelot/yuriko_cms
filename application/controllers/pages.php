@@ -18,8 +18,14 @@ class Pages_Controller extends Website_Controller{
 	{
 		$page = Auto_Modeler::factory('content_page', $alias);
 		if(!$page->id) Event::run('system.404');
+		$content = $page->render_children();
+		if(!$content)
+		{
+			//page has no content yet
+			$content = View::factory('errors/empty_page');
+		}
 		$this->template = View::factory($page->template)
-		                          ->set('page', $page);
+		                          ->set('content', $content);
 	}
 
 	public function load_node($alias = FALSE)

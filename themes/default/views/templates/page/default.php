@@ -14,7 +14,7 @@
 		<div class="grid_16">
 			<?php echo notice::render(); ?> 
 		</div>
-		<?php echo $page->render_children(); ?>
+		<?php echo $content; ?>
 		<div class="clear"></div>
     </div>
 </body>
