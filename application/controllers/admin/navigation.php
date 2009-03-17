@@ -17,7 +17,7 @@ class Navigation_Controller extends Admin_Controller {
 			{
 				$node->insert_as_first_child($parent);
 				notice::add('Navigation Item Created!', 'success');
-				url::redirect('admin/navigation/manage');
+				url::redirect('admin/navigation/edit/'.$node->id);
 			}
 			else
 			{
@@ -35,7 +35,32 @@ class Navigation_Controller extends Admin_Controller {
 	}
 	public function edit($id)
 	{
-		
+		$content = ORM::factory('navigation_content', $id);
+		if (!(bool)$content->id)Event::run('system.404');//incorrect $id
+
+		if(isset($_POST['edit_navigation']))
+		{
+			$post = $this->input->post();
+			//update the page
+			if($content->update($post))
+			{
+				notice::add('Item Saved!', 'success');
+				url::redirect('admin/navigation/manage');
+			}
+			else
+			{
+				$errors = $post->errors('form_errors');
+				foreach($errors as $error)
+				{
+					notice::add($error, 'error');
+				}
+			}
+		}
+
+		$this->template->content = View::factory('content/static/admin/navigation/edit');
+		$this->template->content->item = $content;
+		$this->template->content->pages = ORM::factory('content_page')
+												->select_list('id', 'alias');
 	}
 	public function delete($id)
 	{

@@ -26,7 +26,14 @@
 			<?php endif; ?>
 			<?php echo html::anchor('admin/navigation/delete/'.$child->id,
 					   html::image('media/images/fam_silk/delete.png', 'Delete Tree')); ?>
+			<?php if(($child->anchor) OR ($child->page_id > 0)): ?>
+			<?php echo ($child->page_id > 0)
+						? html::anchor(Auto_Modeler::factory('content_page', $child->page_id)->alias, $child->name)
+						: html::anchor($child->anchor, $child->name) ?>
+			<?php else: ?>
 			<?php echo $child->name; ?>
+			<?php endif; ?>
+			<?php echo html::anchor('admin/navigation/edit/'.$child->id, 'Edit'); ?>
 		<?php endforeach; ?>
 		<?php echo str_repeat('</li></ul></div>', $level); ?>
 	</div>

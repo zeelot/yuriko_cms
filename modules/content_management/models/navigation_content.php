@@ -21,6 +21,17 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 
 		return parent::validate($array, $save);
 	}
+	public function update(array & $array)
+	{
+		$array = Validation::factory($array)
+			->pre_filter('trim')
+			->add_rules('name', 'required', 'length[4,52]', 'chars[a-z A-Z0-9_.]')
+			->add_rules('tag', 'required', 'length[4,52]')
+			->add_rules('page_id', 'digit')
+			->add_rules('anchor', 'chars[a-zA-Z0-9_./]');
+
+		return parent::validate($array, TRUE);
+	}
 
 	public function unique_tag($id)
 	{
@@ -43,7 +54,8 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 		}
 		return parent::unique_key($id);
 	}
-
+	
+	
 	public function delete($descendants = TRUE)
 	{
 		$type = Auto_Modeler::factory('content_type', 'navigation');
