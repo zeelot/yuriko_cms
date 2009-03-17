@@ -145,9 +145,9 @@ a[href^="http://yourwebsite.com"] { background:none; padding:0; margin:0; }
 .bottom {margin-bottom:0;padding-bottom:0;}
 .thin {font-weight: lighter;}
 .error, .notice, .success {padding:.8em;margin-bottom:1.6em;border:2px solid #ddd;}
-.error {background:#FBE3E4;color:#8a1f11;border-color:#FBC2C4;}
+.error {background:url(../images/icons/cross.png) no-repeat 3px 50% #FBE3E4;color:#8a1f11;border-color:#FBC2C4;padding-left:25px;}
 .notice {background:#FFF6BF;color:#514721;border-color:#FFD324;}
-.success {background:url(images/icons/tick.png) no-repeat 3px 50% #E6EFC2;color:#264409;border-color:#C6D880;padding-left:25px;}
+.success {background:url(../images/icons/tick.png) no-repeat 3px 50% #E6EFC2;color:#264409;border-color:#C6D880;padding-left:25px;}
 .error a {color:#8a1f11; background:none; padding:0; margin:0; }
 .notice a {color:#514721; background:none; padding:0; margin:0; }
 .success a {color:#264409; background:none; padding:0; margin:0; }
