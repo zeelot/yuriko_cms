@@ -3,5 +3,7 @@ nbproject
 Icon?
 .svn
 .directory
+.buildpath
+.project
 */logs/*.php
 */cache/*
