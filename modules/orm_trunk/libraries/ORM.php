@@ -8,7 +8,7 @@
  * [ref-orm]: http://wikipedia.org/wiki/Object-relational_mapping
  * [ref-act]: http://wikipedia.org/wiki/Active_record
  *
- * $Id: ORM.php 4065 2009-03-09 17:39:56Z Shadowhand $
+ * $Id: ORM.php 4072 2009-03-13 17:20:38Z jheathco $
  *
  * @package    ORM
  * @author     Kohana Team
@@ -886,15 +886,15 @@ class ORM_Core {
 	{
 		if ($force === TRUE OR empty($this->table_columns))
 		{
-			if (isset(self::$column_cache[$this->object_name]))
+			if (isset(ORM::$column_cache[$this->object_name]))
 			{
 				// Use cached column information
-				$this->table_columns = self::$column_cache[$this->object_name];
+				$this->table_columns = ORM::$column_cache[$this->object_name];
 			}
 			else
 			{
 				// Load table columns
-				self::$column_cache[$this->object_name] = $this->table_columns = $this->db->list_fields($this->table_name, TRUE);
+				ORM::$column_cache[$this->object_name] = $this->table_columns = $this->db->list_fields($this->table_name, TRUE);
 			}
 		}
 

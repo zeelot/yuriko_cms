@@ -1,187 +1,893 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * S7Ncms - www.s7n.de
+ * Modified Preorder Tree Traversal Class.
  *
- * Copyright (c) 2007-2008, Eduard Baun <eduard at baun.de>
- * All rights reserved.
- *
- * See license.txt for full text and disclaimer
- *
- * @author Eduard Baun <eduard at baun.de>
- * @copyright Eduard Baun, 2007-2008
- * @version $Id$
- */
-class ORM_MPTT_Core extends ORM_Tree_Core {
+ * @package libraries
+ * @author Mathew Davies, Kiall Mac Innes
+ **/
+class ORM_MPTT_Core extends ORM
+{
+	/**
+	 * Left Column
+	 *
+	 * @var string
+	 **/
+	protected $left_column = 'lft';
+	
+	/**
+	 * Right Column
+	 *
+	 * @var string
+	 **/
+	protected $right_column = 'rgt';
+	
+	/**
+	 * Level Column
+	 *
+	 * @var string
+	 **/
+	protected $level_column = 'lvl';
 
-        // Left number column name
-        protected $level_column = 'level';
+	/**
+	 * Constructor
+	 *
+	 * @access public
+	 * @return void
+	 * @author Mathew Davies
+	 **/
+	public function __construct($id = NULL)
+	{
+		parent::__construct($id);
+	}
 
-        // Left number column name
-        protected $left_column = 'lft';
+	/**
+	 * Locks the MPTT table.
+	 *
+	 * @access private
+	 * @return void
+	 * @author Kiall Mac Innes
+	 **/
+	private function lock()
+	{
+		$this->db->query('LOCK TABLE '.$this->table_name.' WRITE');
+	}
+	
+	/**
+	 * Unlocks the MPTT table.
+	 *
+	 * @access private
+	 * @return void
+	 * @author Kiall Mac Innes
+	 **/
+	private function unlock()
+	{
+		$this->db->query('UNLOCK TABLES');
+	}
 
-        // Right number column name
-        protected $right_column = 'rgt';
+	/**
+	 * Does the node have a child?
+	 *
+	 * $node = ORM::factory('table', 12)->has_children();
+	 *
+	 * if ($node)
+	 * {
+	 *	 print 'This node has a child.';	  
+	 * }
+	 *
+	 * @access public
+	 * @return boolean
+	 * @author Mathew Davies
+	 **/
+	public function has_children()
+	{
+		// If the gap between the left and right values is more than 1
+		// then we know the node has children.
+		return (($this->{$this->right_column} - $this->{$this->left_column}) > 1);
+	}
+	
+	/**
+	 * Is the current node a leaf node
+	 * (Has no children)
+	 *
+	 * $node = ORM::factory('table', 12)->is_leaf();
+	 *
+	 * if ($node)
+	 * {
+	 *	 print 'This node is a leaf node.';	  
+	 * }
+	 *
+	 * @access public
+	 * @return boolean
+	 * @author Kiall Mac Innes
+	 **/
+	public function is_leaf()
+	{
+		return !$this->has_children();
+	}
+	
+	/**
+	 * Is the current node a descendant of the supplied node
+	 *
+	 * @access public
+	 * @param $target node Target Node
+	 * @return boolean
+	 * @author Gallery3
+	 **/
+	public function is_descendant($target)
+	{
+		return ($this->{$this->left_column} > $target->{$this->left_column} AND $this->{$this->right_column} < $target->{$this->right_column});
+	}
+	
+	/**
+	 * Is the current node a root node?
+	 *
+	 * $is_root = ORM::factory('table', 12)->is_root();
+	 *
+	 * if ($node)
+	 * {
+	 *	 print 'This node is a root node.';	  
+	 * }
+	 *
+	 * @access public
+	 * @return boolean
+	 * @author Kiall Mac Innes
+	 **/
+	public function is_root()
+	{
+		return ($this->{$this->left_column} === 1);
+	}
+	
+	/**
+	 * Returns the root node
+	 *
+	 * $root = $this->root();
+	 *
+	 * @access protected
+	 * @return object
+	 * @author Mathew Davies
+	 **/
+	protected function root()
+	{
+		return self::factory($this->object_name)->where($this->left_column, 1)->find();
+	}
+	
+	/**
+	 * Returns the parent node
+	 *
+	 * $node = $this->parent();
+	 *
+	 * @access protected
+	 * @return object
+	 * @author Mathew Davies
+	 **/
+	protected function parent()
+	{
+		// Root node, can't possibly have a parent
+		if ($this->is_root())
+			return FALSE;
+		
+		// SELECT * FROM `table` WHERE `left` < 9 AND `right` > 10 ORDER BY `right` ASC LIMIT 1
+		return self::factory($this->object_name)->where('`'.$this->left_column.'` < '.$this->{$this->left_column}.' AND `'.$this->right_column.'` > '.$this->{$this->right_column})->orderby($this->right_column, 'ASC')->find();
+	}
+	
+	/**
+	 * Returns the parents of this node
+	 *
+	 * $parents = $this->parents();
+	 *
+	 * @access public
+	 * @param $direction Direction to order the left column by
+	 * @param $root Include the root node or not
+	 * @return object
+	 **/
+	public function parents($direction='ASC', $root = TRUE)
+	{
+		// Root node, can't possibly have a parent
+		if ($this->is_root())
+			return FALSE;
+		
+		// SELECT * FROM `table` WHERE `lft` <= 9 AND `rgt` >= 10 AND id <> 6 ORDER BY `lft` ASC
+		$result = self::factory($this->object_name)->where('`'.$this->left_column.'` <= '.$this->{$this->left_column}.' AND `'.$this->right_column.'` >= '.$this->{$this->right_column}.' AND '.$this->primary_key.' <> '.$this->{$this->primary_key})->orderby($this->left_column, $direction);
+		
+		if ( ! $root)
+			$result->where('`'.$this->left_column.'` != 1');
+			
+		return $result;
+	}
+	
+	/**
+	 * Returns the children of this node
+	 *
+	 * $children = $this->children();
+	 *
+	 * @access public
+	 * @param $direction Direction to order the left column by
+	 * @return object
+	 **/
+	public function children($direction='ASC')
+	{	
+		$child_level = $this->{$this->level_column} + 1;
+		
+		$result = self::factory($this->object_name)->where('`'.$this->left_column.'` > '.$this->{$this->left_column}.' AND `'.$this->right_column.'` < '.$this->{$this->right_column}.' AND '.$this->level_column.' = '.$child_level)->orderby($this->left_column, $direction);
+		return $result;
+	}
+	
+	/**
+	 * Returns the siblings of this node
+	 *
+	 * $siblings = $this->siblings();
+	 *
+	 * @access public
+	 * @param $direction Direction to order the left column by
+	 * @return object
+	 **/
+	public function siblings($direction='ASC')
+	{	
+		$result = self::factory($this->object_name)->where('`'.$this->left_column.'` > '.$this->parent->{$this->left_column}.' AND `'.$this->right_column.'` < '.$this->parent->{$this->right_column}.' AND '.$this->level_column.' = '.$this->{$this->level_column}.' AND '.$this->primary_key.' <> '.$this->{$this->primary_key})->orderby($this->left_column, $direction);
+		return $result;
+	}
+	
+	/**
+	 * Returns a list of leaf nodes.
+	 *
+	 * $leaf_nodes = ORM::factory('table', 1)->leaves;
+	 *
+	 * @access public
+	 * @return object
+	 * @author Mathew Davies
+	 **/
+	public function leaves()
+	{
+		$result = self::factory($this->object_name)->where('`'.$this->left_column.'` = (`'.$this->right_column.'` - 1)	AND `'.$this->left_column.'` >= '.$this->{$this->left_column}.' AND `'.$this->right_column.'` <= '.$this->{$this->right_column})->orderby($this->left_column, 'ASC');
+		
+		return $result;
+	}
+	
+	/**
+	 * Get Size
+	 *
+	 * Returns the current size of the node.
+	 *
+	 * @return void
+	 * @author Mathew Davies, Kiall Mac Innes
+	 **/
+	protected function get_size()
+	{
+		return ($this->{$this->right_column} - $this->{$this->left_column}) + 1;
+	}
 
-        // Path of a Node
-        protected $path = array();
+	/**
+	 * Create a gap in the tree to make room for a new node
+	 *
+	 * @access private
+	 * @param $start integer Start position.
+	 * @param $size integer The size of the gap (default is 2)
+	 * @return void
+	 * @author Kiall Mac Innes
+	 **/
+	private function create_space($start, $size = 2)
+	{
+		// Update the left values.
+		$this->db->query('UPDATE '.$this->table_name.' SET `'.$this->left_column.'` = `'.$this->left_column.'` + '.$size.' WHERE `'.$this->left_column.'` >= '.$start);
 
-        /**
-         * Overload ORM::__get to support "descendants" property.
-         *
-         * @param   string  column name
-         * @return  mixed
-         */
-        public function __get($column)
-        {
-                if ($column === 'descendants')
-                {
-                        if (empty($this->related[$column]))
-                        {
-                                $this->related[$column] = ORM::factory(inflector::singular($this->table_name))
-                                        ->where($this->left_column.' > '. $this->object[$this->left_column])
-                                        ->where($this->right_column.' < '. $this->object[$this->right_column])
-                                        ->orderby($this->left_column, 'ASC')
-                                        ->find_all();
-                        }
+		// Now the right.
+		$this->db->query('UPDATE '.$this->table_name.' SET `'.$this->right_column.'` = `'.$this->right_column.'` + '.$size.' WHERE `'.$this->right_column.'` >= '.$start);
+	}
+	
+	/**
+	 * Closes a gap in a tree. Mainly used after a node has
+	 * been removed.
+	 *
+	 * @access private
+	 * @param $start integer Start position.
+	 * @param $size integer The size of the gap (default is 2)
+	 * @return void
+	 * @author Kiall Mac Innes
+	 **/
+	private function delete_space($start, $size = 2)
+	{
+		// Update the left values.
+		$this->db->query('UPDATE '.$this->table_name.' SET `'.$this->left_column.'` = `'.$this->left_column.'` - '.$size.' WHERE `'.$this->left_column.'` >= '.$start);
+		
+		// Now the right.
+		$this->db->query('UPDATE '.$this->table_name.' SET `'.$this->right_column.'` = `'.$this->right_column.'` - '.$size.' WHERE `'.$this->right_column.'` >= '.$start);
+	}
+	
+	/**
+	 * Inserts a new node to the left of the first node.
+	 *
+	 * $parent = 12;
+	 *
+	 * $new = ORM::factory('table');
+	 * $new->name = 'New Node';
+	 * $new->insert_as_first_child($parent);
+	 *
+	 * @access public
+	 * @param $target object | integer Node object or ID.
+	 * @return void
+	 * @author Mathew
+	 **/
+	public function insert_as_first_child($target)
+	{
+		// Insert should only work on new nodes.. if its already it the tree it needs to be moved!
+		if ($this->loaded)
+			return FALSE;
+		
+		// Lock the table.
+		$this->lock();
+		
+		// If $target isn't an object we find the node with the ID
+		if (!is_a($target, get_class($this)))
+		{
+			$target = self::factory($this->object_name, $target);
+		}
+		else
+		{
+			// Ensure we're using the latest version of $target
+			$target->reload();
+		}
+		
+		// Example : left = 1, right = 32
 
-                        return $this->related[$column];
-                }
+		// Values for the new node
+		// Example : left = 2, right = 3
+		$this->{$this->left_column}  = $target->{$this->left_column} + 1;
+		$this->{$this->right_column} = $this->{$this->left_column} + 1;
+		$this->{$this->level_column} = $target->{$this->level_column} + 1;
+		
+		// Create some space for the new node.
+		$this->create_space($this->{$this->left_column});
+		
+		// Save the new node.
+		parent::save();
+		
+		// Unlock the table.
+		$this->unlock();
+		
+		return $this;
+	}
+	
+	/**
+	 * Inserts a new node to the right of the last node.
+	 *
+	 * $parent = 12;
+	 *
+	 * $new = ORM::factory('table');
+	 * $new->name = 'New Node';
+	 * $new->insert_as_last_child($parent);
+	 *
+	 * @access public
+	 * @param $target object | integer Node object or ID.
+	 * @return void
+	 * @author Mathew Davies
+	 **/
+	public function insert_as_last_child($target)
+	{
+		// Insert should only work on new nodes.. if its already it the tree it needs to be moved!
+		if ($this->loaded)
+			return FALSE;
+			
+		// Lock the table.
+		$this->lock();
+		
+		// If $target isn't an object we find the node with the ID
+		if (!is_a($target, get_class($this)))
+		{
+			$target = self::factory($this->object_name, $target);
+		}
+		else
+		{
+			// Ensure we're using the latest version of $target
+			$target->reload();
+		}
+		
+		// Example : left = 1, right = 32
 
-                return parent::__get($column);
-        }
+		// Values for the new node
+		// Example : left = 32, right = 33
+		$this->{$this->left_column}  = $target->{$this->right_column};
+		$this->{$this->right_column} = $this->{$this->left_column} + 1;
+		$this->{$this->level_column} = $target->{$this->level_column} + 1;
+		
+		// Create some space for the new node.
+		$this->create_space($this->{$this->left_column});
+		
+		// Save the new node.
+		parent::save();
+		
+		// Unlock the table.
+		$this->unlock();
+		
+		return $this;
+	}
 
-        /**
-         * Counts the number of children of the current node
-         *
-         * @return  integer  number of children
-         */
-        public function count_children()
-        {
-                return ($this->object[$this->right_column] - $this->object[$this->left_column] - 1) / 2;
-        }
+	/**
+	 * Inserts a new node as a previous sibling
+	 *
+	 * $target = 12;
+	 *
+	 * $new = ORM::factory('table');
+	 * $new->name = 'New Node';
+	 * $new->insert_as_prev_sibling($target);
+	 *
+	 * @access public
+	 * @param $target object | integer Node object or ID.
+	 * @return void
+	 **/
+	public function insert_as_prev_sibling($target)
+	{
+		// Insert should only work on new nodes.. if its already it the tree it needs to be moved!
+		if ($this->loaded)
+			return FALSE;
+		
+		// Lock the table.
+		$this->lock();
+		
+		// If $target isn't an object we find the node with the ID
+		if (!is_a($target, get_class($this)))
+		{
+			$target = self::factory($this->object_name, $target);
+		}
+		else
+		{
+			// Ensure we're using the latest version of $target
+			$target->reload();
+		}
 
-        /**
-         * Checks if a node has children
-         *
-         * @return  boolean
-         */
-        public function has_children()
-        {
-                return (bool) $this->count_children();
-        }
+		$this->{$this->left_column}  = $target->{$this->left_column};
+		$this->{$this->right_column} = $this->{$this->left_column} + 1;
+		$this->{$this->level_column} = $target->{$this->level_column};
+		
+		// Create some space for the new node.
+		$this->create_space($this->{$this->left_column});
+		
+		// Save the new node.
+		parent::save();
+		
+		// Unlock the table.
+		$this->unlock();
+		
+		return $this;
+	}
 
-        /**
-         * Calculates the path from the rootnode to the current node
-         *
-         * @return  ORM_Iterator  Path to the current node
-         */
-        public function path()
-        {
-                if (empty($this->path))
-                {
-                        if ($this->loaded)
-                        {
-                                $this->path = $this
-                                        ->where($this->left_column.' <= '.$this->object[$this->left_column])
-                                        ->where($this->right_column.' >= '.$this->object[$this->right_column])
-                                        ->orderby($this->left_column, 'ASC')
-                                        ->find_all();
-                        }
-                }
+	/**
+	 * Inserts a new node as a next sibling
+	 *
+	 * $target = 12;
+	 *
+	 * $new = ORM::factory('table');
+	 * $new->name = 'New Node';
+	 * $new->insert_as_next_sibling($target);
+	 *
+	 * @access public
+	 * @param $target object | integer Node object or ID.
+	 * @return void
+	 **/
+	public function insert_as_next_sibling($target)
+	{
+		// Insert should only work on new nodes.. if its already it the tree it needs to be moved!
+		if ($this->loaded)
+			return FALSE;
+		
+		// Lock the table.
+		$this->lock();
+		
+		// If $target isn't an object we find the node with the ID
+		if (!is_a($target, get_class($this)))
+		{
+			$target = self::factory($this->object_name, $target);
+		}
+		else
+		{
+			// Ensure we're using the latest version of $target
+			$target->reload();
+		}
 
-                return $this->path;
-        }
+		$this->{$this->left_column}  = $target->{$this->right_column} + 1;
+		$this->{$this->right_column} = $this->{$this->left_column} + 1;
+		$this->{$this->level_column} = $target->{$this->level_column};
+		
+		// Create some space for the new node.
+		$this->create_space($this->{$this->left_column});
+		
+		// Save the new node.
+		parent::save();
+		
+		// Unlock the table.
+		$this->unlock();
+		
+		return $this;
+	}
+	
+	/**
+	 * Overloaded save method
+	 *
+	 * @return void
+	 * @author Mathew Davies
+	 **/
+	public function save()
+	{
+		if ($this->loaded === TRUE)
+		{
+			return parent::save();
+		}
+		
+		return FALSE;
+	}
+	
+	/**
+	 * Removes a node and descendants if specified.
+	 *
+	 * $
+	 *
+	 * @access public
+	 * @param $descendants boolean Remove the descendants?
+	 * @return void
+	 * @author Mathew Davies, Kiall Mac Innes
+	 **/
+	public function delete($descendants = TRUE)
+	{
+		// Lock the table
+		$this->lock();
+		
+		// The descendants need to be removed.
+		if ($descendants)
+		{
+			// Delete the node and it's descendants.
+			$this->db->delete($this->table_name, '`'.$this->left_column.'` BETWEEN '.$this->{$this->left_column}.' AND '.$this->{$this->right_column});
 
-        /**
-         * Adds a Child to the current node
-         *
-         * @param   ORM_MPTT  Node we want to add as a child
-         * @return  ORM
-         */
-        public function add_child(ORM_MPTT $model)
-        {
-                if ( ! $this->loaded)
-                        return FALSE;
+			// Close the gap
+			$this->delete_space($this->{$this->left_column}, $this->get_size());
+		}
+		// The descendants need to be moved up a level.
+		else
+		{
+			throw new Exception('Not Implemented');
+		}
 
-                // adjust left and right values
-                $this->db->query("UPDATE ".$this->table_name." SET ".$this->left_column."=".$this->left_column."+2 WHERE ".$this->left_column." >= ".$this->object[$this->right_column]);
-                $this->db->query("UPDATE ".$this->table_name." SET ".$this->right_column."=".$this->right_column."+2 WHERE ".$this->right_column." >= ".$this->object[$this->right_column]);
+		// Unlock the table.
+		$this->unlock();
+	}
 
-                $model->__set($this->parent_key, $this->id);
-                $model->__set($this->level_column, $this->object[$this->level_column] + 1);
-                $model->__set($this->left_column, $this->object[$this->right_column]);
-                $model->__set($this->right_column, $this->object[$this->right_column] + 1);
-                $model->save();
+	/**
+	 * Overloads the select_list method to
+	 * support indenting.
+	 *
+	 * @param $key string First table column
+	 * @param $val string Second table column
+	 * @param $indent string Use this character for indenting
+	 * @return void
+	 * @author Mathew
+	 **/
+	public function select_list($key = NULL, $val = NULL, $indent = FALSE)
+	{
+		if (is_string($indent))
+		{
+			$result = $this->load_result(TRUE);
+			
+			$array = array();
+			
+			foreach ($result as $row)
+			{
+				$array[$row->$key] = str_repeat($indent, $row->level).$row->$val;
+			}
+			
+			return $array;
+		}
 
-                return $this;
-        }
+		return parent::select_list($key, $val);
+	}
+	
+	/**
+	 * Returns the subtree of the currently loaded
+	 * node
+	 *
+	 * $root = ORM::factory('table')->root()->find();
+	 *
+	 * $descendants = ORM::factory('table', $root->id)->subtree()->find_all();
+	 *
+	 * @access public
+	 * @param $root boolean Should it include the root node?
+	 * @return object
+	 * @author Mathew Davies
+	 **/
+	public function subtree($root = FALSE)
+	{		
+		if ($root === TRUE)
+			return self::factory($this->object_name)->where('`'.$this->left_column.'` >= '.$this->{$this->left_column}.' AND `'.$this->right_column.'` <= '.$this->{$this->right_column})->orderby($this->left_column, 'ASC');
+			
+		return self::factory($this->object_name)->where('`'.$this->left_column.'` > '.$this->{$this->left_column}.' AND `'.$this->right_column.'` < '.$this->{$this->right_column})->orderby($this->left_column, 'ASC');
+	}
+	
+	/**
+	 * Move to First Child
+	 *
+	 * This moves the current node to the first child of the target node.
+	 *
+	 * @param $target object | integer Target Node
+	 * @return void
+	 * @author Mathew Davies, Kiall Mac Innes
+	 **/
+	public function move_to_first_child($target)
+	{
+		// Lock the table
+		$this->lock();	
+		
+		// Move should only work on nodes that are already in the tree.. if its not already it the tree it needs to be inserted!
+		if (!$this->loaded)
+			return FALSE;
 
-        /**
-         * Deletes the current node and its descendants
-         *
-         * @return  ORM
-         */
-        public function delete($id = NULL)
-        {
-                $move = 2 * ($this->count_children() + 1);
+		// Make sure we have the most uptodate version of this AFTER we lock
+		$this->reload(); // This should *probably* go into $this->lock();
+		
+		// Find the target node properties.
+		if (!is_a($target, get_class($this)))
+		{
+			$target = self::factory($this->table_name, $target);
+		}
+		
+		// New Left Value.
+		$new_left = $target->{$this->left_column} + 1;
+		
+		// Determine the level difference between source and target.
+		$level_offset = $target->{$this->level_column} - $this->{$this->level_column} + 1;
+		
+		// Move
+		$this->move($new_left, $level_offset);
+		
+		// Unlock the table.
+		$this->unlock();
 
-                // adjust left and right values
-                $this->db->query('UPDATE '.$this->table_name.' SET '.$this->left_column.'='.$this->left_column.'-'.$move.' WHERE '.$this->left_column.' > '.$this->object[$this->right_column]);
-                $this->db->query('UPDATE '.$this->table_name.' SET '.$this->right_column.'='.$this->right_column.'-'.$move.' WHERE '.$this->right_column.' > '.$this->object[$this->right_column]);
+		return $this;
+	}
+	
+	/**
+	 * Move to Last Child
+	 *
+	 * This moves the current node to the last child of the target node.
+	 *
+	 * @param $target object | integer Target Node
+	 * @return void
+	 * @author Mathew Davies, Kiall Mac Innes
+	 **/
+	public function move_to_last_child($target)
+	{
+		// Lock the table
+		$this->lock();
+		
+		// Move should only work on nodes that are already in the tree.. if its not already it the tree it needs to be inserted!
+		if (!$this->loaded)
+			return FALSE;
+			
+		// Make sure we have the most uptodate version of this AFTER we lock
+		$this->reload(); // This should *probably* go into $this->lock();
+		
+		// Find the target node properties.
+		if (!is_a($target, get_class($this)))
+		{
+			$target = self::factory($this->table_name, $target);
+		}
+		
+		// New Left Value.
+		$new_left = $target->{$this->right_column};
+		
+		// Determine the level difference between source and target.
+		$level_offset = $target->{$this->level_column} - $this->{$this->level_column} + 1;
+		
+		// Move
+		$this->move($new_left, $level_offset);
+		
+		// Unlock the table.
+		$this->unlock();
+		
+		return $this;
+	}
+	
+	/**
+	 * Move to Previous Sibling.
+	 *
+	 * This moves the current node to the previous sibling of the target node.
+	 *
+	 * @param $target object | integer Target Node
+	 * @return void
+	 * @author Mathew Davies, Kiall Mac Innes
+	 **/
+	public function move_to_prev_sibling($target)
+	{
+		// Move should only work on nodes that are already in the tree.. if its not already it the tree it needs to be inserted!
+		if (!$this->loaded)
+			return FALSE;
+		
+		// Lock the table
+		$this->lock();
+		
+		// Make sure we have the most upto date version of this AFTER we lock
+		$this->reload(); // This should *probably* go into $this->lock();
+		
+		// Find the target node properties.
+		if (!is_a($target, get_class($this)))
+		{
+			$target = self::factory($this->table_name, $target);
+		}
+		
+		// New Left Value.
+		$new_left = $target->{$this->left_column};
+		
+		// Determine the level difference between source and target.
+		$level_offset = $target->{$this->level_column} - $this->{$this->level_column};
+		
+		// Move
+		$this->move($new_left, $level_offset);
+		
+		// Unlock the table.
+		$this->unlock();
+		
+		return $this;
+	}
+	
+	/**
+	 * Move to Next Sibling.
+	 *
+	 * This moves the current node to the next sibling of the target node.
+	 *
+	 * @param $target object | integer Target Node
+	 * @return void
+	 * @author Mathew Davies, Kiall Mac Innes
+	 **/
+	public function move_to_next_sibling($target)
+	{
+		// Move should only work on nodes that are already in the tree.. if its not already it the tree it needs to be inserted!
+		if (!$this->loaded)
+			return FALSE;
+		
+		// Lock the table
+		$this->lock();
+		
+		// Make sure we have the most upto date version of this AFTER we lock
+		$this->reload(); // This should *probably* go into $this->lock();
+		
+		// Find the target node properties.
+		if (!is_a($target, get_class($this)))
+		{
+			$target = self::factory($this->table_name, $target);
+		}
+		
+		// New Left Value.
+		$new_left = $target->{$this->right_column} + 1;
+		
+		// Determine the level difference between source and target.
+		$level_offset = $target->{$this->level_column} - $this->{$this->level_column};
+		
+		// Move
+		$this->move($new_left, $level_offset);
+		
+		// Unlock the table.
+		$this->unlock();
+		
+		return $this;
+	}
+	
+	/**
+	 * Move
+	 *
+	 * @param $new_left integer The value for the new left.
+	 * @return void
+	 * @author Mathew Davies, Kiall Mac Innes
+	 **/
+	protected function move($new_left, $level_offset)
+	{
+		// Lock the table
+		$this->lock();		
+		
+		// Size of current node.
+		// For example left = 5, right = 6
+		// (right - left) + 1
+		// Result = 2
+		$size = $this->get_size();
+		
+		// New right value
+		$new_right = ($new_left + $size) - 1;
 
-                // delete children
-                $this->db
-                        ->where($this->left_column.' < '.$this->object[$this->right_column])
-                        ->where($this->left_column.' > '.$this->object[$this->left_column])
-                        ->delete($this->table_name);
+		// Now we create the new gap
+		$this->create_space($new_left, $size);
 
-                // delete entry
-                return parent::delete($id);
-        }
+		$this->reload();
+		
+		// This is how much we move our current node by.
+		// This needs checking.
+		$offset = ($new_left - $this->{$this->left_column});
+		
+		// Update the values.
+		// UPDATE `$this->table_name` SET `left` = `left` + $offset, `right` = `right` + $offset WHERE `left` >= $this->{$this->left_column} AND `right` <= $this->{$this->right_column}
+		$this->db->query('UPDATE '.$this->table_name.' SET `'.$this->left_column.'` = `'.$this->left_column.'` + '.$offset.', `'.$this->right_column.'` = `'.$this->right_column.'` + '.$offset.'
 
+		, `'.$this->level_column.'` = `'.$this->level_column.'` + '.$level_offset.'
+		
+		WHERE  `'.$this->left_column.'` >= '.$this->{$this->left_column}.' AND `'.$this->right_column.'` <= '.$this->{$this->right_column});
+		
+		// Now we close the old gap
+		$this->delete_space($this->{$this->left_column}, $size);
+		
+		// Unlock the table.
+		$this->unlock();
+	}
+	
+	/**
+	 *
+	 * @access public
+	 * @param $column - Which field to get.
+	 * @return mixed
+	 **/
+	public function __get($column)
+	{
+		switch ($column)
+		{
+			case 'parent':
+				return $this->parent();
+			case 'parents':
+				return $this->parents()->find_all();
+			case 'children':
+				return $this->children()->find_all();
+			case 'first_child':
+				return $this->children()->find();
+			case 'last_child':
+				return $this->children('DESC')->find();
+			case 'siblings':
+				return $this->siblings()->find_all();
+			case 'root':
+				return $this->root();
+			case 'leaves':
+				return $this->leaves()->find_all();
+			default:
+				return parent::__get($column);
+		}
+	}
+	
+	/**
+	 * Verify the tree is in good order 
+	 * 
+	 * This functions speed is irrelevant - its really only for debugging and unit tests
+	 * 
+	 * @todo Look for any nodes no longer contained by the root node.
+	 * @todo Ensure every node has a path to the root via ->parents();
+	 * @access public
+	 * @return boolean
+	 **/
+	public function verify_tree()
+	{
+		if (!$this->is_root())
+			throw new Exception('verify_tree() can only be used on root nodes');
+		
+		$end = $this->{$this->right_column};
 
-        /**
-         * Saves the current node. If the node is new
-         * it will be the child of the root node
-         *
-         * @return ORM
-         */
-        public function save()
-        {
-                $level_column = $this->level_column;
-                $left_column = $this->left_column;
-                $right_column = $this->right_column;
-
-                if (! $this->__get($this->parent_key) > 0)
-                {
-                        // get root node
-                        $query = $this->db->select('id', $this->level_column, $this->left_column, $this->right_column)->where($this->left_column, 1)->limit(1)->get($this->table_name);
-
-                        // do we have a root node?
-                        if (count($query) > 0)
-                        {
-                                $query = $query->current();
-
-                                // adjust the right value of the root node
-                                $this->db->query('UPDATE '.$this->table_name.' SET '.$this->right_column.'='.($query->$right_column + 2).' WHERE id = '.$query->id);
-
-                                // add parent_id, left and right to the new node
-                                $this->__set($this->parent_key, $query->id);
-                                $this->__set($this->level_column, $query->$level_column + 1);
-                                $this->__set($this->left_column, $query->$right_column);
-                                $this->__set($this->right_column, $query->$right_column + 1);
-                        }
-                        else
-                        {
-                                // add parent_id, left and right to the new node
-                                $this->__set($this->parent_key, 0);
-                                $this->__set($this->level_column, 0);
-                                $this->__set($this->left_column, 1);
-                                $this->__set($this->right_column, 2);
-                        }
-                }
-
-                return parent::save();
-        }
-
-}
+		// Look for nodes no longer contained by the root node.
+		$extra_nodes = self::factory($this->object_name)->where('lft>', $end)->orwhere('rgt>', $end)->find_all();
+			if (count($extra_nodes) > 0)
+				return FALSE;
+		
+		$i = 0;
+		
+		while ($i < $end)
+		{
+			$i++;
+			$nodes = self::factory($this->object_name)->where('lft', $i)->orwhere('rgt', $i)->find_all();
+			if (count($nodes) != 1)
+				return FALSE;
+			if ($nodes->current()->lft >= $nodes->current()->rgt)
+				return FALSE;
+			
+			// Tests that only apply to non root nodes. 
+			if (!$nodes->current()->is_root())
+			{
+				$parent_level = $nodes->current()->parent->lvl;
+				$our_level = $nodes->current()->lvl;
+				
+				if ($parent_level + 1 != $our_level)
+					return FALSE;
+			}
+		}
+		
+		return TRUE;
+	}
+	
+} // END class ORM_MPTT_Core

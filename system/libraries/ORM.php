@@ -8,7 +8,7 @@
  * [ref-orm]: http://wikipedia.org/wiki/Object-relational_mapping
  * [ref-act]: http://wikipedia.org/wiki/Active_record
  *
- * $Id: ORM.php 3902 2009-01-13 23:02:41Z jheathco $
+ * $Id: ORM.php 3909 2009-01-16 18:54:10Z jheathco $
  *
  * @package    ORM
  * @author     Kohana Team
@@ -113,11 +113,8 @@ class ORM_Core {
 		}
 		elseif (!empty($id))
 		{
-			// Set the object's primary key, but don't load it until needed
-			$this->object[$this->primary_key] = $id;
-
-			// Object is considered saved until something is set
-			$this->saved = TRUE;
+			// Find an object
+			$this->find($id);
 		}
 	}
 
@@ -267,13 +264,6 @@ class ORM_Core {
 		}
 		elseif (array_key_exists($column, $this->object))
 		{
-			if( ! $this->loaded AND ! $this->empty_primary_key())
-			{
-				// Column asked for but the object hasn't been loaded yet, so do it now
-				// Ignore loading of any columns that have been changed
-				$this->find($this->object[$this->primary_key], TRUE);
-			}
-
 			return $this->object[$column];
 		}
 		elseif (isset($this->related[$column]))
@@ -287,12 +277,6 @@ class ORM_Core {
 		elseif ($model = $this->related_object($column))
 		{
 			// This handles the has_one and belongs_to relationships
-
-			if( ! $this->loaded AND ! $this->empty_primary_key())
-			{
-				// Column asked for but object hasn't been loaded yet
-				$this->find($this->object[$this->primary_key], TRUE);
-			}
 
 			if (array_key_exists($column.'_'.$model->primary_key, $this->object))
 			{
@@ -339,7 +323,7 @@ class ORM_Core {
 			// Load the remote model, always singular
 			$model = ORM::factory(inflector::singular($column));
 
-			if ($this->has($model))
+			if ($this->has($model, TRUE))
 			{
 				// many<>many relationship
 				return $this->related[$column] = $model
@@ -571,10 +555,9 @@ class ORM_Core {
 	 *
 	 * @chainable
 	 * @param   mixed  primary key or an array of clauses
-	 * @param   bool   ignore loading of columns that have been modified
 	 * @return  ORM
 	 */
-	public function find($id = NULL, $ignore_changed = FALSE)
+	public function find($id = NULL)
 	{
 		if ($id !== NULL)
 		{
@@ -590,7 +573,7 @@ class ORM_Core {
 			}
 		}
 
-		return $this->load_result(FALSE, $ignore_changed);
+		return $this->load_result();
 	}
 
 	/**
@@ -716,10 +699,8 @@ class ORM_Core {
 				$data[$column] = $this->object[$column];
 			}
 
-			if ( ! $this->empty_primary_key())
+			if ($this->loaded === TRUE)
 			{
-				// Primary key isn't empty so do an update
-
 				$query = $this->db
 					->where($this->primary_key, $this->object[$this->primary_key])
 					->update($this->table_name, $data);
@@ -821,7 +802,6 @@ class ORM_Core {
 	 * relationships that have been created with other objects.
 	 *
 	 * @chainable
-	 * @param   mixed  id to delete
 	 * @return  ORM
 	 */
 	public function delete($id = NULL)
@@ -929,9 +909,10 @@ class ORM_Core {
 	 * Tests if this object has a relationship to a different model.
 	 *
 	 * @param   object   related ORM model
+	 * @param   boolean  check for any relations to given model
 	 * @return  boolean
 	 */
-	public function has(ORM $model)
+	public function has(ORM $model, $any = FALSE)
 	{
 		$related = $model->object_plural;
 
@@ -954,6 +935,11 @@ class ORM_Core {
 		{
 			// Check if a specific object exists
 			return in_array($model->primary_key_value, $this->changed_relations[$related]);
+		}
+		elseif ($any)
+		{
+			// Check if any relations to given model exist
+			return ! empty($this->changed_relations[$related]);
 		}
 		else
 		{
@@ -1243,18 +1229,14 @@ class ORM_Core {
 	 *
 	 * @chainable
 	 * @param   array  values to load
-	 * @param   bool   ignore loading of columns that have been modified
 	 * @return  ORM
 	 */
-	public function load_values(array $values, $ignore_changed = FALSE)
+	public function load_values(array $values)
 	{
 		if (array_key_exists($this->primary_key, $values))
 		{
-			if ( ! $ignore_changed)
-			{
-				// Replace the object and reset the object status
-				$this->object = $this->changed = $this->related = array();
-			}
+			// Replace the object and reset the object status
+			$this->object = $this->changed = $this->related = array();
 
 			// Set the loaded and saved object status based on the primary key
 			$this->loaded = $this->saved = ($values[$this->primary_key] !== NULL);
@@ -1267,16 +1249,13 @@ class ORM_Core {
 		{
 			if (strpos($column, ':') === FALSE)
 			{
-				if ( ! $ignore_changed OR ! isset($this->changed[$column]))
+				if (isset($this->table_columns[$column]))
 				{
-					if (isset($this->table_columns[$column]))
-					{
-						// The type of the value can be determined, convert the value
-						$value = $this->load_type($column, $value);
-					}
-
-					$this->object[$column] = $value;
+					// The type of the value can be determined, convert the value
+					$value = $this->load_type($column, $value);
 				}
+
+				$this->object[$column] = $value;
 			}
 			else
 			{
@@ -1360,11 +1339,10 @@ class ORM_Core {
 	 *
 	 * @chainable
 	 * @param   boolean       return an iterator or load a single row
-	 * @param   boolean       ignore loading of columns that have been modified
 	 * @return  ORM           for single rows
 	 * @return  ORM_Iterator  for multiple rows
 	 */
-	protected function load_result($array = FALSE, $ignore_changed = FALSE)
+	protected function load_result($array = FALSE)
 	{
 		if ($array === FALSE)
 		{
@@ -1418,7 +1396,7 @@ class ORM_Core {
 		if ($result->count() === 1)
 		{
 			// Load object values
-			$this->load_values($result->result(FALSE)->current(), $ignore_changed);
+			$this->load_values($result->result(FALSE)->current());
 		}
 		else
 		{
