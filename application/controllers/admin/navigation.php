@@ -7,12 +7,13 @@ class Navigation_Controller extends Admin_Controller {
 	 * List all the navigation content nodes for editing
 	 */
 	public function manage()
-	{
+	{		
 		if (isset($_POST['new_navigation_form']))
 		{
 			$post = $this->input->post();
 			$node = ORM::factory('navigation_content');
 			$parent = ORM::factory('navigation_content', $post['parent_id']);
+			if (!$parent->loaded) die($parent->name);
 			if ($node->validate($post))
 			{
 				$node->insert_as_first_child($parent);
