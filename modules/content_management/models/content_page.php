@@ -55,14 +55,12 @@ class Content_Page_Model extends Auto_Modeler_ORM {
 				$this->data[$key] = $value;
 			}
 		}
-		return TRUE;
 	}
 
 	public function render_children()
 	{
 		$objects = $this->find_related('objects');
 		if(count($objects) == 0) return FALSE; //page has no content yet
-		echo kohana::debug((bool)count($objects));
 		$sections = array();
 		$current_section = NULL;
 		$section = NULL;
@@ -77,10 +75,14 @@ class Content_Page_Model extends Auto_Modeler_ORM {
 			$sections[$section->name]['object'] = $section;
 			$sections[$section->name]['nodes'][] = $obj->node;
 		}
+		$output = NULL;
 		foreach($sections as $name => $section)
 		{
-			echo View::factory($section['object']->template)->set('nodes', $section['nodes'])->set('section', $section['object']);
+			$output .= View::factory($section['object']->template)
+							->set('nodes', $section['nodes'])
+							->set('section', $section['object'])->render();
 		}
+		return $output;
 	}
 
 } // End Content Page Model
