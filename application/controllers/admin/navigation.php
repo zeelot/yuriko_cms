@@ -16,7 +16,7 @@ class Navigation_Controller extends Admin_Controller {
 			if (!$parent->loaded) die($parent->name);
 			if ($node->validate($post))
 			{
-				$node->insert_as_first_child($parent);
+				$node->insert_as_last_child($parent);
 				notice::add('Navigation Item Created!', 'success');
 				url::redirect('admin/navigation/edit/'.$node->id);
 			}
