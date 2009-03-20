@@ -109,4 +109,20 @@ class Pages_Controller extends Admin_Controller {
 		$this->template->content->sections = $sections;
 	}
 
+	public function remove_node($id)
+	{
+		$pivot = Auto_Modeler::factory('content_pages_sections_nodes', $id);
+		if ($pivot->id)
+		{
+			$page = $pivot->page_id;
+			$pivot->delete();
+			notice::add('Node Removed!', 'success');
+			url::redirect('admin/pages/edit/'.$page);
+		}
+		else
+		{
+			Event::run('system.404');
+		}
+	}
+
 } // End Admin Page Controller

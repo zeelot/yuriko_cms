@@ -17,7 +17,11 @@
 		<legend>Contents</legend>
 		<ul>
 			<?php foreach($objects as $obj): ?>
-			<li><?php echo $obj->section->name; ?> : <?php echo $obj->node->name; ?></li>
+			<li>
+			<?php echo html::anchor('admin/pages/remove_node/'.$obj->id,
+					   html::image('media/images/fam_silk/delete.png', 'Remove')); ?>
+			<?php echo $obj->section->name; ?> : <?php echo $obj->node->name; ?>
+			</li>
 			<?php endforeach; ?>
 		</ul>
 	</fieldset>
