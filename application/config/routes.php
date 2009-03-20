@@ -21,7 +21,10 @@ $config['user'] = array
 $config['admin'] = array
 (
 	'uri' => 'admin/:controller/:method/:id/:ad',
-	'allowed_roles' => NULL,
+	'allowed_roles' => array
+	(
+		'admin',
+	),
 	'prefix' => array('controller' => 'admin_'),
 	'defaults' => array
 	(
@@ -31,6 +34,11 @@ $config['admin'] = array
 		'ad' => FALSE,
 	),
 );
+/*
+ * @TODO: these two routes need a way to detect segments.
+ * This will be needed for the different content types like blogs
+ * or wiki
+ */
 $config['nodes'] = array
 (
 	'uri' => 'node/:alias',
