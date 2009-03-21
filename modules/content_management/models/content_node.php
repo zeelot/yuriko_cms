@@ -7,7 +7,11 @@ class Content_Node_Model extends Auto_Modeler_ORM {
 	protected $data = array
 	(
 		'id'   => '',
-		'name' => ''
+		'name' => '',
+		'content_type_id' => '',
+		'content_id' => '',
+		'alias' => '',
+		'template' => '',
 	);
 
 	protected $rules = array
@@ -22,6 +26,7 @@ class Content_Node_Model extends Auto_Modeler_ORM {
 	(
 		'page'    => 'content_pages_sections_nodes',
 		'section' => 'content_pages_sections_nodes',
+		'nodes'   => 'content_pages_sections_nodes',
 		'objects' => 'content_pages_sections_nodes',
 	);
 

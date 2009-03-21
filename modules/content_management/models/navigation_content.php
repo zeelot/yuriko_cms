@@ -19,7 +19,9 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 			->pre_filter('trim')
 			->add_rules('name', 'required', 'length[4,52]', 'chars[a-z A-Z0-9_.]')
 			->add_rules('tag', 'required', 'length[4,52]', array($this, 'unique_tag'))
-			->add_rules('parent_id', 'required', 'digit', array($this, 'valid_node'));
+			->add_rules('parent_id', 'required', 'digit', array($this, 'valid_node'))
+			->add_rules('page_id', 'digit')
+			->add_rules('anchor', 'chars[a-zA-Z0-9_./]');
 
 		return parent::validate($array, $save);
 	}
@@ -33,30 +35,7 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 			->add_rules('anchor', 'chars[a-zA-Z0-9_./]');
 
 		return parent::validate($array, TRUE);
-	}
-
-	public function unique_tag($id)
-	{
-		return !(bool) $this->db
-			->where($this->unique_key($id), $id)
-			->count_records($this->table_name);
-	}
-	public function valid_node($id)
-	{
-		return (bool) $this->db
-			->where($this->unique_key($id), $id)
-			->count_records($this->table_name);
-	}
-
-	public function unique_key($id)
-	{
-		if ( ! empty($id) AND is_string($id) AND ! ctype_digit($id))
-		{
-			return 'tag';
-		}
-		return parent::unique_key($id);
-	}
-	
+	}	
 	
 	public function delete($descendants = TRUE)
 	{
@@ -84,6 +63,39 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 
 		}
 		parent::delete($descendants);
+	}
+
+	//checks if a content_node is attached to this item
+	public function has_node()
+	{
+		if(!$this->loaded) return FALSE;
+		return (bool) $this->db
+			->where(array
+				(
+					'content_id' => $this->id,
+					'content_type_id' => Auto_Modeler::factory('content_type', 'navigation')->id,
+				))->count_records('content_nodes');
+	}
+	public function unique_tag($id)
+	{
+		return !(bool) $this->db
+			->where($this->unique_key($id), $id)
+			->count_records($this->table_name);
+	}
+	public function valid_node($id)
+	{
+		return (bool) $this->db
+			->where($this->unique_key($id), $id)
+			->count_records($this->table_name);
+	}
+
+	public function unique_key($id)
+	{
+		if ( ! empty($id) AND is_string($id) AND ! ctype_digit($id))
+		{
+			return 'tag';
+		}
+		return parent::unique_key($id);
 	}
 
 	public function render()

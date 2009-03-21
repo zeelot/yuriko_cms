@@ -3,7 +3,7 @@
 <?php echo form::open(); ?>
 	<fieldset>
 		<legend>Edit Navigation Item "<?php echo $item->name; ?>"</legend>
-		<input type="hidden" name="edit_navigation" value="TRUE" />
+		<input type="hidden" name="edit_navigation_content" value="TRUE" />
 		<label>Tag: <input name="tag" type="text" value="<?php echo $item->tag; ?>" /></label>
 		<label>Name: <input name="name" type="text" value="<?php echo $item->name; ?>" /></label>
 		<label>Link to a Page:

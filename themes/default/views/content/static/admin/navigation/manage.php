@@ -1,65 +1,76 @@
 <?php
 /*
  * Variables:
- * $nodes = ORM_Iterator of all the navigation_content objects
+ * $root = ORM_MPTT of the root node
  */
 
 ?>
 
 <div>
 	<h1>List of Content Nodes</h1>
-	<div class="navigation">
-		<?php $level = 0; ?>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Sort</th>
+			<th>Edit</th>
+			<th>Node</th>
+			<th>Delete</th>
+		</tr>
 		<?php foreach($root->subtree()->find_all() as $child): ?>
-			<?php if($child->level > $level): ?>
-			<div><ul>
-			<li>
-			<?php $level++; ?>
-			<?php elseif($child->level < $level): ?>
-			<?php echo str_repeat('</li></ul></div>', $level - $child->level); ?>
-			</li>
-			<li>
-			<?php $level = $child->level; ?>
-			<?php else: ?>
-			</li>
-			<li>
-			<?php endif; ?>
-			<?php echo html::anchor('admin/navigation/delete/'.$child->id,
-					   html::image('media/images/fam_silk/delete.png', 'Delete Tree')); ?>
-			<?php if(($child->anchor) OR ($child->page_id > 0)): ?>
-			<?php echo ($child->page_id > 0)
-						? html::anchor(Auto_Modeler::factory('content_page', $child->page_id)->alias, $child->name)
-						: html::anchor($child->anchor, $child->name) ?>
-			<?php else: ?>
-			<?php echo $child->name; ?>
-			<?php endif; ?>
-			<?php echo html::anchor('admin/navigation/edit/'.$child->id, 'Edit'); ?>
+		<?php
+		$sort_up = ($child->lft - $child->parent->lft > 1)? TRUE : FALSE;
+		$sort_down = ($child->parent->rgt - $child->rgt > 1)? TRUE : FALSE;
+		?> 
+			<tr>
+				<td>
+				<?php echo str_repeat('----', $child->level - 1); ?>
+				<?php if(($child->page_id > 0) OR ($child->anchor)): ?>
+				<?php echo ($child->page_id > 0)
+					? html::anchor(Auto_Modeler::factory('content_page', $child->page_id)->alias, $child->name)
+					: html::anchor($child->anchor, $child->name) ?>
+				<?php else: ?>
+				<?php echo $child->name; ?>
+				<?php endif; ?>
+				</td>
+				<td>
+				<?php echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', $child->level - 1); ?>
+				<?php if($sort_up):?>
+				<?php echo html::anchor('admin/navigation/move_up/'.$child->id,
+					html::image('media/images/fam_silk/arrow_up.png',
+						array('alt'=>'Move Up', 'title'=>'Move Up'))); ?>
+				<?php endif; ?>
+				<?php if($sort_down):?>
+				<?php echo html::anchor('admin/navigation/move_down/'.$child->id,
+					html::image('media/images/fam_silk/arrow_down.png',
+						array('alt'=>'Move Down', 'title'=>'Move Down'))); ?>
+				<?php endif; ?>
+				</td>
+				<td>
+				<?php echo html::anchor('admin/navigation/edit/'.$child->id,
+					html::image('media/images/fam_silk/wrench.png',
+						array('alt'=>'Edit', 'title'=>'Edit'))); ?>
+				</td>
+				<td>
+				<?php if(!$child->has_node()): ?>
+				<?php echo html::anchor('admin/navigation/create_node/'.$child->id,
+					html::image('media/images/fam_silk/plugin_add.png',
+						array('alt'=>'Attach to Node', 'title'=>'Create Node'))); ?>
+				<?php else: ?>
+				<?php echo html::anchor('admin/navigation/delete_node/'.$child->id,
+					html::image('media/images/fam_silk/plugin_delete.png',
+						array('alt'=>'Detach from Node', 'title'=>'Delete Node'))); ?>
+				<?php endif; ?>
+				</td>
+				<td>
+				<?php echo html::anchor('admin/navigation/delete/'.$child->id,
+					html::image('media/images/fam_silk/bin.png',
+						array('alt'=>'Delete', 'title'=>'Delete'))); ?>
+				</td>
+			</tr>
 		<?php endforeach; ?>
-		<?php echo str_repeat('</li></ul></div>', $level); ?>
-	</div>
-	<?php echo form::open(); ?>
-	<fieldset>
-		<legend>New Menu Item</legend>
-		<input type="hidden" name="new_navigation_form" value="TRUE" />
-		<label for="nav.tag">
-			Tag: <input type="text" name="tag" id="nav.tag" />
-		</label>
-		<label for="nav.name">
-			Name: <input type="text" name="name" id="nav.name" />
-		</label>
-		<label for="nav.parent">
-			Parent:
-			<select name="parent_id" id="nav.parent">
-				<?php foreach($nodes as $node): ?>
-				<option value="<?php echo $node->id; ?>">
-				<?php echo str_repeat('----', $node->level); ?>
-				<?php echo $node->name; ?>
-				</option>
-				<?php endforeach; ?>
-			</select>
-		</label>
-		<button type="submit" name="create" value="create">Create</button>
-	</fieldset>
-	<?php echo form::close(); ?>
+		<tr>
+			<th colspan="5"><?php echo html::anchor('admin/navigation/create', 'Create New Navigation Item'); ?></th>
+		</tr>
+	</table>
 </div>
 
