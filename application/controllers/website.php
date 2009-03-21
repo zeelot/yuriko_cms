@@ -22,8 +22,6 @@ abstract class Website_Controller extends Template_Controller{
 
 		$this->template->theme = Kohana::config('themes.active', FALSE, FALSE);
 
-		//login widget for pages to use
-		widget::set('user_info', Component::factory('widget_user')->method('info'));
 		$this->profiler = new Profiler;
 	}
 } // End Website_Controller
