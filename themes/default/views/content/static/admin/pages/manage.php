@@ -1,7 +1,6 @@
 <div>
 	<h1>Manage Pages</h1>
 	<ul>
-	
 	<?php foreach($nodes as $node): ?>
 		<li>
 			<?php echo $node->title; ?>
@@ -12,7 +11,7 @@
 	</ul>
 	<?php echo form::open(); ?>
 	<fieldset>
-		<input type="hidden" name="new_page_form" value="TRUE" />
+		<input type="hidden" name="new_page_content" value="TRUE" />
 		<legend>New Page</legend>
 		<label for="page.title">
 			Title: <input type="text" id="page.title" name="title" />

@@ -104,7 +104,7 @@ class Navigation_Controller extends Admin_Controller {
 	{
 		$content = ORM::factory('navigation_content', $id);
 		if (!$content->loaded) Event::run('system.404');
-		$type = Auto_Modeler::factory('content_type', 'navigation');
+		$type = ORM::factory('content_type', 'navigation');
 
 		$node = new Content_Node_Model();
 		$node->content_type_id = $type->id;
@@ -114,19 +114,19 @@ class Navigation_Controller extends Admin_Controller {
 		$node->save();
 		$content->node_id = $node->id;
 		$content->save();
+		notice::add('Node Created!', 'success');
 		url::redirect('admin/navigation/manage');
 	}
 	public function delete_node($id = NULL)
 	{
 		$content = ORM::factory('navigation_content', $id);
 		if (!$content->loaded) Event::run('system.404');
-		$type = Auto_Modeler::factory('content_type', 'navigation');
 
-		$node = Auto_Modeler_ORM::factory('content_node', $content->node_id);
+		$node = ORM::factory('content_node', $content->node_id);
 		$content->node_id = 0;
 		$content->save();
 		$node->delete();
-		
+		notice::add('Node Deleted!', 'success');
 		url::redirect('admin/navigation/manage');
 	}
 	public function delete($id = NULL)

@@ -1,65 +1,33 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Content_Page_Model extends Auto_Modeler_ORM {
-
-	protected $table_name = 'content_pages';
-
-	protected $data = array
-	(
-		'id'   => '',
-		'alias' => '',
-		'title' => '',
-	);
-
-	protected $rules = array
-	(
-		'alias' => array('required'),
-		'title' => array('required'),
-	);
-
-	protected $aliases = array
-	(
-		'sections'	=> 'content_pages_sections_nodes',
-		'nodes'		=> 'content_pages_sections_nodes',
-		'objects'	=> 'content_pages_sections_nodes',
-		'content_pages' => 'pages',
-	);
+class Content_Page_Model extends ORM {
 
 	protected $has_many = array
 	(
 		'content_pages_sections_nodes',
+		'content_nodes' => 'content_pages_sections_nodes',
+		'content_sections' => 'content_pages_sections_nodes',
 	);
-	
-	public function __construct($id = NULL)
+
+	public function validate(array & $array, $save = FALSE)
 	{
-		parent::__construct();
-		if ($id != NULL AND is_string($id))
+		$array = Validation::factory($array)
+			->pre_filter('trim')
+			->add_rules('title', 'required', 'length[4,52]', 'chars[a-z A-Z0-9_.]')
+			->add_rules('alias', 'required', 'length[4,52]', array($this, 'unique_tag'));
+	}
+	public function unique_key($id)
+	{
+		if ( ! empty($id) AND is_string($id) AND ! ctype_digit($id))
 		{
-			// try and get a row with this name
-			$data = $this->db->orwhere(array('alias' => $id))->get($this->table_name)->result(FALSE);
-			// try and assign the data
-			if (count($data) == 1 AND $data = $data->current())
-			{
-				foreach ($data as $key => $value)
-				$this->data[$key] = $value;
-			}
+			return 'alias';
 		}
-		elseif ($id != NULL AND (ctype_digit($id) OR is_int($id)))
-		{
-			// try and get a row with this id
-			$data = $this->db->getwhere($this->table_name, array('id' => $id))->result(FALSE);
-			// try and assign the data
-			if (count($data) == 1 AND $data = $data->current())
-			{
-				foreach ($data as $key => $value)
-				$this->data[$key] = $value;
-			}
-		}
+		return parent::unique_key($id);
 	}
 
 	public function render_children()
 	{
-		$objects = $this->find_related('objects');
+		$objects = $this->content_pages_sections_nodes;
 		if(count($objects) == 0) return FALSE; //page has no content yet
 		$sections = array();
 		$current_section = NULL;
@@ -67,13 +35,14 @@ class Content_Page_Model extends Auto_Modeler_ORM {
 		
 		foreach($objects as $obj)
 		{
-			if ($current_section != $obj->section_id)
+			if ($current_section != $obj->content_section_id)
 			{
-				$section = $obj->section;
+				$section = $obj->content_section;
 				$current_section = $section->id;
 			}
+			
 			$sections[$section->name]['object'] = $section;
-			$sections[$section->name]['nodes'][] = $obj->node;
+			$sections[$section->name]['nodes'][] = $obj->content_node;
 		}
 		$output = NULL;
 		foreach($sections as $name => $section)

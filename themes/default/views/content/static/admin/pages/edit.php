@@ -20,7 +20,7 @@
 			<li>
 			<?php echo html::anchor('admin/pages/remove_node/'.$obj->id,
 					   html::image('media/images/fam_silk/delete.png', 'Remove')); ?>
-			<?php echo $obj->section->name; ?> : <?php echo $obj->node->name; ?>
+			<?php echo $obj->content_section->name; ?> : <?php echo $obj->content_node->name; ?>
 			</li>
 			<?php endforeach; ?>
 		</ul>
