@@ -16,8 +16,8 @@
 		You can have as many sub-menu's as you like.
 		</p>
 		<input type="hidden" name="new_navigation_content" value="TRUE" />
-		<label>Tag: <input name="tag" type="text" /></label>
-		<label>Name: <input name="name" type="text" /></label>
+		<label>Tag: <input name="tag" type="text" value="<?php echo (isset($_POST['tag']))?$_POST['tag']:NULL;?>" /></label>
+		<label>Name: <input name="name" type="text" value="<?php echo (isset($_POST['name']))?$_POST['name']:NULL;?>" /></label>
 		<label for="nav.parent">
 			Parent:
 			<select name="parent_id" id="nav.parent">
@@ -45,7 +45,7 @@
 		</label>
 		<label>
 			Manual Link:
-			<input name="anchor" type="text" /></label>
+			<input name="anchor" type="text" value="<?php echo (isset($_POST['anchor']))?$_POST['anchor']:NULL;?>" /></label>
 		</label>
 		<button type="submit" name="create">Craete</button>
 	</fieldset>
