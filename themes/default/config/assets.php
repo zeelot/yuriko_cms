@@ -75,4 +75,12 @@ $config['views'] = array
 			'markitup',
 		),
 	),
+	'content/static/admin/basic/create'		=> array
+	(
+		'globals'			=> array
+		(
+			'jquery',
+			'markitup',
+		),
+	),
 );

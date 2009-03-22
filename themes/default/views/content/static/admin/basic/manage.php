@@ -8,22 +8,42 @@
 
 <div>
 	<h1>List of Content Nodes</h1>
-	<ul>
-		<?php foreach($nodes as $node): ?> 
-		<li><?php echo html::anchor('admin/basic/edit/'.$node->id, $node->name); ?></li>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Edit</th>
+			<th>Node</th>
+			<th>Delete</th>
+		</tr>
+		<?php foreach($pages as $page): ?>
+		<tr>
+			<td><?php echo $page->name; ?></td>
+			<td>
+				<?php echo html::anchor('admin/basic/edit/'.$page->id,
+					html::image('media/images/fam_silk/wrench.png',
+						array('alt'=>'Edit', 'title'=>'Edit'))); ?>
+			</td>
+			<td>
+				<?php if(!$page->has_node()): ?>
+				<?php echo html::anchor('admin/basic/create_node/'.$page->id,
+					html::image('media/images/fam_silk/plugin_add.png',
+						array('alt'=>'Attach to Node', 'title'=>'Create Node'))); ?>
+				<?php else: ?>
+				<?php echo html::anchor('admin/basic/delete_node/'.$page->id,
+					html::image('media/images/fam_silk/plugin_delete.png',
+						array('alt'=>'Detach from Node', 'title'=>'Delete Node'))); ?>
+				<?php endif; ?>
+			</td>
+			<td>
+				<?php echo html::anchor('admin/basic/delete/'.$page->id,
+					html::image('media/images/fam_silk/bin.png',
+						array('alt'=>'Delete', 'title'=>'Delete'))); ?>
+			</td>
+		</tr>
 		<?php endforeach; ?>
-	</ul>
-	<?php echo form::open(); ?>
-	<fieldset>
-		<input type="hidden" name="new_basic_form" value="TRUE" />
-		<input type="hidden" name="content" value="Content" />
-		<input type="hidden" name="format_id" value="1" />
-		<legend>Create Basic Content</legend>
-		<label for="basic.name">
-			Name: <input type="text" id="basic.name" name="name" />
-		</label>
-		<button type="submit" name="submit">Create</button>
-	</fieldset>
-	<?php echo form::close(); ?>
+		<tr>
+			<th colspan="4"><?php echo html::anchor('admin/basic/create', 'Create New Basic Content'); ?></th>
+		</tr>
+	</table>	
 </div>
 

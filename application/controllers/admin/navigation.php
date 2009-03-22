@@ -125,7 +125,7 @@ class Navigation_Controller extends Admin_Controller {
 			notice::add('Action Cancelled!', 'success');
 			url::redirect('admin/navigation/manage');
 		}
-		$this->template->content = View::factory('content/static/admin/navigation/delete_node');
+		$this->template->content = View::factory('content/static/admin/nodes/delete');
 	}
 	public function delete($id = NULL)
 	{

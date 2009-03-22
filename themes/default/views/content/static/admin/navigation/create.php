@@ -2,14 +2,14 @@
 <?php echo form::open(); ?>
 	<fieldset>
 		<legend>New Navigation Item</legend>
-		<p class="notice">
+		<p class="info">
 		The <strong>Tag</strong> field is a unique identifier for the Navigation Item.
 		Usually	it is good practice to use the path to the item as the tag (this
 		ensures the tag will be unique). Ex: main.home (as a tag for the Home link
 		located under the Main Menu).  The <strong>Name</strong> field is the
 		text the visitors will see in the menu.
 		</p>
-		<p class="notice">
+		<p class="info">
 		The <strong>Parent</strong> is the location you want this item to be placed in.
 		root will start a new Navigation Tree (like Admin Menu).
 		All the links under Admin Menu will have a Parent of 'Admin Menu'.
@@ -29,10 +29,7 @@
 				<?php endforeach; ?>
 			</select>
 		</label>
-	</fieldset>
-	<fieldset>
-		<legend>Link</legend>
-		<p class="notice">
+		<p class="info">
 		Navigation Items can be links to Pages (which will tie a link to a page
 		alias), or you can set a manual link to specify an outside page like
 		'http://google.com'.  If a Page is selected, the Manual Link field will
@@ -50,8 +47,6 @@
 			Manual Link:
 			<input name="anchor" type="text" /></label>
 		</label>
-	</fieldset>
-	<fieldset>
 		<button type="submit" name="create">Craete</button>
 	</fieldset>
 <?php echo form::close(); ?>

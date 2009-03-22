@@ -1,9 +1,8 @@
 
 <div>
 	<p class="notice">
-	Are you sure you want to delete this Item and all of it's children?
-	This action cannot be undone! Deleting this Item will automatically remove
-	any Navigation content related to this Item from any Pages.
+	Are you sure you want to delete this Content?
+	This action cannot be undone!
 	</p>
 	<?php echo form::open(); ?>
 	<fieldset>

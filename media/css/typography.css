@@ -144,9 +144,10 @@ a[href^="http://yourwebsite.com"] { background:none; padding:0; margin:0; }
 .top {margin-top:0;padding-top:0;}
 .bottom {margin-bottom:0;padding-bottom:0;}
 .thin {font-weight: lighter;}
-.error, .notice, .success {padding:.8em;margin-bottom:1.6em;border:2px solid #ddd;}
+.error, .notice, .success, .info{padding:.8em;margin:1.6em 0em;border:2px solid #ddd;}
 .error {background:url(../images/icons/cross.png) no-repeat 3px 50% #FBE3E4;color:#8a1f11;border-color:#FBC2C4;padding-left:25px;}
-.notice {background:#FFF6BF;color:#514721;border-color:#FFD324;}
+.info {background:url(../images/fam_silk/information.png) no-repeat 3px 50% #E8F6FF;color:#4B5A8E;border-color:#CAE9FF;padding-left:25px;}
+.notice {background:url(../images/fam_silk/error.png) no-repeat 3px 50% #FFF6BF;color:#514721;border-color:#FFD324;padding-left:25px;}
 .success {background:url(../images/icons/tick.png) no-repeat 3px 50% #E6EFC2;color:#264409;border-color:#C6D880;padding-left:25px;}
 .error a {color:#8a1f11; background:none; padding:0; margin:0; }
 .notice a {color:#514721; background:none; padding:0; margin:0; }
