@@ -17,8 +17,8 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 	{
 		$array = Validation::factory($array)
 			->pre_filter('trim')
-			->add_rules('name', 'required', 'length[4,52]', 'chars[a-z A-Z0-9_.]')
-			->add_rules('tag', 'required', 'length[4,52]', array($this, 'unique_tag'))
+			->add_rules('name', 'required', 'length[1,52]', 'chars[a-z A-Z0-9_.]')
+			->add_rules('tag', 'required', 'length[1,52]', array($this, 'unique_tag'))
 			->add_rules('parent_id', 'required', 'digit', array($this, 'valid_node'))
 			->add_rules('page_id', 'digit')
 			->add_rules('anchor', 'chars[a-zA-Z0-9_./:]');
