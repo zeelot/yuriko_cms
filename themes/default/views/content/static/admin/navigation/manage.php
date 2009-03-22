@@ -7,7 +7,7 @@
 ?>
 
 <div>
-	<h1>List of Content Nodes</h1>
+	<h1>List of Navigation Items</h1>
 	<table>
 		<tr>
 			<th>Name</th>
