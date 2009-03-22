@@ -73,32 +73,21 @@ class Navigation_Controller extends Admin_Controller {
 	}
 	public function move_up($id = NULL)
 	{
-		$node = ORM::factory('navigation_content', $id);
-		if(!$node->loaded) Event::run('system.404');
+		$item = ORM::factory('navigation_content', $id);
+		if(!$item->loaded) Event::run('system.404');
 
-		$top = ORM::factory('navigation_content')
-			->where(array('level' => $node->level, 'rgt' => $node->lft-1))
-			->find();
-		if(!$top->loaded) Event::run('mptt.already_top');
-
-		$node->move_to_prev_sibling($top);
+		$item->move_up();
 		notice::add('Item Moved!', 'success');
 		url::redirect('admin/navigation/manage');
 	}
 	public function move_down($id = NULL)
 	{
-		$node = ORM::factory('navigation_content', $id);
-		if(!$node->loaded) Event::run('system.404');
+		$item = ORM::factory('navigation_content', $id);
+		if(!$item->loaded) Event::run('system.404');
 
-		$top = ORM::factory('navigation_content')
-			->where(array('level' => $node->level, 'lft' => $node->rgt+1))
-			->find();
-		if(!$top->loaded) Event::run('mptt.already_bottom');
-
-		$node->move_to_next_sibling($top);
+		$item->move_down();
 		notice::add('Item Moved!', 'success');
 		url::redirect('admin/navigation/manage');
-
 	}
 	public function create_node($id = NULL)
 	{
@@ -121,28 +110,38 @@ class Navigation_Controller extends Admin_Controller {
 	{
 		$content = ORM::factory('navigation_content', $id);
 		if (!$content->loaded) Event::run('system.404');
-
 		$node = ORM::factory('content_node', $content->node_id);
-		$content->node_id = 0;
-		$content->save();
-		$node->delete();
-		notice::add('Node Deleted!', 'success');
-		url::redirect('admin/navigation/manage');
+		
+		if(isset($_POST['confirm']))
+		{
+			$content->node_id = 0;
+			$content->save();
+			$node->delete();
+			notice::add('Node Deleted Successfully!', 'success');
+			url::redirect('admin/navigation/manage');
+		}
+		elseif(isset($_POST['cancel']))
+		{
+			notice::add('Action Cancelled!', 'success');
+			url::redirect('admin/navigation/manage');
+		}
+		$this->template->content = View::factory('content/static/admin/navigation/delete_node');
 	}
 	public function delete($id = NULL)
 	{
-		$node = ORM::factory('navigation_content', $id);
-		if (!$node->loaded) Event::run('system.404');
-
-		if($node->delete())
+		$item = ORM::factory('navigation_content', $id);
+		if (!$item->loaded) Event::run('system.404');
+		if(isset($_POST['confirm']))
 		{
+			$item->delete();
 			notice::add('Item Deleted Successfully!', 'success');
+			url::redirect('admin/navigation/manage');
 		}
-		else
+		elseif(isset($_POST['cancel']))
 		{
-			//@TODO: look into why this is always FALSE
-			notice::add('Item Deleted Successfully!', 'success');
+			notice::add('Action Cancelled!', 'success');
+			url::redirect('admin/navigation/manage');
 		}
-		url::redirect('admin/navigation/manage');
+		$this->template->content = View::factory('content/static/admin/navigation/delete');
 	}
 } // End Admin Navigation Controller

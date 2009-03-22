@@ -39,22 +39,22 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 	
 	public function delete($descendants = TRUE)
 	{
-		$type = Auto_Modeler::factory('content_type', 'navigation');
+		$type = ORM::factory('content_type', 'navigation');
 		//delete all the nodes that this and its descendants are in
 		if($descendants)
 		{
 			$items = $this->subtree(TRUE)->find_all();
 			foreach($items as $item)
 			{
-				$node = Auto_Modeler::factory('content_node')
-					->fetch_where(array
+				$node = ORM::factory('content_node')
+					->where(array
 						(
 							'content_type_id' => $type->id,
 							'content_id' => $item->id,
-						));
-				if((bool)count($node))
+						))->find();
+				if($node->loaded)
 				{
-					$node->current()->delete();
+					$node->delete();
 				}
 			}
 		}
@@ -63,6 +63,25 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 
 		}
 		parent::delete($descendants);
+	}
+
+	public function move_up()
+	{
+		$above = ORM::factory('navigation_content')
+			->where(array('level' => $this->level, 'rgt' => $this->lft-1))
+			->find();
+		if(!$above->loaded) Event::run('mptt.already_top');
+
+		$this->move_to_prev_sibling($above);
+	}
+	public function move_down()
+	{
+		$below = ORM::factory('navigation_content')
+			->where(array('level' => $this->level, 'lft' => $this->rgt+1))
+			->find();
+		if(!$below->loaded) Event::run('mptt.already_bottom');
+
+		$this->move_to_next_sibling($below);
 	}
 
 	//checks if a content_node is attached to this item
