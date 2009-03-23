@@ -68,7 +68,7 @@ class frache_Core {
 		}
 	}
 
-	/*
+	/**
 	 * Parses the output for any fragment blocks and caches them.
 	 */
 	public static function store()
