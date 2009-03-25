@@ -9,16 +9,25 @@ class Pages_Controller extends Admin_Controller {
 	 */
 	public function manage()
 	{
+		
+		$pages = ORM::factory('content_page')->find_all();
+		$this->template->content = View::factory('content/static/admin/pages/manage');
+		$this->template->content->pages = $pages;
+	}
+	public function create()
+	{
+		$page = ORM::factory('content_page');
 		if (isset($_POST['new_page_content']))
 		{
-			//create the new page
-			$page = ORM::factory('content_page');
 			$post = $this->input->post();
-			if($page->validate())
+			//simple way to repopulate form...I hope it works
+			$page->load_values($post);
+			//create the new page
+			if($page->validate($post))
 			{
 				$page->save();
 				notice::add('Page Created Successfully', 'success');
-				url::redirect(Router::$current_uri);
+				url::redirect('admin/pages/manage');
 			}
 			else
 			{
@@ -27,38 +36,63 @@ class Pages_Controller extends Admin_Controller {
 					notice::add($error, 'error');
 				}
 			}
-			
-		}
-		$nodes = ORM::factory('content_page')->find_all();
-		$this->template->content = View::factory('content/static/admin/pages/manage');
-		$this->template->content->nodes = $nodes;
-	}
 
+		}
+		$this->template->content = View::factory('content/static/admin/pages/create');
+		$this->template->content->page = $page;
+	}
+	public function delete($id = NULL)
+	{
+		$page = ORM::factory('content_page', $id);
+		if (!$page->loaded) Event::run('system.404');
+
+		if(isset($_POST['confirm']))
+		{
+			$page->delete();
+			notice::add('Page Deleted Successfully!', 'success');
+			url::redirect('admin/pages/manage');
+		}
+		elseif(isset($_POST['cancel']))
+		{
+			notice::add('Action Cancelled!', 'success');
+			url::redirect('admin/pages/manage');
+		}
+		$this->template->content = View::factory('content/static/admin/pages/delete');
+	}
 	public function edit($id = FALSE)
 	{
 		$page = ORM::factory('content_page', $id);
 		if (!$page->loaded) Event::run('system.404');
 
-		if (isset($_POST['page_info_form']))
+		if (isset($_POST['edit_content_page']))
 		{
 			$post = $this->input->post();
-			$page->title = $post['title'];
+			$page->name = $post['name'];
 			$page->alias = $post['alias'];
-			try
+			if($page->validate($post))
 			{
 				$page->save();
 				notice::add('Page Saved', 'success');
 				url::redirect(Router::$current_uri);
 			}
-			catch (Kohana_User_Exception $e)
+			else
 			{
-				foreach($page->validation->errors('page_errors') as $error)
+				foreach($post->errors('page_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}
 			}
 		}
-		if (isset($_POST['page_add_node_form']))
+
+		$this->template->content = View::factory('content/static/admin/pages/edit');
+		$this->template->content->page = $page;
+		$this->template->content->objects = $page->content_pages_sections_nodes;
+	}
+	public function add_node($id = NULL)
+	{
+		$page = ORM::factory('content_page', $id);
+		if(!$page->loaded) Event::run('system.404');
+		if (isset($_POST['page_add_content_node']))
 		{
 			$post = $this->input->post();
 			$pivot = ORM::factory('content_pages_sections_nodes');
@@ -80,48 +114,43 @@ class Pages_Controller extends Admin_Controller {
 				$pivot->content_page_id = $page->id;
 				$pivot->content_section_id = $post['section'];
 				$pivot->content_node_id = $post['node'];
-				$pivot->save();
-				try
+				//@TODO: fix this for in-model validation! callbacks n such
+				if($pivot->save())
 				{
-					$pivot->save();
-					notice::add('Content added Successfully', 'success');
-					url::redirect(Router::$current_uri);
+					notice::add('Content Node Added Successfully', 'success');
+					url::redirect('admin/pages/edit/'.$page->id);
 				}
-				catch (Kohana_User_Exception $e)
+				else
 				{
-					foreach($pivot->validation->errors('page_errors') as $error)
-					{
-						notice::add($error, 'error');
-					}
+					notice::add('Error adding content!', 'error');
 				}
 			}
 		}
-
-
 		$nodes = ORM::factory('content_node')->select_list('id', 'name');
 		$sections = ORM::factory('content_section')->select_list('id', 'name');
 
-		$this->template->content = View::factory('content/static/admin/pages/edit');
-		$this->template->content->page = $page;
-		$this->template->content->objects = $page->content_pages_sections_nodes;
+		$this->template->content = View::factory('content/static/admin/pages/add_node');
 		$this->template->content->nodes = $nodes;
 		$this->template->content->sections = $sections;
 	}
-
 	public function remove_node($id)
 	{
 		$pivot = ORM::factory('content_pages_sections_nodes', $id);
-		if ($pivot->loaded)
+		if (!$pivot->loaded) Event::run('system.404');
+		
+		if(isset($_POST['confirm']))
 		{
 			$page = $pivot->content_page_id;
 			$pivot->delete();
 			notice::add('Node Removed!', 'success');
 			url::redirect('admin/pages/edit/'.$page);
 		}
-		else
+		elseif(isset($_POST['cancel']))
 		{
-			Event::run('system.404');
+			notice::add('Action Cancelled!', 'success');
+			url::redirect('admin/pages/edit/'.$pivot->content_page->id);
 		}
+		$this->template->content = View::factory('content/static/admin/pages/remove_node');
 	}
 
 } // End Admin Page Controller

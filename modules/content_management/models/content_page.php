@@ -13,8 +13,15 @@ class Content_Page_Model extends ORM {
 	{
 		$array = Validation::factory($array)
 			->pre_filter('trim')
-			->add_rules('title', 'required', 'length[4,52]', 'chars[a-z A-Z0-9_.]')
-			->add_rules('alias', 'required', 'length[4,52]', array($this, 'unique_tag'));
+			->add_rules('name', 'required', 'length[1,127]', 'chars[a-zA-Z0-9_./]')
+			->add_rules('alias', 'required', 'length[1,127]', 'chars[a-zA-Z0-9_./]');
+		//if this is a new page the name and alias should be unique
+		if(!$this->loaded)
+		{
+			$array->add_rules('name', array($this, 'unique_name'))
+			->add_rules('alias', array($this, 'unique_alias'));
+		}
+		return parent::validate($array, $save);
 	}
 	public function unique_key($id)
 	{
@@ -23,6 +30,18 @@ class Content_Page_Model extends ORM {
 			return 'alias';
 		}
 		return parent::unique_key($id);
+	}
+	public function unique_alias($id)
+	{
+		return !(bool) $this->db
+			->where('alias', $id)
+			->count_records($this->table_name);
+	}
+	public function unique_name($id)
+	{
+		return !(bool) $this->db
+			->where('name', $id)
+			->count_records($this->table_name);
 	}
 
 	public function render_children()

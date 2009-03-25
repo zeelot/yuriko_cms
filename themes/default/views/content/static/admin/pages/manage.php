@@ -1,25 +1,26 @@
 <div>
 	<h1>Manage Pages</h1>
-	<ul>
-	<?php foreach($nodes as $node): ?>
-		<li>
-			<?php echo $node->title; ?>
-			(<?php echo html::anchor('admin/pages/edit/'.$node->id, 'Edit'); ?>)
-			(<?php echo html::anchor($node->alias, 'Visit'); ?>)
-		</li>
-	<?php endforeach; ?>
-	</ul>
-	<?php echo form::open(); ?>
-	<fieldset>
-		<input type="hidden" name="new_page_content" value="TRUE" />
-		<legend>New Page</legend>
-		<label for="page.title">
-			Title: <input type="text" id="page.title" name="title" />
-		</label>
-		<label for="page.alias">
-			Alias: <input type="text" id="page.alias" name="alias" />
-		</label>
-		<button type="submit" name="submit">Create</button>
-	</fieldset>
-	<?php echo form::close(); ?>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Alias</th>
+			<th>Edit</th>
+			<th>Delete</th>
+		</tr>
+		<?php foreach($pages as $page): ?>
+			<tr>
+				<td><?php echo $page->name; ?></td>
+				<td><?php echo html::anchor($page->alias, $page->alias); ?></td>
+				<td><?php echo html::anchor('admin/pages/edit/'.$page->id,
+					html::image('media/images/fam_silk/wrench.png',
+						array('alt'=>'Edit', 'title'=>'Edit'))); ?></td>
+				<td><?php echo html::anchor('admin/pages/delete/'.$page->id,
+					html::image('media/images/fam_silk/bin.png',
+						array('alt'=>'Delete', 'title'=>'Delete'))); ?></td>
+			</tr>
+		<?php endforeach; ?>
+		<tr>
+			<th colspan="4"><?php echo html::anchor('admin/pages/create', 'Create a new Page'); ?></th>
+		</tr>
+	</table>
 </div>
