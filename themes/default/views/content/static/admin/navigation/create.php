@@ -21,10 +21,10 @@
 		<label for="nav.parent">
 			Parent:
 			<select name="parent_id" id="nav.parent">
-				<?php foreach($nodes as $node): ?>
-				<option value="<?php echo $node->id; ?>">
-				<?php echo str_repeat('----', $node->level); ?>
-				<?php echo $node->name; ?>
+				<?php foreach($items as $item): ?>
+				<option value="<?php echo $item->id; ?>">
+				<?php echo str_repeat('----', $item->level); ?>
+				<?php echo $item->name; ?>
 				</option>
 				<?php endforeach; ?>
 			</select>

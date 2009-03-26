@@ -18,51 +18,51 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 		$array = Validation::factory($array)
 			->pre_filter('trim')
 			->add_rules('name', 'required', 'length[1,52]', 'chars[a-z A-Z0-9_.]')
-			->add_rules('tag', 'required', 'length[1,52]', array($this, 'unique_tag'))
-			->add_rules('parent_id', 'required', 'digit', array($this, 'valid_node'))
+			->add_rules('tag', 'required', 'length[1,52]')
 			->add_rules('page_id', 'digit')
 			->add_rules('anchor', 'chars[a-zA-Z0-9_./:]');
+		if(!$this->loaded)
+		{
+			$array
+			//the parent needs to exist and the current item does NOT
+				->add_rules('parent_id', 'required', 'digit', array($this, 'item_exists'))
+				->add_rules('tag', array($this, 'item_available'));
+		}
 
 		return parent::validate($array, $save);
 	}
-	public function update(array & $array)
-	{
-		$array = Validation::factory($array)
-			->pre_filter('trim')
-			->add_rules('name', 'required', 'length[4,52]', 'chars[a-z A-Z0-9_.]')
-			->add_rules('tag', 'required', 'length[4,52]')
-			->add_rules('page_id', 'digit')
-			->add_rules('anchor', 'chars[a-zA-Z0-9_./:]');
-
-		return parent::validate($array, TRUE);
-	}	
-	
-	public function delete($descendants = TRUE)
+	public function save()
 	{
 		$type = ORM::factory('content_type', 'navigation');
-		//delete all the nodes that this and its descendants are in
-		if($descendants)
+
+		$node = new Content_Node_Model($this->node_id);
+		$node->content_type_id = $type->id;
+		$node->content_id = $this->id;
+		$node->name = $this->name;
+		$node->alias = 'navigation/'.$this->tag;
+		$node->save();
+		$this->node_id = $node->id;
+		return parent::save();
+	}
+	public function delete()
+	{
+		$type = ORM::factory('content_type', 'navigation');
+		//delete all the nodes that this and its descendants created
+		$items = $this->subtree(TRUE)->find_all();
+		foreach($items as $item)
 		{
-			$items = $this->subtree(TRUE)->find_all();
-			foreach($items as $item)
+			$node = ORM::factory('content_node')
+				->where(array
+					(
+						'content_type_id' => $type->id,
+						'content_id' => $item->id,
+					))->find();
+			if($node->loaded)
 			{
-				$node = ORM::factory('content_node')
-					->where(array
-						(
-							'content_type_id' => $type->id,
-							'content_id' => $item->id,
-						))->find();
-				if($node->loaded)
-				{
-					$node->delete();
-				}
+				$node->delete();
 			}
 		}
-		else
-		{
-
-		}
-		parent::delete($descendants);
+		parent::delete();
 	}
 
 	public function move_up()
@@ -95,17 +95,15 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 					'content_type_id' => Auto_Modeler::factory('content_type', 'navigation')->id,
 				))->count_records('content_nodes');
 	}
-	public function unique_tag($id)
-	{
-		return !(bool) $this->db
-			->where($this->unique_key($id), $id)
-			->count_records($this->table_name);
-	}
-	public function valid_node($id)
+	public function item_exists($id)
 	{
 		return (bool) $this->db
 			->where($this->unique_key($id), $id)
 			->count_records($this->table_name);
+	}
+	public function item_available($id)
+	{
+		return !$this->item_exists($id);
 	}
 
 	public function unique_key($id)

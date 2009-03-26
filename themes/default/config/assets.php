@@ -83,4 +83,15 @@ $config['views'] = array
 			'markitup',
 		),
 	),
+	/**
+	 * all the admin managing views
+	 */
+	'content/static/admin/navigation/manage'	=> array
+	(
+		'globals'			=> array
+		(
+			'jquery',
+			'thickbox',
+		),
+	),
 );

@@ -18,12 +18,13 @@ class Navigation_Controller extends Admin_Controller {
 		if (isset($_POST['new_navigation_content']))
 		{
 			$post = $this->input->post();
-			$node = ORM::factory('navigation_content');
+			$item = ORM::factory('navigation_content');
 			$parent = ORM::factory('navigation_content', $post['parent_id']);
 
-			if ($node->validate($post))
+			if ($item->validate($post))
 			{
-				$node->insert_as_last_child($parent);
+				$item->insert_as_last_child($parent);
+				$item->save();
 				notice::add('Navigation Item Created!', 'success');
 				url::redirect('admin/navigation/manage');
 			}
@@ -35,24 +36,24 @@ class Navigation_Controller extends Admin_Controller {
 				}
 			}
 		}
-		$root = ORM::factory('navigation_content')->root->find();
-		$nodes = ORM::factory('navigation_content')->orderby('lft', 'ASC')->find_all();
+		$items = ORM::factory('navigation_content')->orderby('lft', 'ASC')->find_all();
 		$this->template->content = View::factory('content/static/admin/navigation/create');
-		$this->template->content->nodes = $nodes;
+		$this->template->content->items = $items;
 		$this->template->content->pages = ORM::factory('content_page')
 												->select_list('id', 'alias');
 	}
 	public function edit($id = NULL)
 	{
-		$content = ORM::factory('navigation_content', $id);
-		if (!$content->loaded)Event::run('system.404');//incorrect $id
+		$item = ORM::factory('navigation_content', $id);
+		if (!$item->loaded)Event::run('system.404');//incorrect $id
 
 		if(isset($_POST['edit_navigation_content']))
 		{
 			$post = $this->input->post();
 			//update the page
-			if($content->update($post))
+			if($item->validate($post))
 			{
+				$item->save();
 				notice::add('Item Saved!', 'success');
 				url::redirect('admin/navigation/manage');
 			}
@@ -67,7 +68,7 @@ class Navigation_Controller extends Admin_Controller {
 		}
 
 		$this->template->content = View::factory('content/static/admin/navigation/edit');
-		$this->template->content->item = $content;
+		$this->template->content->item = $item;
 		$this->template->content->pages = ORM::factory('content_page')
 												->select_list('id', 'alias');
 	}
@@ -89,23 +90,7 @@ class Navigation_Controller extends Admin_Controller {
 		notice::add('Item Moved!', 'success');
 		url::redirect('admin/navigation/manage');
 	}
-	public function create_node($id = NULL)
-	{
-		$content = ORM::factory('navigation_content', $id);
-		if (!$content->loaded) Event::run('system.404');
-		$type = ORM::factory('content_type', 'navigation');
-
-		$node = new Content_Node_Model();
-		$node->content_type_id = $type->id;
-		$node->content_id = $content->id;
-		$node->name = $content->name;
-		$node->alias = 'navigation/'.$content->tag;
-		$node->save();
-		$content->node_id = $node->id;
-		$content->save();
-		notice::add('Node Created!', 'success');
-		url::redirect('admin/navigation/manage');
-	}
+	
 	public function delete_node($id = NULL)
 	{
 		$content = ORM::factory('navigation_content', $id);

@@ -64,6 +64,18 @@ $config['global'] = array
 			'media/editor/markitup/sets/markdown/set',
 		),
 	),
+	'thickbox'	=> array
+	(
+		'weight'		=> 5, //has to load after jquery
+		'stylesheets'	=> array
+		(
+			'media/thickbox/thickbox',
+		),
+		'scripts'		=> array
+		(
+			'media/thickbox/thickbox',
+		),
+	),
 	'960'		=> array
 	(
 		'weight'		=> 0,

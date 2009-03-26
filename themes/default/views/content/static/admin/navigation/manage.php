@@ -12,9 +12,7 @@
 		<tr>
 			<th>Name</th>
 			<th>Sort</th>
-			<th>Edit</th>
-			<th>Node</th>
-			<th>Delete</th>
+			<th>Actions</th>
 		</tr>
 		<?php foreach($root->subtree()->find_all() as $child): ?>
 		<?php
@@ -46,30 +44,26 @@
 				<?php endif; ?>
 				</td>
 				<td>
-				<?php echo html::anchor('admin/navigation/edit/'.$child->id,
+				<?php echo html::anchor('admin/navigation/edit/'.$child->id.'?height=600',
 					html::image('media/images/fam_silk/wrench.png',
-						array('alt'=>'Edit', 'title'=>'Edit'))); ?>
-				</td>
-				<td>
-				<?php if(!$child->has_node()): ?>
-				<?php echo html::anchor('admin/navigation/create_node/'.$child->id,
-					html::image('media/images/fam_silk/plugin_add.png',
-						array('alt'=>'Attach to Node', 'title'=>'Create Node'))); ?>
-				<?php else: ?>
-				<?php echo html::anchor('admin/navigation/delete_node/'.$child->id,
-					html::image('media/images/fam_silk/plugin_delete.png',
-						array('alt'=>'Detach from Node', 'title'=>'Delete Node'))); ?>
-				<?php endif; ?>
-				</td>
-				<td>
-				<?php echo html::anchor('admin/navigation/delete/'.$child->id,
+						array('alt'=>'Edit', 'title'=>'Edit')),
+					array('class' => 'thickbox')); ?>
+				<?php echo html::anchor('node/'.$child->node->alias.'?width=800&height=500',
+					html::image('media/images/fam_silk/zoom.png',
+						array('alt'=>'Preview Node', 'title'=>'Preview Node')),
+				array('class' => 'thickbox')); ?>
+				-
+				<?php echo html::anchor('admin/navigation/delete/'.$child->id.'?height=200',
 					html::image('media/images/fam_silk/bin.png',
-						array('alt'=>'Delete', 'title'=>'Delete'))); ?>
+						array('alt'=>'Delete', 'title'=>'Delete')),
+					array('class' => 'thickbox')); ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>
 		<tr>
-			<th colspan="5"><?php echo html::anchor('admin/navigation/create', 'Create New Navigation Item'); ?></th>
+			<th colspan="5"><?php echo html::anchor('admin/navigation/create?height=650',
+				'Create New Navigation Item',
+				array('class' => 'thickbox')); ?></th>
 		</tr>
 	</table>
 </div>
