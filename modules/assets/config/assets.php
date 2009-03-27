@@ -55,7 +55,7 @@ $config['global'] = array
 		'weight'		=> 2,
 		'scripts'		=> array
 		(
-			'media/js/livequery/jquery.livequery',
+			'media/js/jquery.livequery',
 		),
 	),
 	'markitup'	=> array
