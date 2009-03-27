@@ -39,7 +39,7 @@ class Basic_Content_Model extends ORM implements Content_Model{
 	{
 		if($this->format->name == 'markdown')
 		{
-			require Kohana::find_file('vendor', 'Markdown');
+			include_once Kohana::find_file('vendor', 'Markdown');
 			$this->html = Markdown($this->content);
 		}else if($this->format->name == 'html')
 		{
@@ -54,7 +54,9 @@ class Basic_Content_Model extends ORM implements Content_Model{
 		$node->alias = 'basic/'.$this->name;
 		$node->save();
 		$this->node_id = $node->id;
-		return parent::save();
+		parent::save();
+		$node->content_id = $this->id;
+		return $node->save();
 	}
 	public function delete()
 	{
