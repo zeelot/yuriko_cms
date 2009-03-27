@@ -94,7 +94,7 @@ $config['views'] = array
 	/**
 	 * all the admin managing views
 	 */
-	'content/static/admin/navigation/manage'	=> array
+	'content/static/admin/basic/manage'	=> array
 	(
 		'globals'			=> array
 		(
