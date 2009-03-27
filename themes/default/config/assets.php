@@ -67,6 +67,14 @@ $config['views'] = array
 
 		),
 	),
+	'content/static/admin/basic/manage'		=> array
+	(
+		'globals'			=> array
+		(
+			'jquery',
+			'markitup',
+		),
+	),
 	'content/static/admin/basic/edit'		=> array
 	(
 		'globals'			=> array
@@ -94,7 +102,23 @@ $config['views'] = array
 			'thickbox',
 		),
 	),
-	'content/static/admin/basic/manage'	=> array
+	'content/static/admin/navigation/manage'	=> array
+	(
+		'globals'			=> array
+		(
+			'jquery',
+			'thickbox',
+		),
+	),
+	'content/static/admin/pages/manage'	=> array
+	(
+		'globals'			=> array
+		(
+			'jquery',
+			'thickbox',
+		),
+	),
+	'content/static/admin/pages/edit'	=> array
 	(
 		'globals'			=> array
 		(

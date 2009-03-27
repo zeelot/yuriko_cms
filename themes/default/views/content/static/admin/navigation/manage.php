@@ -8,7 +8,7 @@
 
 <div>
 	<h1>List of Navigation Items</h1>
-	<table>
+	<table class="admin">
 		<tr>
 			<th>Name</th>
 			<th>Sort</th>

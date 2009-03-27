@@ -2,6 +2,10 @@ body{
   background:#FFF4D7;
 }
 
+table.admin {width:100%;}
+.admin td:last-child {width:80px;}
+.admin td {padding:3px; font-weight:800;}
+
 .preview {display:block;padding-top:20px;}
 
 .notices {margin:10px 0px;}

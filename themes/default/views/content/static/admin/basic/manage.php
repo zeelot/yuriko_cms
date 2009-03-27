@@ -7,8 +7,8 @@
 ?>
 
 <div>
-	<h1>List of Content Nodes</h1>
-	<table>
+	<h1>List of Basic Contents</h1>
+	<table class="admin">
 		<tr>
 			<th>Name</th>
 			<th>Actions</th>
@@ -27,7 +27,7 @@
 						array('alt'=>'Preview', 'title'=>'Preview')),
 					array('class' => 'thickbox')); ?>
 			-
-				<?php echo html::anchor('admin/basic/delete/'.$content->id.'?height=300',
+				<?php echo html::anchor('admin/basic/delete/'.$content->id.'?height=200',
 					html::image('media/images/fam_silk/bin.png',
 						array('alt'=>'Delete', 'title'=>'Delete')),
 					array('class' => 'thickbox')); ?>
