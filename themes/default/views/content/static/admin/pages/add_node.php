@@ -7,8 +7,12 @@
 		<label for="page.node">
 		Node:
 		<select name="node" id="page.node">
-			<?php foreach($nodes as $id => $name): ?>
-			<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+			<?php foreach($node_groups as $group => $nodes): ?>
+			<optgroup label="<?php echo $group; ?>">
+				<?php foreach($nodes as $node): ?>
+				<option value="<?php echo $node->node_id; ?>"><?php echo $node->name; ?> - <?php echo $node->node->alias; ?></option>
+				<?php endforeach; ?>
+			</optgroup>			
 			<?php endforeach; ?>
 		</select>
 		</label>

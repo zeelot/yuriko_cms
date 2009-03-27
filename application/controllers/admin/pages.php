@@ -126,11 +126,17 @@ class Pages_Controller extends Admin_Controller {
 				}
 			}
 		}
-		$nodes = ORM::factory('content_node')->select_list('id', 'name');
+		$node_groups = array();
+		$content_types = ORM::factory('content_type')->find_all();
+		foreach($content_types as $type)
+		{
+			$node_groups[$type->name] = ORM::factory($type->name.'_content')->find_all();
+		}
+		ORM::factory('content_node')->find_all();
 		$sections = ORM::factory('content_section')->select_list('id', 'name');
 
 		$this->template->content = View::factory('content/static/admin/pages/add_node');
-		$this->template->content->nodes = $nodes;
+		$this->template->content->node_groups = $node_groups;
 		$this->template->content->sections = $sections;
 	}
 	public function remove_node($id)

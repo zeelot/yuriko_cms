@@ -50,6 +50,14 @@ $config['global'] = array
 			'media/js/jquery-1.3.2.min',
 		),
 	),
+	'livequery' => array
+	(
+		'weight'		=> 2,
+		'scripts'		=> array
+		(
+			'media/js/livequery/jquery.livequery',
+		),
+	),
 	'markitup'	=> array
 	(
 		'weight'		=> 5, //has to load after jquery
@@ -61,7 +69,6 @@ $config['global'] = array
 		'scripts'		=> array
 		(
 			'media/editor/markitup/jquery.markitup',
-			'media/editor/markitup/sets/markdown/set',
 		),
 	),
 	'thickbox'	=> array

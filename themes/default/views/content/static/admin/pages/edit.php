@@ -14,22 +14,25 @@
 	</fieldset>
 	<?php echo form::close(); ?>
 	<h2>Content Nodes</h2>
-	<table>
+	<table class="admin">
 		<tr>
-			<th>Node</th>
 			<th>Section</th>
+			<th>Node</th>
 			<th>Delete</th>
 		</tr>
 		<?php foreach($objects as $obj): ?>
 		<tr>
 			<td><?php echo $obj->content_section->name; ?></td>
-			<td><?php echo $obj->content_node->name; ?></td>
-			<td><?php echo html::anchor('admin/pages/remove_node/'.$obj->id,
-				   html::image('media/images/fam_silk/delete.png', 'Remove')); ?></td>
+			<td><?php echo $obj->content_node->name; ?> ( <?php echo $obj->content_node->alias; ?> )</td>
+			<td><?php echo html::anchor('admin/pages/remove_node/'.$obj->id.'?height=200&width=300',
+				html::image('media/images/fam_silk/bin.png', 'Remove'),
+				array('class' => 'thickbox')); ?></td>
 		</tr>
 		<?php endforeach; ?>
 		<tr>
-			<th colspan="3"><?php echo html::anchor('admin/pages/add_node/'.$page->id, 'Add a Node'); ?></th>
+			<th colspan="3"><?php echo html::anchor('admin/pages/add_node/'.$page->id.'?height=200&width=300',
+				'Add a Node',
+				array('class' => 'thickbox')); ?></th>
 		</tr>
 	</table>
 </div>

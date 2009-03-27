@@ -21,7 +21,7 @@
 				<?php endforeach; ?>
 			</select>
 		</label>
-		<label>Content: <textarea name="content" id="markdown"><?php echo $item->content; ?></textarea></label>
+		<label>Content: <textarea name="content" class="markitup"><?php echo $item->content; ?></textarea></label>
 		<label><button>Save</button></label>
 	</fieldset>
 <?php echo form::close(); ?>

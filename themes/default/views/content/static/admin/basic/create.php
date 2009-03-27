@@ -21,7 +21,7 @@
 				<?php endforeach; ?>
 			</select>
 		</label>
-		<label>Content: <textarea name="content" id="markdown"><?php echo (isset($_POST['content']))?$_POST['content']:NULL;?></textarea></label>
+		<label>Content: <textarea name="content" class="markitup"><?php echo (isset($_POST['content']))?$_POST['content']:NULL;?></textarea></label>
 		<label><button>Create</button></label>
 	</fieldset>
 <?php echo form::close(); ?>

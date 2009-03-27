@@ -17,7 +17,7 @@
 		<tr>
 			<td><?php echo $content->name; ?></td>
 			<td>
-				<?php echo html::anchor('admin/basic/edit/'.$content->id.'?height=600',
+				<?php echo html::anchor('admin/basic/edit/'.$content->id.'?height=800&width=800',
 					html::image('media/images/fam_silk/wrench.png',
 						array('alt'=>'Edit', 'title'=>'Edit')),
 					array('class' => 'thickbox')); ?>
