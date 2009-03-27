@@ -98,7 +98,6 @@ class assets_Core
 				{
 					foreach($required['scripts'] as $script => $weight)
 					{
-						echo kohana::debug($script);
 						self::add_script($script, $weight);
 					}
 				}
