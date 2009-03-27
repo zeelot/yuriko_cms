@@ -28,9 +28,9 @@ class Basic_Controller extends Admin_Controller {
 				}
 			}
 		}
-		$pages = ORM::factory('basic_content')->find_all();
+		$contents = ORM::factory('basic_content')->find_all();
 		$this->template->content = View::factory('content/static/admin/basic/manage');
-		$this->template->content->pages = $pages;
+		$this->template->content->contents = $contents;
 	}
 	public function edit($id = NULL)
 	{
@@ -40,7 +40,8 @@ class Basic_Controller extends Admin_Controller {
 		if(isset($_POST['edit_basic_content']))
 		{
 			//update the page
-			if($content->update($_POST))
+			$post = $this->input->post();
+			if($content->validate($post))
 			{
 				$content->save();
 				notice::add('Content Saved!', 'success');
@@ -48,7 +49,7 @@ class Basic_Controller extends Admin_Controller {
 			}
 			else
 			{
-				$errors = $_POST->errors('form_errors');
+				$errors = $post->errors('form_errors');
 				foreach($errors as $error)
 				{
 					notice::add($error, 'error');
@@ -87,23 +88,6 @@ class Basic_Controller extends Admin_Controller {
 		$this->template->content = View::factory('content/static/admin/basic/create');
 		$this->template->content->formats = ORM::factory('content_format')
 												->select_list('id', 'name');
-	}
-	public function create_node($id = NULL)
-	{
-		$content = ORM::factory('basic_content', $id);
-		if (!$content->loaded) Event::run('system.404');
-		$type = ORM::factory('content_type', 'basic');
-
-		$node = new Content_Node_Model();
-		$node->content_type_id = $type->id;
-		$node->content_id = $content->id;
-		$node->name = $content->name;
-		$node->alias = 'basic/'.$content->name;
-		$node->save();
-		$content->node_id = $node->id;
-		$content->save();
-		notice::add('Node Created!', 'success');
-		url::redirect('admin/basic/manage');
 	}
 	public function delete_node($id = NULL)
 	{

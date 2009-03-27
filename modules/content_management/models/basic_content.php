@@ -3,7 +3,7 @@
 
 class Basic_Content_Model extends ORM implements Content_Model{
 
-	protected $belongs_to = array('format' => 'content_format');
+	protected $belongs_to = array('format' => 'content_format', 'node' => 'content_node');
 
 	public function unique_key($id)
 	{
@@ -18,23 +18,18 @@ class Basic_Content_Model extends ORM implements Content_Model{
 	{
 		$array = Validation::factory($array)
 			->pre_filter('trim')
-			->add_rules('name', 'required', 'length[4,32]', 'chars[a-zA-Z0-9_.]', array($this, 'unique_name'))
-			->add_rules('format_id', 'required', 'valid::digit')
-			->add_rules('content', 'required');
-
-		return parent::validate($array, $save);
-	}
-	public function update(array & $array, $save = FALSE)
-	{
-		$array = Validation::factory($array)
-			->pre_filter('trim')
 			->add_rules('name', 'required', 'length[4,32]', 'chars[a-zA-Z0-9_.]')
 			->add_rules('format_id', 'required', 'valid::digit')
 			->add_rules('content', 'required');
+		if(!$this->loaded)
+		{
+			$array
+				->add_rules('name', array($this, 'name_available'));
+		}
 
 		return parent::validate($array, $save);
 	}
-	public function unique_name($id)
+	public function name_available($id)
 	{
 		return !(bool) $this->db
 			->where($this->unique_key($id), $id)
@@ -50,7 +45,22 @@ class Basic_Content_Model extends ORM implements Content_Model{
 		{
 			$this->html = $this->content;
 		}
+		$type = ORM::factory('content_type', 'basic');
+
+		$node = new Content_Node_Model($this->node_id);
+		$node->content_type_id = $type->id;
+		$node->content_id = $this->id;
+		$node->name = $this->name;
+		$node->alias = 'basic/'.$this->name;
+		$node->save();
+		$this->node_id = $node->id;
 		return parent::save();
+	}
+	public function delete()
+	{
+		$node = ORM::factory('content_node', $content->node_id);
+		$node->delete();
+		parent::delete();
 	}
 	//checks if a content_node is attached to this item
 	public function has_node()

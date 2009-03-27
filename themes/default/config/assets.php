@@ -94,4 +94,12 @@ $config['views'] = array
 			'thickbox',
 		),
 	),
+	'content/static/admin/basic/manage'	=> array
+	(
+		'globals'			=> array
+		(
+			'jquery',
+			'thickbox',
+		),
+	),
 );

@@ -90,28 +90,6 @@ class Navigation_Controller extends Admin_Controller {
 		notice::add('Item Moved!', 'success');
 		url::redirect('admin/navigation/manage');
 	}
-	
-	public function delete_node($id = NULL)
-	{
-		$content = ORM::factory('navigation_content', $id);
-		if (!$content->loaded) Event::run('system.404');
-		$node = ORM::factory('content_node', $content->node_id);
-		
-		if(isset($_POST['confirm']))
-		{
-			$content->node_id = 0;
-			$content->save();
-			$node->delete();
-			notice::add('Node Deleted Successfully!', 'success');
-			url::redirect('admin/navigation/manage');
-		}
-		elseif(isset($_POST['cancel']))
-		{
-			notice::add('Action Cancelled!', 'success');
-			url::redirect('admin/navigation/manage');
-		}
-		$this->template->content = View::factory('content/static/admin/nodes/delete');
-	}
 	public function delete($id = NULL)
 	{
 		$item = ORM::factory('navigation_content', $id);

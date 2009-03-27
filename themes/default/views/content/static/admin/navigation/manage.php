@@ -61,7 +61,7 @@
 			</tr>
 		<?php endforeach; ?>
 		<tr>
-			<th colspan="5"><?php echo html::anchor('admin/navigation/create?height=650',
+			<th colspan="3"><?php echo html::anchor('admin/navigation/create?height=650',
 				'Create New Navigation Item',
 				array('class' => 'thickbox')); ?></th>
 		</tr>

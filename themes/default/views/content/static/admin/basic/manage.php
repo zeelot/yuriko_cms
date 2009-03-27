@@ -11,38 +11,31 @@
 	<table>
 		<tr>
 			<th>Name</th>
-			<th>Edit</th>
-			<th>Node</th>
-			<th>Delete</th>
+			<th>Actions</th>
 		</tr>
-		<?php foreach($pages as $page): ?>
+		<?php foreach($contents as $content): ?>
 		<tr>
-			<td><?php echo $page->name; ?></td>
+			<td><?php echo $content->name; ?></td>
 			<td>
-				<?php echo html::anchor('admin/basic/edit/'.$page->id,
+				<?php echo html::anchor('admin/basic/edit/'.$content->id.'?height=600',
 					html::image('media/images/fam_silk/wrench.png',
-						array('alt'=>'Edit', 'title'=>'Edit'))); ?>
-			</td>
-			<td>
-				<?php if(!$page->has_node()): ?>
-				<?php echo html::anchor('admin/basic/create_node/'.$page->id,
-					html::image('media/images/fam_silk/plugin_add.png',
-						array('alt'=>'Attach to Node', 'title'=>'Create Node'))); ?>
-				<?php else: ?>
-				<?php echo html::anchor('admin/basic/delete_node/'.$page->id,
-					html::image('media/images/fam_silk/plugin_delete.png',
-						array('alt'=>'Detach from Node', 'title'=>'Delete Node'))); ?>
-				<?php endif; ?>
-			</td>
-			<td>
-				<?php echo html::anchor('admin/basic/delete/'.$page->id,
+						array('alt'=>'Edit', 'title'=>'Edit')),
+					array('class' => 'thickbox')); ?>
+				
+				<?php echo html::anchor('node/'.$content->node->alias.'?height=700',
+					html::image('media/images/fam_silk/zoom.png',
+						array('alt'=>'Preview', 'title'=>'Preview')),
+					array('class' => 'thickbox')); ?>
+			-
+				<?php echo html::anchor('admin/basic/delete/'.$content->id.'?height=300',
 					html::image('media/images/fam_silk/bin.png',
-						array('alt'=>'Delete', 'title'=>'Delete'))); ?>
+						array('alt'=>'Delete', 'title'=>'Delete')),
+					array('class' => 'thickbox')); ?>
 			</td>
 		</tr>
 		<?php endforeach; ?>
 		<tr>
-			<th colspan="4"><?php echo html::anchor('admin/basic/create', 'Create New Basic Content'); ?></th>
+			<th colspan="3"><?php echo html::anchor('admin/basic/create', 'Create New Basic Content'); ?></th>
 		</tr>
 	</table>	
 </div>
