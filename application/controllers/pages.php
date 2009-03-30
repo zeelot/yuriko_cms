@@ -16,7 +16,7 @@ class Pages_Controller extends Website_Controller{
 	 */
 	public function load($alias = FALSE)
 	{
-		$page = Auto_Modeler::factory('content_page', $alias);
+		$page = ORM::factory('content_page', $alias);
 		if(!$page->id) Event::run('system.404');
 		$content = $page->render_children();
 		if(!$content)
@@ -31,7 +31,7 @@ class Pages_Controller extends Website_Controller{
 	public function load_node($alias = FALSE)
 	{
 		$this->auto_render = FALSE;
-		$node = Auto_Modeler::factory('content_node', $alias);
+		$node = ORM::factory('content_node', $alias);
 		if(!$node->id) Event::run('system.404');
 
 		echo View::factory($node->template)->set('node', $node->find_content());
