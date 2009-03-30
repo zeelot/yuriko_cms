@@ -12,7 +12,7 @@
 class Example_Test extends Unit_Test_Case {
 
 	// Disable this Test class?
-	const DISABLED = TRUE;
+	const DISABLED = FALSE;
 
 	public $setup_has_run = FALSE;
 

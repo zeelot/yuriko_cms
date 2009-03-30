@@ -2,7 +2,7 @@
 /**
  * MySQLi Database Driver
  *
- * $Id: Mysqli.php 3903 2009-01-14 04:09:39Z zombor $
+ * $Id: Mysqli.php 4130 2009-03-28 04:14:59Z zombor $
  *
  * @package    Core
  * @author     Kohana Team
@@ -57,7 +57,7 @@ class Database_Mysqli_Driver extends Database_Mysql_Driver {
 			}
 
 			// Clear password after successful connect
-			$this->config['connection']['pass'] = NULL;
+			$this->db_config['connection']['pass'] = NULL;
 
 			return $this->link;
 		}
@@ -77,6 +77,11 @@ class Database_Mysqli_Driver extends Database_Mysql_Driver {
 				// Set the cached object
 				self::$query_cache[$hash] = new Kohana_Mysqli_Result($this->link, $this->db_config['object'], $sql);
 			}
+			else
+			{
+				// Rewind cached result
+				self::$query_cache[$hash]->rewind();
+			}
 
 			// Return the cached query
 			return self::$query_cache[$hash];
@@ -89,12 +94,6 @@ class Database_Mysqli_Driver extends Database_Mysql_Driver {
 	{
 		if ($this->link->set_charset($charset) === FALSE)
 			throw new Kohana_Database_Exception('database.error', $this->show_error());
-	}
-
-	public function stmt_prepare($sql = '')
-	{
-		is_object($this->link) or $this->connect();
-		return new Kohana_Mysqli_Statement($sql, $this->link);
 	}
 
 	public function escape_str($str)

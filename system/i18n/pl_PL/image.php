@@ -19,6 +19,12 @@ $lang = array
 		'not_found' => 'Podany katalog ImageMagick nie zawiera wymaganego programu, %s.',
 	),
 
+	// GraphicsMagick specific messages
+	'graphicsmagick' => array
+	(
+		'not_found' => 'Podany katalog GraphicsMagick nie zawiera wymaganego programu, %s.',
+	),
+
 	// GD specific messages
 	'gd' => array
 	(

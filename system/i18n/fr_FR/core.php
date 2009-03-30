@@ -9,6 +9,7 @@ $lang = array
 	'log_dir_unwritable'    => 'Le répertoire spécifié dans votre fichier de configuration pour le fichier de log ne pointe pas vers un répertoire accessible en écriture.',
 	'resource_not_found'    => 'La ressource %s, %s, n\'a pas été trouvée.',
 	'invalid_filetype'      => 'Le type de ficher demandé, .%s, n\'est pas autorisé dans le fichier de configuration des vues (view configuration file).',
+	'view_set_filename'     => 'Vous devez renseigner le nom de la vue avant d\'appeller la méthode render',
 	'no_default_route'      => 'Aucune route par défaut n\a été définie. Veuillez la spécifer dans le fichier config/routes.php.',
 	'no_controller'         => 'Kohana n\'a pu déterminer aucun controlleur pour effectuer la requête: %s.',
 	'page_not_found'        => 'La page demandée %s n\'a pu être trouvée.',

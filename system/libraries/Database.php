@@ -2,7 +2,7 @@
 /**
  * Provides database access in a platform agnostic way, using simple query building blocks.
  *
- * $Id: Database.php 3868 2009-01-07 08:21:21Z jheathco $
+ * $Id: Database.php 4130 2009-03-28 04:14:59Z zombor $
  *
  * @package    Core
  * @author     Kohana Team
@@ -264,7 +264,7 @@ class Database_Core {
 		if ($this->config['benchmark'] == TRUE)
 		{
 			// Benchmark the query
-			self::$benchmarks[] = array('query' => $sql, 'time' => $stop - $start, 'rows' => count($result));
+			Database::$benchmarks[] = array('query' => $sql, 'time' => $stop - $start, 'rows' => count($result));
 		}
 
 		return $result;
@@ -299,7 +299,9 @@ class Database_Core {
 			{
 				if (preg_match('/^DISTINCT\s++(.+)$/i', $val, $matches))
 				{
-					$val            = $this->config['table_prefix'].$matches[1];
+					// Only prepend with table prefix if table name is specified
+					$val = (strpos($matches[1], '.') !== FALSE) ? $this->config['table_prefix'].$matches[1] : $matches[1];
+
 					$this->distinct = TRUE;
 				}
 				else
@@ -334,14 +336,32 @@ class Database_Core {
 		}
 		else
 		{
-			$sql = (array) $sql;
+			$sql = array($sql);
 		}
 
 		foreach ($sql as $val)
 		{
 			if (($val = trim($val)) === '') continue;
 
-			$this->from[] = $this->config['table_prefix'].$val;
+			if (is_string($val))
+			{
+				// TODO: Temporary solution, this should be moved to database driver (AS is checked for twice)
+				if (stripos($val, ' AS ') !== FALSE)
+				{
+					$val = str_ireplace(' AS ', ' AS ', $val);
+
+					list($table, $alias) = explode(' AS ', $val);
+
+					// Attach prefix to both sides of the AS
+					$val = $this->config['table_prefix'].$table.' AS '.$this->config['table_prefix'].$alias;
+				}
+				else
+				{
+					$val = $this->config['table_prefix'].$val;
+				}
+			}
+
+			$this->from[] = $val;
 		}
 
 		return $this;
@@ -379,14 +399,47 @@ class Database_Core {
 		foreach ($keys as $key => $value)
 		{
 			$key    = (strpos($key, '.') !== FALSE) ? $this->config['table_prefix'].$key : $key;
-			$cond[] = $this->driver->where($key, $this->driver->escape_column($this->config['table_prefix'].$value), 'AND ', count($cond), FALSE);
+
+			if (is_string($value))
+			{
+				// Only escape if it's a string
+				$value = $this->driver->escape_column($this->config['table_prefix'].$value);
+			}
+
+			$cond[] = $this->driver->where($key, $value, 'AND ', count($cond), FALSE);
 		}
 
-		if( ! is_array($this->join)) { $this->join = array(); }
-
-		foreach ((array) $table as $t)
+		if ( ! is_array($this->join))
 		{
-			$join['tables'][] = $this->driver->escape_column($this->config['table_prefix'].$t);
+			$this->join = array();
+		}
+
+		if ( ! is_array($table))
+		{
+			$table = array($table);
+		}
+
+		foreach ($table as $t)
+		{
+			if (is_string($t))
+			{
+				// TODO: Temporary solution, this should be moved to database driver (AS is checked for twice)
+				if (stripos($t, ' AS ') !== FALSE)
+				{
+					$t = str_ireplace(' AS ', ' AS ', $t);
+
+					list($table, $alias) = explode(' AS ', $t);
+
+					// Attach prefix to both sides of the AS
+					$t = $this->config['table_prefix'].$table.' AS '.$this->config['table_prefix'].$alias;
+				}
+				else
+				{
+					$t = $this->config['table_prefix'].$t;
+				}
+			}
+
+			$join['tables'][] = $this->driver->escape_column($t);
 		}
 
 		$join['conditions'] = '('.trim(implode(' ', $cond)).')';
@@ -1119,11 +1172,15 @@ class Database_Core {
 	 * See if a table exists in the database.
 	 *
 	 * @param   string   table name
+	 * @param   boolean  True to attach table prefix
 	 * @return  boolean
 	 */
-	public function table_exists($table_name)
+	public function table_exists($table_name, $prefix = TRUE)
 	{
-		return in_array($this->config['table_prefix'].$table_name, $this->list_tables());
+		if ($prefix)
+			return in_array($this->config['table_prefix'].$table_name, $this->list_tables());
+		else
+			return in_array($table_name, $this->list_tables());
 	}
 
 	/**
@@ -1260,17 +1317,6 @@ class Database_Core {
 	}
 
 	/**
-	 * Create a prepared statement (experimental).
-	 *
-	 * @param   string  SQL query
-	 * @return  object
-	 */
-	public function stmt_prepare($sql)
-	{
-		return $this->driver->stmt_prepare($sql, $this->config);
-	}
-
-	/**
 	 * Pushes existing query space onto the query stack.  Use push
 	 * and pop to prevent queries from clashing before they are
 	 * executed
@@ -1278,7 +1324,7 @@ class Database_Core {
 	 * @return Database_Core This Databaes object
 	 */
 	public function push()
-	{	
+	{
 		array_push($this->query_history, array(
 			$this->select,
 			$this->from,
@@ -1310,7 +1356,7 @@ class Database_Core {
 			// No history
 			return $this;
 		}
-	
+
 		list(
 			$this->select,
 			$this->from,
@@ -1328,6 +1374,40 @@ class Database_Core {
 		return $this;
 	}
 
+	/**
+	 * Count the number of records in the last query, without LIMIT or OFFSET applied.
+	 *
+	 * @return  integer
+	 */
+	public function count_last_query()
+	{
+		if ($sql = $this->last_query())
+		{
+			if (stripos($sql, 'LIMIT') !== FALSE)
+			{
+				// Remove LIMIT from the SQL
+				$sql = preg_replace('/\sLIMIT\s+[^a-z]+/i', ' ', $sql);
+			}
+
+			if (stripos($sql, 'OFFSET') !== FALSE)
+			{
+				// Remove OFFSET from the SQL
+				$sql = preg_replace('/\sOFFSET\s+\d+/i', '', $sql);
+			}
+
+			// Get the total rows from the last query executed
+			$result = $this->query
+			(
+				'SELECT COUNT(*) AS '.$this->escape_column('total_rows').' '.
+				'FROM ('.trim($sql).') AS '.$this->escape_table('counted_results')
+			);
+
+			// Return the total number of rows from the query
+			return (int) $result->current()->total_rows;
+		}
+
+		return FALSE;
+	}
 
 } // End Database Class
 

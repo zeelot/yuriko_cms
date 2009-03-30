@@ -2,7 +2,7 @@
 /**
  * Provides Kohana-specific helper functions. This is where the magic happens!
  *
- * $Id: Kohana.php 3880 2009-01-09 19:58:25Z jheathco $
+ * $Id: Kohana.php 4111 2009-03-24 21:40:51Z jheathco $
  *
  * @package    Core
  * @author     Kohana Team
@@ -105,7 +105,7 @@ final class Kohana {
 		$ER = error_reporting(~E_NOTICE & ~E_STRICT);
 
 		// Set the user agent
-		self::$user_agent = trim($_SERVER['HTTP_USER_AGENT']);
+		self::$user_agent = ( ! empty($_SERVER['HTTP_USER_AGENT']) ? trim($_SERVER['HTTP_USER_AGENT']) : '');
 
 		if (function_exists('date_default_timezone_set'))
 		{
@@ -694,14 +694,14 @@ final class Kohana {
 	 */
 	public static function render($output)
 	{
-		// Fetch memory usage in MB
-		$memory = function_exists('memory_get_usage') ? (memory_get_usage() / 1024 / 1024) : 0;
-
-		// Fetch benchmark for page execution time
-		$benchmark = Benchmark::get(SYSTEM_BENCHMARK.'_total_execution');
-
 		if (self::config('core.render_stats') === TRUE)
 		{
+			// Fetch memory usage in MB
+			$memory = function_exists('memory_get_usage') ? (memory_get_usage() / 1024 / 1024) : 0;
+
+			// Fetch benchmark for page execution time
+			$benchmark = Benchmark::get(SYSTEM_BENCHMARK.'_total_execution');
+
 			// Replace the global template variables
 			$output = str_replace(
 				array
@@ -1139,18 +1139,21 @@ final class Kohana {
 			{
 				$items = (array) glob($path.'*');
 
-				foreach ($items as $index => $item)
+				if ( ! empty($items))
 				{
-					$files[] = $item = str_replace('\\', '/', $item);
-
-					// Handle recursion
-					if (is_dir($item) AND $recursive == TRUE)
+					foreach ($items as $index => $item)
 					{
-						// Filename should only be the basename
-						$item = pathinfo($item, PATHINFO_BASENAME);
+						$files[] = $item = str_replace('\\', '/', $item);
 
-						// Append sub-directory search
-						$files = array_merge($files, self::list_files($directory, TRUE, $path.$item));
+						// Handle recursion
+						if (is_dir($item) AND $recursive == TRUE)
+						{
+							// Filename should only be the basename
+							$item = pathinfo($item, PATHINFO_BASENAME);
+
+							// Append sub-directory search
+							$files = array_merge($files, self::list_files($directory, TRUE, $path.$item));
+						}
 					}
 				}
 			}

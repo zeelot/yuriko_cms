@@ -93,6 +93,8 @@ $config['mobile'] = array
 	'ericsson'       => 'Ericsson',
 	'blackBerry'     => 'BlackBerry',
 	'motorola'       => 'Motorola',
+	'iphone'         => 'iPhone',
+	'android'        => 'Android',
 );
 
 // There are hundreds of bots but these are the most common.
