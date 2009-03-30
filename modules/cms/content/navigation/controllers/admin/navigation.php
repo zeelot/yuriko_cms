@@ -10,7 +10,7 @@ class Navigation_Controller extends Admin_Controller {
 	public function manage()
 	{
 		$root = ORM::factory('navigation_content')->root->find();
-		$this->template->content = View::factory('content/static/admin/navigation/manage');
+		$this->template->content = View::factory('admin/navigation/manage');
 		$this->template->content->root = $root;
 	}
 	public function create()
@@ -37,7 +37,7 @@ class Navigation_Controller extends Admin_Controller {
 			}
 		}
 		$items = ORM::factory('navigation_content')->orderby('lft', 'ASC')->find_all();
-		$this->template->content = View::factory('content/static/admin/navigation/create');
+		$this->template->content = View::factory('admin/navigation/create');
 		$this->template->content->items = $items;
 		$this->template->content->pages = ORM::factory('content_page')
 												->select_list('id', 'alias');
@@ -67,7 +67,7 @@ class Navigation_Controller extends Admin_Controller {
 			}
 		}
 
-		$this->template->content = View::factory('content/static/admin/navigation/edit');
+		$this->template->content = View::factory('admin/navigation/edit');
 		$this->template->content->item = $item;
 		$this->template->content->pages = ORM::factory('content_page')
 												->select_list('id', 'alias');
@@ -105,6 +105,6 @@ class Navigation_Controller extends Admin_Controller {
 			notice::add('Action Cancelled!', 'success');
 			url::redirect('admin/navigation/manage');
 		}
-		$this->template->content = View::factory('content/static/admin/navigation/delete');
+		$this->template->content = View::factory('admin/navigation/delete');
 	}
 } // End Admin Navigation Controller

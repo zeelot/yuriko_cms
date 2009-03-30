@@ -29,7 +29,7 @@ class Basic_Controller extends Admin_Controller {
 			}
 		}
 		$contents = ORM::factory('basic_content')->find_all();
-		$this->template->content = View::factory('content/static/admin/basic/manage');
+		$this->template->content = View::factory('admin/basic/manage');
 		$this->template->content->contents = $contents;
 	}
 	public function edit($id = NULL)
@@ -57,7 +57,7 @@ class Basic_Controller extends Admin_Controller {
 			}
 		}
 
-		$this->template->content = View::factory('content/static/admin/basic/edit');
+		$this->template->content = View::factory('admin/basic/edit');
 		$this->template->content->item = $content;
 		$this->template->content->formats = ORM::factory('content_format')
 												->select_list('id', 'name');
@@ -85,7 +85,7 @@ class Basic_Controller extends Admin_Controller {
 				}
 			}
 		}
-		$this->template->content = View::factory('content/static/admin/basic/create');
+		$this->template->content = View::factory('admin/basic/create');
 		$this->template->content->formats = ORM::factory('content_format')
 												->select_list('id', 'name');
 	}
@@ -108,7 +108,7 @@ class Basic_Controller extends Admin_Controller {
 			notice::add('Action Cancelled!', 'success');
 			url::redirect('admin/basic/manage');
 		}
-		$this->template->content = View::factory('content/static/admin/nodes/delete');
+		$this->template->content = View::factory('admin/nodes/delete');
 	}
 	public function delete($id = NULL)
 	{
@@ -125,6 +125,6 @@ class Basic_Controller extends Admin_Controller {
 			notice::add('Action Cancelled!', 'success');
 			url::redirect('admin/basic/manage');
 		}
-		$this->template->content = View::factory('content/static/admin/basic/delete');
+		$this->template->content = View::factory('admin/basic/delete');
 	}
 } // End Admin Basic Controller
