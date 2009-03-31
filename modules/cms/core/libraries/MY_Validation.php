@@ -28,7 +28,12 @@ class Validation extends Validation_Core{
 	{
 		if ($file === NULL)
 		{
-			return $this->errors;
+			$errors = array();
+			foreach($this->errors as $field => $error)
+			{
+				$errors[$field] = $error[0];
+			}
+			return $errors;
 		}
 		else
 		{
