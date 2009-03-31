@@ -62,7 +62,7 @@ $config['views'] = array
 	/**
 	 * Basic Content Admin Section
 	 */
-	'content/static/admin/basic/manage'		=> array
+	'admin/basic/manage'		=> array
 	(
 		'globals'			=> array
 		(
@@ -76,7 +76,7 @@ $config['views'] = array
 			'themes/default/media/js/markitup' => 100,
 		),
 	),
-	'content/static/admin/basic/edit'		=> array
+	'admin/basic/edit'		=> array
 	(
 		'globals'			=> array
 		(
@@ -89,7 +89,7 @@ $config['views'] = array
 			'themes/default/media/js/markitup' => 100,
 		),
 	),
-	'content/static/admin/basic/create'		=> array
+	'admin/basic/create'		=> array
 	(
 		'globals'			=> array
 		(
@@ -105,7 +105,7 @@ $config['views'] = array
 	/**
 	 * Navigation Admin Sections
 	 */
-	'content/static/admin/navigation/manage'	=> array
+	'admin/navigation/manage'	=> array
 	(
 		'globals'			=> array
 		(
@@ -116,7 +116,7 @@ $config['views'] = array
 	/**
 	 * Pages Admin Sections
 	 */
-	'content/static/admin/pages/manage'	=> array
+	'admin/pages/manage'	=> array
 	(
 		'globals'			=> array
 		(
@@ -124,7 +124,18 @@ $config['views'] = array
 			'thickbox',
 		),
 	),
-	'content/static/admin/pages/edit'	=> array
+	'admin/pages/edit'	=> array
+	(
+		'globals'			=> array
+		(
+			'jquery',
+			'thickbox',
+		),
+	),
+	/**
+	 * Plugins Admin Sections
+	 */
+	'admin/plugins/manage'	=> array
 	(
 		'globals'			=> array
 		(
