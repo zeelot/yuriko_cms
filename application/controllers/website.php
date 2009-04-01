@@ -17,10 +17,6 @@ abstract class Website_Controller extends Template_Controller{
 		{
 			$this->template = new View('templates/static/ajax');
 		}
-		else
-		{
-			$this->profiler = new Profiler;
-		}
 		if ($this->auto_render == TRUE)
 		{
 			// Render the template immediately after the controller method
