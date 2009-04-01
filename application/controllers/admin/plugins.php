@@ -34,44 +34,30 @@ class Plugins_Controller extends Admin_Controller {
 
 	public function enable($id = NULL)
 	{
-		/**
-		 * @TODO: fix dependency checking possibly put it into a helper
-		 */
 		$plugin = ORM::factory('plugin', $id);
 		if ((!$plugin->loaded) OR ($plugin->enabled)) Event::run('system.404');
-		//need to enable it temporarily to use the config
-		Kohana::config_set('core.modules', array_merge(Kohana::config('core.modules'), array(MODPATH.'cms/plugins/'.$plugin->dir)));
-		$config = kohana::config('plugin.'.$plugin->dir);
-		//check dependencies
-		$dep_pass = TRUE;
-		foreach ($config['dependencies'] as $dependency => $version)
+
+		if(isset($_POST['confirm']))
 		{
-			//if dependency = core, check cms version
-			if($dependency == 'core')
+			if (TRUE === $status = $plugin->enable())
 			{
-				if(version_compare($version, kohana::config('cms.version'), '>'))
-				{
-					$dep_pass = FALSE;
-					notice::add('This plugin is not compatible with the current CMS version', 'error');
-				}
+				notice::add('Plugin Enabled', 'success');
 			}
 			else
 			{
-				$dep = kohana::config('plugin.'.$dependency, FALSE, FALSE);
-				if((!$dep) OR (version_compare($version, $dep['version'], '>')))
+				foreach($status->errors('plugin_errors') as $error)
 				{
-					$dep_pass = FALSE;
-					notice::add('This plugin requires '.$dependency.' version '.$version.' or higher.', 'error');
+					notice::add($error, 'error');
 				}
 			}
+			url::redirect('admin/plugins/manage');
 		}
-		if($dep_pass)
+		elseif(isset($_POST['cancel']))
 		{
-			$plugin->enabled = 1;
-			$plugin->save();
-			notice::add('Plugin Enabled', 'success');
+			notice::add('Action Cancelled!', 'success');
+			url::redirect('admin/plugins/manage');
 		}
-		url::redirect('admin/plugins/manage');
+		$this->template->content = View::factory('admin/plugins/disable');
 	}
 	public function disable($id = NULL)
 	{
@@ -80,9 +66,17 @@ class Plugins_Controller extends Admin_Controller {
 
 		if(isset($_POST['confirm']))
 		{
-			$plugin->enabled = 0;
-			$plugin->save();
-			notice::add('Plugin Disabled', 'success');
+			if (TRUE === $status = $plugin->disable())
+			{
+				notice::add('Plugin Disabled', 'success');
+			}
+			else
+			{
+				foreach($status->errors('plugin_errors') as $error)
+				{
+					notice::add($error, 'error');
+				}
+			}
 			url::redirect('admin/plugins/manage');
 		}
 		elseif(isset($_POST['cancel']))
@@ -90,7 +84,7 @@ class Plugins_Controller extends Admin_Controller {
 			notice::add('Action Cancelled!', 'success');
 			url::redirect('admin/plugins/manage');
 		}
-		$this->template->content = View::factory('admin/plugins/delete');
+		$this->template->content = View::factory('admin/plugins/disable');
 	}
 
 } // End Admin Plugins Controller
