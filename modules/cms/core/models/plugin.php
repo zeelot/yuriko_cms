@@ -2,14 +2,48 @@
 
 class Plugin_Model extends ORM {
 
+	public function unique_key($id)
+	{
+		if ( ! empty($id) AND is_string($id) AND ! ctype_digit($id))
+		{
+			return 'dir';
+		}
+
+		return parent::unique_key($id);
+	}
+
+	public function __set($key, $value)
+	{
+		if ($key === 'dependencies')
+		{
+			$value = serialize($value);
+		}
+
+		parent::__set($key, $value);
+	}
+	public function __get($key)
+	{
+		if ($key === 'dependencies')
+		{
+			return unserialize(parent::__get($key));
+		}
+		else
+		{
+			return parent::__get($key);
+		}
+	}
+
 	public function validate(array & $array, $save = FALSE)
 	{
 		$array = Validation::factory($array)
-			->pre_filter('trim')
+			->pre_filter('trim', 'name', 'dir', 'description', 'version')
 			->add_rules('name', 'required', 'length[1,127]', 'chars[a-zA-Z 0-9_./]')
 			->add_rules('dir', 'required', 'length[1,127]', 'chars[a-zA-Z0-9_./]')
-			->add_rules('description', 'required', 'length[1,500]')
-			->add_rules('version', 'required', 'length[1,5]');
+			->add_rules('dependencies', 'is_array')
+			->add_rules('description', 'required', 'length[1,1000]')
+			->add_rules('notice_enable', 'length[1,1000]')
+			->add_rules('notice_disable', 'length[1,1000]')
+			->add_rules('version', 'required', 'length[1,15]');
 		return parent::validate($array, $save);
 	}
 
@@ -23,27 +57,47 @@ class Plugin_Model extends ORM {
 	}
 	public function enable_callback(Validation $array, $field)
 	{
-		//enable the plugin to check the config
-		Kohana::config_set('core.modules',
-			array_merge(Kohana::config('core.modules'),
-				array(MODPATH.'cms/plugins/'.$array->dir)));
-		$config = kohana::config('plugin.'.$array->dir);
-		foreach ($config['dependencies'] as $dependency => $version)
+		foreach ($array['dependencies'] as $dependency => $version)
 		{
 			//if dependency = core, check cms version
 			if($dependency == 'core')
 			{
-				if(version_compare($version, kohana::config('cms.version'), '>'))
+				if(version_compare($version[0], kohana::config('cms.version'), '>'))
 				{
-					$array->add_error($field, 'core_dependency', array($version));
+					//core is too old
+					$array->add_error($field, 'core_upgrade', array($version[0]));
+				}
+				elseif(isset($version[1]) AND version_compare($version[1], kohana::config('cms.version'), '<'))
+				{
+					//core is too new
+					$array->add_error($field, 'core_downgrade', array($version[1]));
 				}
 			}
 			else
 			{
-				$dep = kohana::config('plugin.'.$dependency, FALSE, FALSE);
-				if((!$dep) OR (version_compare($version, $dep['version'], '>')))
+				$dep = ORM::factory('plugin', $dependency);
+				if(!$dep->loaded)
 				{
-					$array->add_error($field, 'dependency', array($dependency, $version));
+					//the plugin is not installed
+					$array->add_error($field, 'dependency_install', array($dependency, $version[0]));
+				}
+				else
+				{
+					if(!$dep->enabled)
+					{
+						//the plugin needs to be loaded
+						$array->add_error($field, 'dependency_enable', array($dep->name, $version[0]));
+					}
+					if(version_compare($version[0], $dep->version, '>'))
+					{
+						//the required plugin is too old
+						$array->add_error($field, 'dependency_upgrade', array($dep->name, $version[0]));
+					}
+					elseif(isset($version[1]) AND version_compare($version[1], $dep->version, '<'))
+					{
+						//the required plugin is too new
+						$array->add_error($field, 'dependency_downgrade', array($dep->name, $version[1]));
+					}
 				}
 			}
 		}
@@ -58,7 +112,7 @@ class Plugin_Model extends ORM {
 		//check each plugins dependencies
 		foreach($plugins as $plugin)
 		{
-			if(array_key_exists($this->dir, kohana::config('plugin.'.$plugin->dir.'.dependencies')))
+			if(array_key_exists($this->dir, $plugin->dependencies))
 			{
 				//plugin depends on this one
 				$array->add_error($field, 'needed', array($plugin->name));
@@ -70,7 +124,6 @@ class Plugin_Model extends ORM {
 		$array = $this->as_array();
 
 		$array = Validation::factory($array)
-			->pre_filter('trim')
 			->add_rules('enabled', array($this, 'is_disabled'))
 			->add_callbacks('enabled', array($this, 'enable_callback'));
 		//return the validation object on failure
@@ -90,7 +143,6 @@ class Plugin_Model extends ORM {
 		$array = $this->as_array();
 
 		$array = Validation::factory($array)
-			->pre_filter('trim')
 			->add_rules('enabled', array($this, 'is_enabled'))
 			->add_callbacks('enabled', array($this, 'disable_callback'));
 		//return the validation object on failure
@@ -141,7 +193,7 @@ class Plugin_Model extends ORM {
 			}
 			else
 			{
-				foreach ($plugin->errors() as $error)
+				foreach ($plugin->errors('plugin_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}

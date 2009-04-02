@@ -1,48 +1,40 @@
 <?php
-
+/**
+ * This is the hook responsible for enabling themes throughout the site
+ */
 class themes_hook {
 
-  public function __construct()
-  {
-    // Hook into routing
-    Event::add('system.ready', array($this, 'load_themes'));
-	Event::add('system.pre_controller', array($this, 'add_form_module'));
-    $this->session = Session::instance();
+	public function __construct()
+	{
+		// Hook into routing
+		Event::add('system.ready', array($this, 'load_themes'));
+		Event::add('system.pre_controller', array($this, 'add_form_module'));
+		Event::add('site_settings.form_processing', array($this, 'site_settings_form'));
+	}
+
+	public function load_themes()
+	{
+		$theme = ORM::factory('site_setting', 'site_theme')->value;
+		Kohana::config_set('core.modules', array_merge(array(DOCROOT.'themes/default'), Kohana::config('core.modules')));
+		if($theme!='default')
+		{
+			Kohana::config_set('core.modules', array_merge(array(DOCROOT.'themes/'.$theme), Kohana::config('core.modules')));
+		}
+	}
+
+	public function add_form_module()
+	{
+		$themes = filesystem::get_folders(DOCROOT.'themes/');
+		$sel = ORM::factory('site_setting', 'site_theme')->value;
+		$view = View::factory('form_modules/site_settings/theme_selection')
+			->set('themes', $themes)
+			->set('sel', $sel);
+		//add the themes dropdown to the site_settings form
+		form_module::set('site_settings', $view);
   }
-
-  public function load_themes()
+  public function site_settings_form()
   {
-      /*
-	   * @TODO: fix the user profile
-	   if(Auth::instance()->logged_in())
-	  {
-		  $user_theme = $this->session->get('auth_user')->profile->theme;
-		  if($user_theme->id > 0)
-		  {
-			  Kohana::config_set
-			  ( 'themes.active', array
-				  (
-					  'name'    => $user_theme->name,
-					  'dir'     => $user_theme->dir,
-				  )
-			  );
-			  Kohana::config_set('core.modules', array_merge(Kohana::config('core.modules'), array(DOCROOT.'themes/'.$user_theme->dir)));
-		  }
-	  }
-	   */
-
-	  // the default theme should be loaded for fallback
-	  Kohana::config_set('core.modules', array_merge(Kohana::config('core.modules'), array(DOCROOT.'themes/default')));
-  }
-
-  public function add_form_module()
-  {
-	$user = $this->session->get('auth_user');
-	$view = View::factory('form_modules/user_profile/theme_selection')
-			->set('themes', ORM::factory('theme')->find_all())
-			->set('user', $user);
-	//add the themes dropdown to the user_profile form (found in the profile page)
-	form_module::set('user_profile', $view);
+	  
   }
 }
 new themes_hook;
