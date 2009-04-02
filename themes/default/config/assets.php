@@ -12,135 +12,74 @@
  * designer should NOT be allowed in the controller!
  *
  */
-$config['views'] = array
+$config['views'] = array(); //DO NOT DO THIS IN OTHER THEMES!!
+$config['views']['templates/static/admin/default'] = array
 (
-	'kohana_profiler' => array
+	'globals'			=> array
 	(
-		//load the debug css files anytime the profiler is loaded
-		'globals'			=> array
-		(
-			'debug',		//the kohana.css
-		),
+		'960',			//the 960 css files
+		'common',		//the reset and typography stuff
 	),
-	'templates/static/default'	=> array
+	'stylesheets'		=> array
 	(
-		'globals'			=> array
-		(
-			'960',			//the 960 css files
-			'common',		//the reset and typography stuff
-		),
-		'stylesheets'		=> array
-		(
-			'themes/default/media/css/styles' => 100,
-		),
+		'themes/default/media/css/styles' => 100,
 	),
-	'templates/static/admin/default'		=> array
+);
+$config['views']['templates/page/default'] = array
+(
+	'globals'			=> array
 	(
-		'globals'			=> array
-		(
-			'960',			//the 960 css files
-			'common',		//the reset and typography stuff
-		),
-		'stylesheets'		=> array
-		(
-			'themes/default/media/css/styles' => 100,
-		),
+		'960',			//the 960 css files
+		'common',		//the reset and typography stuff
 	),
-	'templates/page/default' => array
+	'stylesheets'		=> array
 	(
-		'globals'			=> array
-		(
-			'960',			//the 960 css files
-			'common',		//the reset and typography stuff
-			'debug',		//the kohana.css
-		),
-		'stylesheets'		=> array
-		(
-			'themes/default/media/css/styles' => 100,
-		),
+		'themes/default/media/css/styles' => 100,
 	),
-	/**
-	 * Basic Content Admin Section
-	 */
-	'admin/basic/manage'		=> array
+);
+/**
+ * Basic Content Admin Section
+ */
+$config['views']['admin/basic/manage'] = array
+(
+	'globals'			=> array
 	(
-		'globals'			=> array
-		(
-			'jquery',
-			'markitup',
-			'thickbox',
-			'livequery',
-		),
-		'scripts'			=> array
-		(
-			'themes/default/media/js/markitup' => 100,
-		),
+		'jquery',
+		'markitup',
+		'thickbox',
+		'livequery',
 	),
-	'admin/basic/edit'		=> array
+	'scripts'			=> array
 	(
-		'globals'			=> array
-		(
-			'jquery',
-			'markitup',
-			'livequery',
-		),
-		'scripts'			=> array
-		(
-			'themes/default/media/js/markitup' => 100,
-		),
+		'themes/default/media/js/markitup' => 100,
 	),
-	'admin/basic/create'		=> array
+);
+$config['views']['admin/basic/create'] =
+$config['views']['admin/basic/edit']   = array
+(
+	'globals'			=> array
 	(
-		'globals'			=> array
-		(
-			'jquery',
-			'markitup',
-			'livequery',
-		),
-		'scripts'			=> array
-		(
-			'themes/default/media/js/markitup' => 100,
-		),
+		'jquery',
+		'markitup',
+		'livequery',
 	),
-	/**
-	 * Navigation Admin Sections
-	 */
-	'admin/navigation/manage'	=> array
+	'scripts'			=> array
 	(
-		'globals'			=> array
-		(
-			'jquery',
-			'thickbox',
-		),
+		'themes/default/media/js/markitup' => 100,
 	),
-	/**
-	 * Pages Admin Sections
-	 */
-	'admin/pages/manage'	=> array
+);
+
+/**
+ * Admin Sections
+ */
+$config['views']['admin/navigation/manage']	=
+$config['views']['admin/pages/manage']      =
+$config['views']['admin/pages/edit']        =
+$config['views']['admin/plugins/manage']    = array
+(
+	'globals'			=> array
 	(
-		'globals'			=> array
-		(
-			'jquery',
-			'thickbox',
-		),
-	),
-	'admin/pages/edit'	=> array
-	(
-		'globals'			=> array
-		(
-			'jquery',
-			'thickbox',
-		),
-	),
-	/**
-	 * Plugins Admin Sections
-	 */
-	'admin/plugins/manage'	=> array
-	(
-		'globals'			=> array
-		(
-			'jquery',
-			'thickbox',
-		),
+		'jquery',
+		'thickbox',
 	),
 );
