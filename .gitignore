@@ -5,6 +5,6 @@ Icon?
 .directory
 .buildpath
 .project
-*/logs/*.php
+*/logs/*
 */cache/*
 */application/config/*
