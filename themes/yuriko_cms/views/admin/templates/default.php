@@ -12,12 +12,16 @@
 </head>
 
 <body>
+	<div id="header"></div>
     <div class="container_16" id="main_frame">
 		<div class="grid_16">
 			<?php echo notice::render(); ?>
 		</div>
-        <div class="grid_4 side_panel">
-			<?php echo View::factory('menu/admin'); ?>
+        <div class="grid_12 content">
+            <?php echo (isset($content))? $content : null; ?>
+        </div>
+		<div class="grid_4 side_panel">
+			<?php echo View::factory('admin/nav/main'); ?>
 			<?php echo widget::get('user_info'); ?>
 			<p>
 				<a href="http://validator.w3.org/check?uri=referer" class="noicon">
@@ -33,9 +37,6 @@
 					alt="Valid CSS!" />
 				</a>
 			</p>
-        </div>
-        <div class="grid_12 content">
-            <?php echo (isset($content))? $content : null; ?>
         </div>
 		<div class="clear"></div>
     </div>

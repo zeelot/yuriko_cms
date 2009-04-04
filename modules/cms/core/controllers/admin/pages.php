@@ -11,7 +11,7 @@ class Pages_Controller extends Admin_Controller {
 	{
 		
 		$pages = ORM::factory('content_page')->find_all();
-		$this->template->content = View::factory('admin/pages/manage');
+		$this->template->content = View::factory('admin/content/pages/manage');
 		$this->template->content->pages = $pages;
 	}
 	public function create()
@@ -38,7 +38,7 @@ class Pages_Controller extends Admin_Controller {
 			}
 
 		}
-		$this->template->content = View::factory('admin/pages/create');
+		$this->template->content = View::factory('admin/content/pages/create');
 		$this->template->content->page = $page;
 	}
 	public function delete($id = NULL)
@@ -57,7 +57,7 @@ class Pages_Controller extends Admin_Controller {
 			notice::add('Action Cancelled!', 'success');
 			url::redirect('admin/pages/manage');
 		}
-		$this->template->content = View::factory('admin/pages/delete');
+		$this->template->content = View::factory('admin/content/pages/delete');
 	}
 	public function edit($id = FALSE)
 	{
@@ -84,7 +84,7 @@ class Pages_Controller extends Admin_Controller {
 			}
 		}
 
-		$this->template->content = View::factory('admin/pages/edit');
+		$this->template->content = View::factory('admin/content/pages/edit');
 		$this->template->content->page = $page;
 		$this->template->content->objects = $page->content_pages_sections_nodes;
 	}
@@ -135,7 +135,7 @@ class Pages_Controller extends Admin_Controller {
 		ORM::factory('content_node')->find_all();
 		$sections = ORM::factory('content_section')->select_list('id', 'name');
 
-		$this->template->content = View::factory('admin/pages/add_node');
+		$this->template->content = View::factory('admin/content/pages/add_node');
 		$this->template->content->node_groups = $node_groups;
 		$this->template->content->sections = $sections;
 	}
@@ -156,7 +156,7 @@ class Pages_Controller extends Admin_Controller {
 			notice::add('Action Cancelled!', 'success');
 			url::redirect('admin/pages/edit/'.$pivot->content_page->id);
 		}
-		$this->template->content = View::factory('admin/pages/remove_node');
+		$this->template->content = View::factory('admin/content/pages/remove_node');
 	}
 
 } // End Admin Page Controller

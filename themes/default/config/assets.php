@@ -13,7 +13,7 @@
  *
  */
 $config['views'] = array(); //DO NOT DO THIS IN OTHER THEMES!!
-$config['views']['templates/static/admin/default'] = array
+$config['views']['admin/templates/default'] = array
 (
 	'globals'			=> array
 	(

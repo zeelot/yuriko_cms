@@ -9,6 +9,6 @@ $config['views']['admin/templates/default'] = array
 	),
 	'stylesheets'		=> array
 	(
-		'themes/zeelots_other_theme/media/css/styles' => 100,
+		'themes/yuriko_cms/media/css/styles' => 100,
 	),
 );
