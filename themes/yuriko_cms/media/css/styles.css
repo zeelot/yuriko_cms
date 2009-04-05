@@ -16,7 +16,7 @@ body{
 	border-bottom:2px solid #000;
 }
 #main_frame > * {
-	position:relative; top:-400px;
+	position:relative; top:-430px;
 	text-align:left;
 }
 h1, h2, h3, h4, h5, h6, h7{
