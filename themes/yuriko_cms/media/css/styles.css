@@ -3,16 +3,32 @@ body{
 }
 #header {
 	width:1200px; height:500px;
-	margin:0px auto -180px auto; text-align:center;
-	background:url(../images/header_image.jpg) no-repeat center;
-	border:2px solid #000;
+	margin:0px auto; text-align:center;
+	background:url(../images/top_3.jpg) no-repeat center;
+	border-left:2px solid #000;border-right:2px solid #000;
 }
-#main_frame{
+#header img{position:relative; top:133px; left:-41px;}
+#content_container{
+	width:1200px; height:500px;
+	margin:0px auto; text-align:center;
+	background: #95a7fd;
+	border-left:2px solid #000;border-right:2px solid #000;
+	border-bottom:2px solid #000;
+}
+#main_frame > * {
+	position:relative; top:-400px;
+	text-align:left;
 }
 h1, h2, h3, h4, h5, h6, h7{
-	color:#9BF;
+	color:#6AD;
 }
 h1 {text-align:center;}
+fieldset{
+	border-color:#000;
+}
+input, button, select {border:1px solid #1448a4;}
+label input, label select{display:block; width:15em;}
+button{margin-top:15px;}
 a, a:link, a:visited {
 	text-decoration:none;
 	font-weight:800;
@@ -20,11 +36,11 @@ a, a:link, a:visited {
 }
 a:hover {color:#4aaccd;}
 .content {
-	background: #EEF;
+	background: url(../images/eef_opacity-60.png) repeat;
 	border:2px solid #000;
 }
 .side_panel {
-	background: #EEF;
+	background: url(../images/eef_opacity-60.png) repeat;
 	border:2px solid #000; margin-right: -2px; margin-left:-2px;
 }
 .content > *, .side_panel > * {margin-left:5px; margin-right:5px;}
@@ -37,8 +53,7 @@ table.admin {width:100%;}
 .notices {margin:10px 0px;}
 .notices ul, .notices ul li {margin:0px; padding:0px;}
 
-label input, label select{display:block; width:15em;}
-button{margin-top:15px;}
+
 
 
 
