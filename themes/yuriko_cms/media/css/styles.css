@@ -26,7 +26,10 @@ h1 {text-align:center;}
 fieldset{
 	border-color:#000;
 }
-input, button, select {border:1px solid #1448a4;}
+input,
+input[type="text"], input[type="password"],
+button, select {border:1px solid #1448a4;}
+
 label input, label select{display:block; width:15em;}
 button{margin-top:15px;}
 a, a:link, a:visited {
