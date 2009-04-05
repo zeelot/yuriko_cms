@@ -21,7 +21,9 @@ body{
 }
 h1, h2, h3, h4, h5, h6, h7{
 	color:#6AD;
+	border-color:#000;
 }
+table, tr, td, th {border-color:#000;}
 h1 {text-align:center;}
 fieldset{
 	border-color:#000;
@@ -47,7 +49,8 @@ a:hover {color:#4aaccd;}
 	border:2px solid #000; margin-right: -2px; margin-left:-2px;
 }
 .content > *, .side_panel > * {margin-left:5px; margin-right:5px;}
-table.admin {width:100%;}
+table.admin {width:100%; border-color:#000;}
+.message {border-color:#000;}
 .admin td:last-child {width:80px;}
 .admin td {padding:3px; font-weight:800;}
 

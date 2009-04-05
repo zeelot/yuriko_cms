@@ -11,6 +11,7 @@
 	<ul>
 		<li><?php echo html::anchor('admin/settings/manage', 'Settings'); ?></li>
 		<li><?php echo html::anchor('admin/plugins/manage', 'Plugins'); ?></li>
+		<li><?php echo html::anchor('admin/users/manage', 'Users'); ?></li>
 	</ul>
 </div>
 <!-- END MENUS -->
