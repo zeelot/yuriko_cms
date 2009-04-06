@@ -17,20 +17,17 @@
 		<tr>
 			<td><?php echo $content->name; ?></td>
 			<td>
-				<?php echo html::anchor('admin/basic/edit/'.$content->id.'?height=800&width=800',
+				<?php echo html::anchor('admin/basic/edit/'.$content->id,
 					html::image('media/images/fam_silk/wrench.png',
-						array('alt'=>'Edit', 'title'=>'Edit')),
-					array('class' => 'thickbox')); ?>
+						array('alt'=>'Edit', 'title'=>'Edit'))); ?>
 				
-				<?php echo html::anchor('node/'.$content->node->alias.'?height=700',
+				<?php echo html::anchor('node/'.$content->node->alias,
 					html::image('media/images/fam_silk/zoom.png',
-						array('alt'=>'Preview', 'title'=>'Preview')),
-					array('class' => 'thickbox')); ?>
+						array('alt'=>'Preview', 'title'=>'Preview'))); ?>
 			-
-				<?php echo html::anchor('admin/basic/delete/'.$content->id.'?height=200',
+				<?php echo html::anchor('admin/basic/delete/'.$content->id,
 					html::image('media/images/fam_silk/bin.png',
-						array('alt'=>'Delete', 'title'=>'Delete')),
-					array('class' => 'thickbox')); ?>
+						array('alt'=>'Delete', 'title'=>'Delete'))); ?>
 			</td>
 		</tr>
 		<?php endforeach; ?>

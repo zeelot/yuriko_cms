@@ -24,13 +24,19 @@
  */
 $config['global'] = array
 (
-	'common'	=> array
+	'reset'	=> array
 	(
 		'weight'		=> 0,
 		'stylesheets'	=> array
 		(
 			'media/css/reset',
-			'media/css/styles',
+		),
+	),
+	'typography'	=> array
+	(
+		'weight'		=> 1,
+		'stylesheets'	=> array
+		(
 			'media/css/typography',
 		),
 	),
@@ -73,6 +79,18 @@ $config['global'] = array
 		'scripts'		=> array
 		(
 			'media/thickbox/thickbox',
+		),
+	),
+	'colorbox'	=> array
+	(
+		'weight'		=> 5, //has to load after jquery
+		'stylesheets'	=> array
+		(
+			'media/colorbox/colorbox',
+		),
+		'scripts'		=> array
+		(
+			'media/colorbox/jquery.colorbox-min',
 		),
 	),
 	'960'		=> array

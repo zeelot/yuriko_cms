@@ -20,7 +20,7 @@ $config['user'] = array
 
 $config['admin'] = array
 (
-	'uri' => 'admin/:controller/:method/:id/:ad',
+	'uri' => 'admin/:controller/:method/:id',
 	'allowed_roles' => array
 	(
 		'admin',
@@ -31,11 +31,6 @@ $config['admin'] = array
 		'controller' => 'main',
 		'method' => 'home',
 		'id' => FALSE,
-		'ad' => FALSE,
-	),
-	'regex' => array
-	(
-		'ad' => '.*'
 	),
 );
 /*

@@ -1,7 +1,11 @@
 body{
   background:#FFF4D7;
 }
+label{display:block;}
 
+.message{
+	margin:5px 0px;
+}
 table.admin {width:100%;}
 .admin td:last-child {width:80px;}
 .admin td {padding:3px; font-weight:800;}

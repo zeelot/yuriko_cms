@@ -6,7 +6,7 @@
  */
 
 ?>
-<div class="grid_8">
+<div class="grid_8 section">
 	<h1 class="error">Missing Content!</h1>
 	<p>
 		This page seems to have no content. Either because the admin just
@@ -16,7 +16,7 @@
 		this page.
 	</p>
 </div>
-<div class="grid_8">
+<div class="grid_8 section">
 	<h1>Admins</h1>
 	<p>
 		<strong>Steps to create a page with content:</strong>

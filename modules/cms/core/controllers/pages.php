@@ -24,7 +24,7 @@ class Pages_Controller extends Website_Controller{
 			//page has no content yet
 			$content = View::factory('errors/empty_page');
 		}
-		$this->template = View::factory($page->template)
+		$this->template = View::factory('templates/page/'.$page->template)
 		                          ->set('content', $content);
 	}
 
@@ -34,6 +34,6 @@ class Pages_Controller extends Website_Controller{
 		$node = ORM::factory('content_node', $alias);
 		if(!$node->id) Event::run('system.404');
 
-		echo View::factory($node->template)->set('node', $node->find_content());
+		echo View::factory('templates/node/'.$node->template)->set('node', $node->find_content());
 	}
 }

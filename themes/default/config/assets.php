@@ -17,8 +17,9 @@ $config['views']['admin/templates/default'] = array
 (
 	'globals'			=> array
 	(
+		'reset',
 		'960',			//the 960 css files
-		'common',		//the reset and typography stuff
+		'typography',
 	),
 	'stylesheets'		=> array
 	(
@@ -29,8 +30,9 @@ $config['views']['templates/page/default'] = array
 (
 	'globals'			=> array
 	(
-		'960',			//the 960 css files
-		'common',		//the reset and typography stuff
+		'reset',
+		'960',
+		'typography',
 	),
 	'stylesheets'		=> array
 	(
@@ -80,6 +82,6 @@ $config['views']['admin/plugins/manage']    = array
 	'globals'			=> array
 	(
 		'jquery',
-		'thickbox',
+		//'thickbox',
 	),
 );

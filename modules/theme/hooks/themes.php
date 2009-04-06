@@ -9,7 +9,6 @@ class themes_hook {
 		// Hook into routing
 		Event::add('system.ready', array($this, 'load_themes'));
 		Event::add('system.pre_controller', array($this, 'add_form_module'));
-		Event::add('site_settings.form_processing', array($this, 'site_settings_form'));
 	}
 
 	public function load_themes()
@@ -31,10 +30,6 @@ class themes_hook {
 			->set('sel', $sel);
 		//add the themes dropdown to the site_settings form
 		form_module::set('site_settings', $view);
-  }
-  public function site_settings_form()
-  {
-	  
   }
 }
 new themes_hook;

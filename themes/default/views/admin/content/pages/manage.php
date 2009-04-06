@@ -14,21 +14,18 @@
 				<?php echo html::anchor('admin/pages/edit/'.$page->id,
 					html::image('media/images/fam_silk/wrench.png',
 						array('alt'=>'Edit', 'title'=>'Edit'))); ?>
-				<?php echo html::anchor($page->alias.'?height=700&width=1100',
+				<?php echo html::anchor($page->alias,
 					html::image('media/images/fam_silk/zoom.png',
-						array('alt'=>'Preview', 'title'=>'Preview')),
-					array('class' => 'thickbox')); ?>
+						array('alt'=>'Preview', 'title'=>'Preview'))); ?>
 				-
-				<?php echo html::anchor('admin/pages/delete/'.$page->id.'?height=200',
+				<?php echo html::anchor('admin/pages/delete/'.$page->id,
 					html::image('media/images/fam_silk/bin.png',
-						array('alt'=>'Delete', 'title'=>'Delete')),
-					array('class' => 'thickbox')); ?>
+						array('alt'=>'Delete', 'title'=>'Delete'))); ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>
 		<tr>
-			<th colspan="3"><?php echo html::anchor('admin/pages/create?height=250&width=300', 'Create a new Page',
-					array('class' => 'thickbox')); ?></th>
+			<th colspan="3"><?php echo html::anchor('admin/pages/create', 'Create a new Page'); ?></th>
 		</tr>
 	</table>
 </div>

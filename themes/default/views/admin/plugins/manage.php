@@ -11,20 +11,17 @@
 			<td><?php echo $plugin->name; ?></td>
 			<td><?php echo $plugin->version; ?></td>
 			<td>
-			<?php echo html::anchor('admin/plugins/info/'.$plugin->id.'?height=500',
+			<?php echo html::anchor('admin/plugins/info/'.$plugin->id,
 				html::image('media/images/fam_silk/information.png',
-					array('alt' => 'Info', 'title' => 'Info')),
-				array('class' => 'thickbox')); ?>
+					array('alt' => 'Info', 'title' => 'Info'))); ?>
 			<?php if(!$plugin->enabled): ?>
-			<?php echo html::anchor('admin/plugins/enable/'.$plugin->id.'?height=200',
+			<?php echo html::anchor('admin/plugins/enable/'.$plugin->id,
 				html::image('media/images/fam_silk/add.png',
-					array('alt' => 'Enable', 'title' => 'Add')),
-				array('class' => 'thickbox')); ?>
+					array('alt' => 'Enable', 'title' => 'Add'))); ?>
 			<?php else: ?>
-			<?php echo html::anchor('admin/plugins/disable/'.$plugin->id.'?height=200',
+			<?php echo html::anchor('admin/plugins/disable/'.$plugin->id,
 				html::image('media/images/fam_silk/delete.png',
-					array('alt' => 'Remove', 'title' => 'Remove')),
-				array('class' => 'thickbox')); ?>
+					array('alt' => 'Remove', 'title' => 'Remove'))); ?>
 			<?php endif; ?>
 			</td>
 		</tr>

@@ -44,26 +44,22 @@
 				<?php endif; ?>
 				</td>
 				<td>
-				<?php echo html::anchor('admin/navigation/edit/'.$child->id.'?height=600',
+				<?php echo html::anchor('admin/navigation/edit/'.$child->id,
 					html::image('media/images/fam_silk/wrench.png',
-						array('alt'=>'Edit', 'title'=>'Edit')),
-					array('class' => 'thickbox')); ?>
-				<?php echo html::anchor('node/'.$child->node->alias.'?width=800&height=500',
+						array('alt'=>'Edit', 'title'=>'Edit'))); ?>
+				<?php echo html::anchor('node/'.$child->node->alias,
 					html::image('media/images/fam_silk/zoom.png',
-						array('alt'=>'Preview Node', 'title'=>'Preview Node')),
-				array('class' => 'thickbox')); ?>
+						array('alt'=>'Preview Node', 'title'=>'Preview Node'))); ?>
 				-
-				<?php echo html::anchor('admin/navigation/delete/'.$child->id.'?height=200',
+				<?php echo html::anchor('admin/navigation/delete/'.$child->id,
 					html::image('media/images/fam_silk/bin.png',
-						array('alt'=>'Delete', 'title'=>'Delete')),
-					array('class' => 'thickbox')); ?>
+						array('alt'=>'Delete', 'title'=>'Delete'))); ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>
 		<tr>
-			<th colspan="3"><?php echo html::anchor('admin/navigation/create?height=650',
-				'Create New Navigation Item',
-				array('class' => 'thickbox')); ?></th>
+			<th colspan="3"><?php echo html::anchor('admin/navigation/create',
+				'Create New Navigation Item'); ?></th>
 		</tr>
 	</table>
 </div>

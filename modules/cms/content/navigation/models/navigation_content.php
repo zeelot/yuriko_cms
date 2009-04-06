@@ -20,7 +20,8 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 			->add_rules('name', 'required', 'length[1,52]', 'chars[a-z A-Z0-9_.]')
 			->add_rules('tag', 'required', 'length[1,52]')
 			->add_rules('page_id', 'digit')
-			->add_rules('anchor', 'chars[a-zA-Z0-9_./:]');
+			->add_rules('anchor', 'chars[a-zA-Z0-9_./:]')
+			->add_rules('view', 'required');
 		if(!$this->loaded)
 		{
 			$array
@@ -117,7 +118,7 @@ class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
 
 	public function render()
 	{
-		echo View::factory($this->view)
+		echo View::factory('content/navigation/'.$this->view)
 			->set('node', $this);
 	}
 

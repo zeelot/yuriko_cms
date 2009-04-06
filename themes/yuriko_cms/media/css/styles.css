@@ -7,11 +7,10 @@ body{
 	background:url(../images/top_3.jpg) no-repeat center;
 	border-left:2px solid #000;border-right:2px solid #000;
 }
-#header img{position:relative; top:133px; left:-41px;}
 #content_container{
-	width:1200px; height:500px;
+	width:1200px; 
 	margin:0px auto; text-align:center;
-	background: #95a7fd;
+	background: url(../images/pattern.jpg) repeat #95a6fd;
 	border-left:2px solid #000;border-right:2px solid #000;
 	border-bottom:2px solid #000;
 }
@@ -40,15 +39,12 @@ a, a:link, a:visited {
 	color:#1448a4;
 }
 a:hover {color:#4aaccd;}
-.content {
+.content, .side_panel, .section {
 	background: url(../images/eef_opacity-60.png) repeat;
-	border:2px solid #000;
+	border:2px solid #000; margin-left:8px; margin-right:8px;
 }
-.side_panel {
-	background: url(../images/eef_opacity-60.png) repeat;
-	border:2px solid #000; margin-right: -2px; margin-left:-2px;
-}
-.content > *, .side_panel > * {margin-left:5px; margin-right:5px;}
+.content > *, .side_panel > *, .section > * {margin-left:5px; margin-right:5px;}
+
 table.admin {width:100%; border-color:#000;}
 .message {border-color:#000;}
 .admin td:last-child {width:80px;}
