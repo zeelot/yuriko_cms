@@ -32,7 +32,7 @@
 		<label>View:
 			<select name="view">
 				<?php foreach(Kohana::list_files('views/content/basic') as $file): ?>
-				<option value="<?php echo basename($file, '.php'); ?>" <?php echo (basename($file, '.php') == $item->view)? 'selected="selected"':NULL; ?>><?php echo basename($file, '.php'); ?></option>
+				<option value="<?php echo basename($file, '.php'); ?>" ><?php echo basename($file, '.php'); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</label>

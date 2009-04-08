@@ -4,8 +4,7 @@
 	<h3>Content</h3>
 	<ul>
 		<li><?php echo html::anchor('admin/pages/manage', 'Pages'); ?></li>
-		<li><?php echo html::anchor('admin/basic/manage', 'Basic Content'); ?></li>
-		<li><?php echo html::anchor('admin/navigation/manage', 'Navigation Content'); ?></li>
+		<?php Event::run('admin.nav.content'); ?>
 	</ul>
 	<h3>Site</h3>
 	<ul>

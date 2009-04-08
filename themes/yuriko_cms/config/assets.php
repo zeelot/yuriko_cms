@@ -20,6 +20,11 @@ $config['views']['templates/page/default'] = array
 		'reset',
 		'960',
 		'typography',
+		'jquery',
+	),
+	'scripts'			=> array
+	(
+		'themes/yuriko_cms/media/js/site' => 100,
 	),
 	'stylesheets'		=> array
 	(

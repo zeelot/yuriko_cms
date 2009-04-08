@@ -7,8 +7,15 @@ body{
 	background:url(../images/top_3.jpg) no-repeat center;
 	border-left:2px solid #000;border-right:2px solid #000;
 }
+#gutter {
+	width:1200px;
+	margin:0px auto; text-align:center;
+	background: #95a6fd;
+	border-left:2px solid #000;border-right:2px solid #000;
+	border-bottom:2px solid #000;
+}
 #content_container{
-	width:1200px; 
+	width:1200px;
 	margin:0px auto; text-align:center;
 	background: url(../images/pattern.jpg) repeat #95a6fd;
 	border-left:2px solid #000;border-right:2px solid #000;

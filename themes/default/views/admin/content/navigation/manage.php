@@ -24,7 +24,7 @@
 				<?php echo str_repeat('----', $child->level - 1); ?>
 				<?php if(($child->page_id > 0) OR ($child->anchor)): ?>
 				<?php echo ($child->page_id > 0)
-					? html::anchor(Auto_Modeler::factory('content_page', $child->page_id)->alias, $child->name)
+					? html::anchor(ORM::factory('content_page', $child->page_id)->alias, $child->name)
 					: html::anchor($child->anchor, $child->name) ?>
 				<?php else: ?>
 				<?php echo $child->name; ?>

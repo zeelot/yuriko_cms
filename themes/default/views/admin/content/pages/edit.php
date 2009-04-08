@@ -20,17 +20,17 @@
 			<th>Node</th>
 			<th>Delete</th>
 		</tr>
-		<?php foreach($objects as $obj): ?>
+		<?php foreach($pivots as $pivot): ?>
 		<tr>
-			<td><?php echo $obj->content_section->name; ?></td>
-			<td><?php echo $obj->content_node->name; ?> ( <?php echo $obj->content_node->alias; ?> )</td>
-			<td><?php echo html::anchor('admin/pages/remove_node/'.$obj->id.'?height=200&width=300',
+			<td><?php echo $sections[$pivot->section]; ?></td>
+			<td><?php echo $pivot->content_node->name; ?> ( <?php echo $pivot->content_node->alias; ?> )</td>
+			<td><?php echo html::anchor('admin/pages/remove_node/'.$pivot->id,
 				html::image('media/images/fam_silk/bin.png', 'Remove'),
 				array('class' => 'thickbox')); ?></td>
 		</tr>
 		<?php endforeach; ?>
 		<tr>
-			<th colspan="3"><?php echo html::anchor('admin/pages/add_node/'.$page->id.'?height=200&width=300',
+			<th colspan="3"><?php echo html::anchor('admin/pages/add_node/'.$page->id,
 				'Add a Node',
 				array('class' => 'thickbox')); ?></th>
 		</tr>
