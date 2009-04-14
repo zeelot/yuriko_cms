@@ -83,11 +83,34 @@ class Pages_Controller extends Admin_Controller {
 				}
 			}
 		}
-
 		$this->template->content = View::factory('admin/content/pages/edit');
 		$this->template->content->page = $page;
 		$this->template->content->pivots = $page->content_pivots;
 		$this->template->content->sections = Kohana::config('theme.sections');
+	}
+	public function add_inheritance($id = NULL)
+	{
+		$page = ORM::factory('content_page', $id);
+		if(!$page->loaded) Event::run('system.404');
+		if (isset($_POST['page_add_inheritance']))
+		{
+			$post = $this->input->post();
+			if($page->add_inheritance($post))
+			{
+				notice::add('Page Saved', 'success');
+				url::redirect('admin/pages/edit/'.$page->id);
+			}
+			else
+			{
+				foreach($post->errors('page_errors') as $error)
+				{
+					notice::add($error, 'error');
+				}
+			}
+		}
+		$pages = ORM::factory('content_page')->where('id !=', $page->id)->find_all();
+		$this->template->content = View::factory('admin/content/pages/add_inheritance');
+		$this->template->content->pages = $pages;
 	}
 	public function add_node($id = NULL)
 	{

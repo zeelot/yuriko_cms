@@ -5,6 +5,7 @@ class Content_Page_Model extends ORM {
 	protected $has_many = array
 	(
 		'content_pivots',
+		'content_page_inheritances',
 	);
 
 	public function validate(array & $array, $save = FALSE)
@@ -20,6 +21,25 @@ class Content_Page_Model extends ORM {
 			->add_rules('alias', array($this, 'unique_alias'));
 		}
 		return parent::validate($array, $save);
+	}
+	public function add_inheritance(array & $array)
+	{
+		//@TODO: find a better way to do this.
+		$array = Validation::factory($array)
+			->pre_filter('trim')
+			->add_rules('page_id', 'required', 'digit', array($this, 'page_exists'), array($this, 'unique_inheritance'));
+		if ($array->validate())
+		{
+			$inheritance = ORM::factory('content_page_inheritance');
+			$inheritance->content_page_id = $this->id;
+			$inheritance->inherited_page_id = $array->page_id;
+			$inheritance->save();
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 	public function unique_key($id)
 	{
@@ -41,21 +61,50 @@ class Content_Page_Model extends ORM {
 			->where('name', $id)
 			->count_records($this->table_name);
 	}
-
+	public function page_exists($id)
+	{
+		return (bool) $this->db
+			->where($this->unique_key($id), $id)
+			->count_records($this->table_name);
+	}
+	public function unique_inheritance($id)
+	{
+		return !(bool) $this->db
+			->where(array('content_page_id' => $this->id, 'inherited_page_id' => $id))
+			->count_records('content_page_inheritances');
+	}
+	public function has_content()
+	{
+		return (bool) $this->db
+			->where(array('content_page_id' => $this->id))
+			->count_records('content_pivots');
+	}
+	/**
+	 * Returns the page sections along with any inherited nodes.
+	 * @return <array> The sections of the theme filles with the content nodes
+	 */
 	public function get_sections()
 	{
-		$sections = Kohana::config('theme.sections');
 		$data = array();
-		foreach ($sections as $key => $name)
+		$pages = array();
+		$pages[] = $this->id;
+		foreach ($this->content_page_inheritances as $inh)
 		{
-			$pivots = ORM::factory('content_pivot')
-				->where(array('content_page_id' => $this->id, 'section' => $key))
-				->find_all();
-			foreach($pivots as $pivot)
+			$pages[] = $inh->inherited_page_id;
+		}
+		$pivots = ORM::factory('content_pivot')
+			->in('content_page_id', $pages)
+			->find_all();
+		foreach($pivots as $pivot)
+		{
+			$data[$pivot->section][] = $pivot->content_node;
+		}
+		foreach (Kohana::config('theme.sections') as $key => $section)
+		{
+			if(!isset($data[$key]))
 			{
-				$data[$key][] = $pivot->content_node;
+				$data[$key] = array();
 			}
-			if (!isset($data[$key])) $data[$key] = array();
 		}
 		return $data;
 	}
