@@ -12,11 +12,12 @@
 </head>
 
 <body>
+	<div id="header"></div>
+	<div id="content_container">
     <div class="container_16" id="main_frame">
-        <div class="grid_16 content">
             <?php echo (isset($content))? $content : null; ?>
-        </div>
 		<div class="clear"></div>
     </div>
+	</div>
 </body>
 </html>

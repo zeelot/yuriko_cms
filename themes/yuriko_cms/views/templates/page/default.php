@@ -16,7 +16,7 @@
 		<div class="container_16">
 			<div class="grid_16 section header">
 				 <?php foreach($sections[1] as $header_node): ?>
-					<?php $header_node->render(); ?>
+					<?php echo $header_node; ?>
 				<?php endforeach; ?>
 			</div>
 		</div>
@@ -32,7 +32,7 @@
 			<!-- BEGIN SECTION -->
 			<div class="grid_12 section content">
 				<?php foreach($sections[2] as $content_node): ?>
-					<?php $content_node->render(); ?>
+					<?php echo $content_node; ?>
 				<?php endforeach; ?>
 			</div>
 			<!-- END SECTION -->
@@ -41,7 +41,7 @@
 			<!-- BEGIN SECTION -->
 			<div class="grid_4 section side_panel">
 				<?php foreach($sections[3] as $side_node): ?>
-					<?php $side_node->render(); ?>
+					<?php echo $side_node; ?>
 				<?php endforeach; ?>
 			</div>
 			<!-- END SECTION -->
@@ -55,7 +55,7 @@
 			<!-- BEGIN SECTION -->
 			<div class="grid_16">
 				<?php foreach($sections[4] as $gutter_node): ?>
-					<?php $gutter_node->render(); ?>
+					<?php echo $gutter_node; ?>
 				<?php endforeach; ?>
 			</div>
 			<!-- END SECTION -->

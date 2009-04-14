@@ -1,6 +1,6 @@
 
 <!-- BEGIN NODE -->
 <div class="node">
-	<?php echo $node->render(); ?>
+	<?php echo $content; ?>
 </div>
 <!-- END NODE -->
