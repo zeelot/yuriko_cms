@@ -25,8 +25,7 @@
 			<td><?php echo $sections[$pivot->section]; ?></td>
 			<td><?php echo $pivot->content_node->name; ?> ( <?php echo $pivot->content_node->alias; ?> )</td>
 			<td><?php echo html::anchor('admin/pages/remove_node/'.$pivot->id,
-				html::image('media/images/fam_silk/bin.png', 'Remove'),
-				array('class' => 'thickbox')); ?></td>
+				html::image('media/images/fam_silk/bin.png', 'Remove')); ?></td>
 		</tr>
 		<?php endforeach; ?>
 		<tr>
@@ -42,7 +41,11 @@
 	</p>
 	<ul>
 		<?php foreach($page->content_page_inheritances as $inh): ?>
-		<li><?php echo $inh->inherited_page->name; ?></li>
+		<li>
+		<?php echo html::anchor('admin/pages/remove_inheritance/'.$inh->id,
+				html::image('media/images/fam_silk/bin.png', 'Remove')); ?>
+		<?php echo $inh->inherited_page->name; ?>
+		</li>
 		<?php endforeach; ?>
 		<li><?php echo html::anchor('admin/pages/add_inheritance/'.$page->id,
 				'Inherit Content From Another Page'); ?></li>

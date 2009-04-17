@@ -112,6 +112,24 @@ class Pages_Controller extends Admin_Controller {
 		$this->template->content = View::factory('admin/content/pages/add_inheritance');
 		$this->template->content->pages = $pages;
 	}
+	public function remove_inheritance($id = NULL)
+	{
+		$inheritance = ORM::factory('content_page_inheritance', $id);
+		if (!$inheritance->loaded) Event::run('system.404');
+		if(isset($_POST['confirm']))
+		{
+			$page = $inheritance->content_page_id;
+			$inheritance->delete();
+			notice::add('Inherited Page Removed.', 'success');
+			url::redirect('admin/pages/edit/'.$page);
+		}
+		elseif(isset($_POST['cancel']))
+		{
+			notice::add('Action Cancelled!', 'success');
+			url::redirect('admin/pages/edit/'.$inheritance->content_page_id);
+		}
+		$this->template->content = View::factory('admin/content/pages/remove_inheritance');
+	}
 	public function add_node($id = NULL)
 	{
 		$page = ORM::factory('content_page', $id);
@@ -178,7 +196,7 @@ class Pages_Controller extends Admin_Controller {
 		elseif(isset($_POST['cancel']))
 		{
 			notice::add('Action Cancelled!', 'success');
-			url::redirect('admin/pages/edit/'.$pivot->content_page->id);
+			url::redirect('admin/pages/edit/'.$pivot->content_page_id);
 		}
 		$this->template->content = View::factory('admin/content/pages/remove_node');
 	}
