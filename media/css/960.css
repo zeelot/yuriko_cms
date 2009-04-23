@@ -365,52 +365,6 @@
 	padding-right: 900px;
 }
 
-/* my addition from bluetrip */
-.container_16 .pull-1 {margin-left:-60px;}
-.container_16 .pull-2 {margin-left:-120px;}
-.container_16 .pull-3 {margin-left:-180px;}
-.container_16 .pull-4 {margin-left:-240px;}
-.container_16 .pull-5 {margin-left:-300px;}
-.container_16 .pull-6 {margin-left:-360px;}
-.container_16 .pull-7 {margin-left:-420px;}
-.container_16 .pull-8 {margin-left:-480px;}
-.container_16 .pull-9 {margin-left:-540px;}
-.container_16 .pull-10 {margin-left:-600px;}
-.container_16 .pull-11 {margin-left:-660px;}
-.container_16 .pull-12 {margin-left:-720px;}
-.container_16 .pull-13 {margin-left:-780px;}
-.container_16 .pull-14 {margin-left:-840px;}
-.container_16 .pull-15 {margin-left:-900px;}
-.container_16 .pull-16 {margin-left:-960px;}
-.container_16 .pull-1, .container_16 .pull-2, .container_16 .pull-3,
-.container_16 .pull-4, .container_16 .pull-5, .container_16 .pull-6,
-.container_16 .pull-7, .container_16 .pull-8, .container_16 .pull-9,
-.container_16 .pull-10, .container_16 .pull-11, .container_16 .pull-12,
-.container_16 .pull-13, .container_16 .pull-14, .container_16 .pull-15,
-.container_16 .pull-16 {float:left;position:relative;}
-
-.container_16 .push-1 {margin:0 -60px 1.5em 60px;}
-.container_16 .push-2 {margin:0 -120px 1.5em 120px;}
-.container_16 .push-3 {margin:0 -180px 1.5em 180px;}
-.container_16 .push-4 {margin:0 -240px 1.5em 240px;}
-.container_16 .push-5 {margin:0 -300px 1.5em 300px;}
-.container_16 .push-6 {margin:0 -360px 1.5em 360px;}
-.container_16 .push-7 {margin:0 -420px 1.5em 420px;}
-.container_16 .push-8 {margin:0 -480px 1.5em 480px;}
-.container_16 .push-9 {margin:0 -540px 1.5em 540px;}
-.container_16 .push-10 {margin:0 -600px 1.5em 600px;}
-.container_16 .push-11 {margin:0 -660px 1.5em 660px;}
-.container_16 .push-12 {margin:0 -720px 1.5em 720px;}
-.container_16 .push-13 {margin:0 -780px 1.5em 780px;}
-.container_16 .push-14 {margin:0 -840px 1.5em 840px;}
-.container_16 .push-15 {margin:0 -900px 1.5em 900px;}
-.container_16 .push-16 {margin:0 -960px 1.5em 960px;}
-.container_16 .push-1, .container_16 .push-2, .container_16 .push-3,
-.container_16 .push-4, .container_16 .push-5, .container_16 .push-6,
-.container_16 .push-7, .container_16 .push-8, .container_16 .push-9,
-.container_16 .push-10, .container_16 .push-11, .container_16 .push-12,
-.container_16 .push-13, .container_16 .push-14, .container_16 .push-15,
-.container_16 .push-16 {float:right;position:relative;}
 
 /* `Clear Floated Elements
 ----------------------------------------------------------------------------------------------------*/
