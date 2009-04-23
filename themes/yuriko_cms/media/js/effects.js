@@ -1,3 +1,4 @@
 $(document).ready(function()	{
-	$('table.admin td:last-child a').colorbox();
+	$('.side_panel').bg(30);
+	$('#footer .container_16').bg([0, 0, 30, 30]);
 });

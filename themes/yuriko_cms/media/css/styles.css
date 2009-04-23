@@ -1,74 +1,46 @@
 body{
-  background:#CDF;
+	background: #EFE;
 }
-#header {
-	width:1200px; height:500px;
-	margin:0px auto; text-align:center;
-	background:url(../images/top_3.jpg) no-repeat center;
-	border-left:2px solid #000;border-right:2px solid #000;
+
+table {
+	width:100%;
 }
-#gutter {
-	width:1200px;
-	margin:0px auto; text-align:center;
-	background: #95a6fd;
-	border-left:2px solid #000;border-right:2px solid #000;
-	border-bottom:2px solid #000;
+
+#header{
+	border-bottom:2px solid #8CD;
+	background: #9EF;
+	overflow:hidden;
 }
-#content_container{
-	width:1200px;
-	margin:0px auto; text-align:center;
-	background: url(../images/pattern.jpg) repeat #95a6fd;
-	border-left:2px solid #000;border-right:2px solid #000;
-	border-bottom:2px solid #000;
+#content{
+	border-top:2px solid #7BC;
+	background: url(../images/000_shadow.png) repeat-y center;
 }
-#main_frame > * {
-	position:relative; top:-430px;
-	text-align:left;
+#footer{
+	background: url(../images/000_shadow.png) repeat-y center;
 }
-h1, h2, h3, h4, h5, h6, h7{
-	color:#6AD;
-	border-color:#000;
+
+#content .container_16{
+	background: #CFF;
+	border-left: 2px solid #59A;
+	border-right: 2px solid #59A;
 }
-table, tr, td, th {border-color:#000;}
-h1 {text-align:center;}
-fieldset{
-	border-color:#000;
+#footer .container_16{
+	background: #CFF;
+	border:2px solid #59A;
 }
-input,
-input[type="text"], input[type="password"],
-button, select {border:1px solid #1448a4;}
 
-label input, label select{display:block; width:15em;}
-button{margin-top:15px;}
-a, a:link, a:visited {
-	text-decoration:none;
-	font-weight:800;
-	color:#1448a4;
+.side_panel{
+	padding:5px;
+	border:1px solid #000;
+	background:#8CD;
+	position:relative;
+	top:-60px;
 }
-a:hover {color:#4aaccd;}
-.content, .side_panel, .section {
-	background: url(../images/eef_opacity-60.png) repeat;
-	border:2px solid #000; margin-left:8px; margin-right:8px;
+
+/** notices **/
+.notices ul{
+	margin:0px; padding:0px;
 }
-.content > *, .side_panel > *, .section > * {margin-left:5px; margin-right:5px;}
-
-table.admin {width:100%; border-color:#000;}
-.message {border-color:#000;}
-.admin td:last-child {width:80px;}
-.admin td {padding:3px; font-weight:800;}
-
-.preview {display:block;padding-top:20px;}
-
-.notices {margin:10px 0px;}
-.notices ul, .notices ul li {margin:0px; padding:0px;}
-
-
-
-
-
-/* FORMS */
-.side_panel label input{display:block; width:15em;}
-.content label textarea{width:50em}
-.markItUp  {
-	width:55em;
+.notices ul li{
+	margin:0px; padding:0px;
 }

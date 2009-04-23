@@ -12,32 +12,50 @@
 </head>
 
 <body>
-	<div id="header"></div>
-	<div id="content_container">
+	<div id="header">
+		<div class="container_16">
+			<div id="logo" class="grid_16">
+				<?php echo html::anchor
+				('',
+				html::image('themes/yuriko_cms/media/images/yuriko_logo.png')); ?>
+			</div>
+		</div>
+	</div>
+	<div id="content">
 		<div class="container_16" id="main_frame">
-			<div class="grid_16">
+			<div class="grid_12 suffix_4">
 				<?php echo notice::render(); ?>
 			</div>
 			<div class="grid_12 content">
 				<?php echo (isset($content))? $content : null; ?>
 			</div>
-			<div class="grid_4 side_panel">
-				<?php echo View::factory('admin/nav/main'); ?>
-				<?php echo widget::get('user_info'); ?>
-				<p>
-					<a href="http://validator.w3.org/check?uri=referer" class="noicon">
-					<img
-						src="http://www.w3.org/Icons/valid-xhtml10"
-						alt="Valid XHTML 1.0 Transitional" />
-					</a>
-				</p>
-				<p>
-					<a href="http://jigsaw.w3.org/css-validator" class="noicon">
-					<img
-						src="http://jigsaw.w3.org/css-validator/images/vcss"
-						alt="Valid CSS!" />
-					</a>
-				</p>
+			<div class="grid_4">
+				<div class="side_panel">
+					<?php echo View::factory('admin/nav/main'); ?>
+					<?php echo widget::get('user_info'); ?>
+					<p>
+						<a href="http://validator.w3.org/check?uri=referer" class="noicon">
+						<img
+							src="http://www.w3.org/Icons/valid-xhtml10"
+							alt="Valid XHTML 1.0 Transitional" />
+						</a>
+					</p>
+					<p>
+						<a href="http://jigsaw.w3.org/css-validator" class="noicon">
+						<img
+							src="http://jigsaw.w3.org/css-validator/images/vcss"
+							alt="Valid CSS!" />
+						</a>
+					</p>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div id="footer">
+		<div class="container_16">
+			<div class="grid_16">
+				<p>Copyright YurikoCMS</p>
 			</div>
 			<div class="clear"></div>
 		</div>

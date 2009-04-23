@@ -7,6 +7,7 @@ $config['views']['admin/templates/default'] = array
 		'960',			//the 960 css files
 		'reset',
 		'typography',
+		'divcorners',
 	),
 	'stylesheets'		=> array
 	(
@@ -21,10 +22,12 @@ $config['views']['templates/page/default'] = array
 		'960',
 		'typography',
 		'jquery',
+		'divcorners',
+		'roundcorners',
 	),
 	'scripts'			=> array
 	(
-		'themes/yuriko_cms/media/js/site' => 100,
+		'themes/yuriko_cms/media/js/effects' => 100,
 	),
 	'stylesheets'		=> array
 	(

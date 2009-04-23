@@ -11,21 +11,26 @@
 
 <body>
 	<div id="header">
+		<div class="container_16">
+			<div id="logo" class="grid_16">
+				<?php echo html::anchor
+				('',
+				html::image('themes/yuriko_cms/media/images/yuriko_logo.png')); ?>
+			</div>
 		<?php if(count($sections[1]) > 0): ?>
 		<!-- BEGIN SECTION -->
-		<div class="container_16">
 			<div class="grid_16 section header">
 				 <?php foreach($sections[1] as $header_node): ?>
 					<?php echo $header_node; ?>
 				<?php endforeach; ?>
 			</div>
-		</div>
 		<!-- END SECTION -->
 		<?php endif; ?>
+		</div>
 	</div>
-	<div id="content_container">
+	<div id="content">
 		<div class="container_16" id="main_frame">
-			<div class="grid_16">
+			<div class="grid_12 suffix_4">
 				<?php echo notice::render(); ?>
 			</div>
 			<?php if(count($sections[2]) > 0): ?>
@@ -39,17 +44,19 @@
 			<?php endif; ?>
 			<?php if(count($sections[3]) > 0): ?>
 			<!-- BEGIN SECTION -->
-			<div class="grid_4 section side_panel">
-				<?php foreach($sections[3] as $side_node): ?>
-					<?php echo $side_node; ?>
-				<?php endforeach; ?>
+			<div class="grid_4 section">
+				<div class="side_panel">
+					<?php foreach($sections[3] as $side_node): ?>
+						<?php echo $side_node; ?>
+					<?php endforeach; ?>
+				</div>
 			</div>
 			<!-- END SECTION -->
 			<?php endif; ?>
 			<div class="clear"></div>
 		</div>
 	</div>
-	<div id="gutter">
+	<div id="footer">
 		<div class="container_16">
 			<?php if(count($sections[4]) > 0): ?>
 			<!-- BEGIN SECTION -->
