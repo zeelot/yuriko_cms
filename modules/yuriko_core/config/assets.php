@@ -93,6 +93,26 @@ $config['global'] = array
 			'media/colorbox/jquery.colorbox-min',
 		),
 	),
+	'divcorners'	=> array
+	(
+		'weight'		=> 5, //has to load after jquery
+		'stylesheets'	=> array
+		(
+			'media/css/jquery.divcorners',
+		),
+		'scripts'		=> array
+		(
+			'media/js/jquery.divcorners.min',
+		),
+	),
+	'divcorners'	=> array
+	(
+		'weight'		=> 5, //has to load after jquery
+		'scripts'		=> array
+		(
+			'media/js/jquery.roundcorners-1.0.1',
+		),
+	),
 	'960'		=> array
 	(
 		'weight'		=> 0,
