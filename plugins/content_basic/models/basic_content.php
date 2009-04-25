@@ -20,8 +20,7 @@ class Basic_Content_Model extends ORM implements Content_Model{
 			->pre_filter('trim')
 			->add_rules('name', 'required', 'length[1,55]', 'chars[a-zA-Z0-9_.]')
 			->add_rules('format_id', 'required', 'valid::digit')
-			->add_rules('content', 'required')
-			->add_rules('view', 'required');
+			->add_rules('content', 'required');
 		if(!$this->loaded)
 		{
 			$array

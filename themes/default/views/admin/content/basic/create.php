@@ -23,20 +23,6 @@
 		</label>
 		<label>Content: <textarea name="content" class="markitup"><?php echo (isset($_POST['content']))?$_POST['content']:NULL;?></textarea></label>
 	</fieldset>
-	<fieldset>
-		<legend>Advanced Settings</legend>
-		<p class="info">
-		The View is the file responsible for rendering content.  If you don't know how these
-		settings work, leave them with the default value!
-		</p>
-		<label>View:
-			<select name="view">
-				<?php foreach(Kohana::list_files('views/content/basic') as $file): ?>
-				<option value="<?php echo basename($file, '.php'); ?>" ><?php echo basename($file, '.php'); ?></option>
-				<?php endforeach; ?>
-			</select>
-		</label>
-	</fieldset>
 	<label><button>Create</button></label>
 <?php echo form::close(); ?>
 </div>

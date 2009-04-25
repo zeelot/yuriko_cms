@@ -48,20 +48,6 @@
 			<input name="anchor" type="text" value="<?php echo (isset($_POST['anchor']))?$_POST['anchor']:NULL;?>" /></label>
 		</label>
 	</fieldset>
-	<fieldset>
-		<legend>Advanced Settings</legend>
-		<p class="info">
-		The View is the file responsible for rendering content.  If you don't know how these
-		settings work, leave them with the default value!
-		</p>
-		<label>View:
-			<select name="view">
-				<?php foreach(Kohana::list_files('views/content/navigation') as $file): ?>
-				<option value="<?php echo basename($file, '.php'); ?>" <?php echo (basename($file, '.php') == $item->view)? 'selected="selected"':NULL; ?>><?php echo basename($file, '.php'); ?></option>
-				<?php endforeach; ?>
-			</select>
-		</label>
-	</fieldset>
 	<label><button>Create</button></label>
 <?php echo form::close(); ?>
 </div>
