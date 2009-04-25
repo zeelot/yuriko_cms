@@ -2,7 +2,9 @@ body{
   background:#FFF4D7;
 }
 label{display:block;}
-
+.content {
+	
+}
 .message{
 	margin:5px 0px;
 }

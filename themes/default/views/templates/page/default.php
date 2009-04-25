@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div class="container_16" id="main_frame">
+    <div class="container_16 frontend" id="main_frame">
 		<div class="grid_16">
 			<?php echo notice::render(); ?> 
 		</div>

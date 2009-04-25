@@ -15,9 +15,11 @@ class Pages_Controller extends Website_Controller{
 	public function load($route = FALSE)
 	{
 		$segs = explode(':', $route);
-		$alias = $segs[0];
+		$args = NULL;
+		if (isset($segs[1])) $args = $segs[1];
+		$alias = rtrim($segs[0], '/');
 		$page = ORM::factory('content_page', $alias);
-		if(!$page->id) Event::run('system.404');
+		if (!$page->id) Event::run('system.404');
 		if (!$page->has_content())
 		{
 			$this->template = View::factory('templates/static/default');
@@ -40,9 +42,17 @@ class Pages_Controller extends Website_Controller{
 			{
 				$node = $pivot->content_node;
 				$type = $node->content_type;
-				$node_view = View::factory('templates/node/'.$node->template);
+				/**
+				 * load the view defined in the pivots table
+				 * so that a view can be defined when adding a node to a page.
+				 * this makes it possible to use a different view for
+				 * a menu displayed at the top of the page and a menu on the
+				 * side of the page.
+				 */
+				$node_view = View::factory('templates/node/'.$pivot->view);
+				
 				$node_view->content = Component::factory('content/'.$type->name)
-					->method('index', array($node->content_id));
+					->method('index', array($node->content_id, $args));
 				$sections[$pivot->section][] = $node_view;
 			}
 			foreach (Kohana::config('theme.sections') as $key => $val)
