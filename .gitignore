@@ -5,4 +5,4 @@ Icon?
 .directory
 .buildpath
 .project
-*/application/config/*
+/application/config/*.php
