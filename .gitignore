@@ -5,6 +5,4 @@ Icon?
 .directory
 .buildpath
 .project
-*/logs/*
-*/cache/*
 */application/config/*
