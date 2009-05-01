@@ -94,10 +94,9 @@ $config['extension_prefix'] = 'MY_';
  */
 $config['modules'] = array
 (
-	// MODPATH.'auth',      // Authentication
-	// MODPATH.'kodoc',     // Self-generating documentation
-	// MODPATH.'gmaps',     // Google Maps integration
-	// MODPATH.'archive',   // Archive utility
-	// MODPATH.'payment',   // Online payments
-	// MODPATH.'unit_test', // Unit testing
+	MODPATH.'auth',
+	MODPATH.'router3',
+	MODPATH.'yuriko_core',
+	MODPATH.'user',
+	MODPATH.'theme',
 );
