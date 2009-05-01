@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `basic_contents` (
   `html` longtext collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `content_formats`;
 CREATE TABLE IF NOT EXISTS `content_formats` (
@@ -34,7 +34,10 @@ CREATE TABLE IF NOT EXISTS `content_nodes` (
   `alias` varchar(127) collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `alias` (`alias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=62 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+INSERT INTO `content_nodes` (`id`, `content_type_id`, `content_id`, `name`, `alias`) VALUES
+(1, 2, 1, 'root', 'navigation/root');
 
 DROP TABLE IF EXISTS `content_pages`;
 CREATE TABLE IF NOT EXISTS `content_pages` (
@@ -45,7 +48,10 @@ CREATE TABLE IF NOT EXISTS `content_pages` (
   `locked` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `alias` (`alias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+INSERT INTO `content_pages` (`id`, `alias`, `name`, `template`, `locked`) VALUES
+(1, 'home', 'Home', 'default', 0);
 
 DROP TABLE IF EXISTS `content_page_inheritances`;
 CREATE TABLE IF NOT EXISTS `content_page_inheritances` (
@@ -56,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `content_page_inheritances` (
   KEY `pages_has_inheritances_FKIndex2` (`inherited_page_id`),
   KEY `page_inheritances_FKIndex2` (`content_page_id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 DROP TABLE IF EXISTS `content_pivots`;
 CREATE TABLE IF NOT EXISTS `content_pivots` (
@@ -68,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `content_pivots` (
   PRIMARY KEY  (`id`),
   KEY `has_nodes_FKIndex2` (`content_node_id`),
   KEY `has_pages_FKIndex2` (`content_page_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 DROP TABLE IF EXISTS `content_types`;
 CREATE TABLE IF NOT EXISTS `content_types` (
@@ -96,7 +102,10 @@ CREATE TABLE IF NOT EXISTS `navigation_contents` (
   `anchor` varchar(255) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `tag` (`tag`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=50 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+INSERT INTO `navigation_contents` (`id`, `node_id`, `page_id`, `level`, `lft`, `rgt`, `tag`, `view`, `name`, `anchor`) VALUES
+(1, 1, 0, 0, 1, 2, 'root', 'default', 'root', NULL);
 
 DROP TABLE IF EXISTS `plugins`;
 CREATE TABLE IF NOT EXISTS `plugins` (
@@ -112,6 +121,13 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `dir` (`dir`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+
+INSERT INTO `plugins` (`id`, `name`, `dir`, `description`, `dependencies`, `notice_enable`, `notice_disable`, `enabled`, `version`) VALUES
+(1, 'Zend ACL', 'zend_acl', 'A Port of the Zend ACL Module', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'You should only enable this plugin if it is required\n                        by other plugins. Continue enabling this plugin?', 'Disable this plugin?', '0', '0.1.0'),
+(2, 'Simple ACL', 'simple_acl', 'A simple Router Based ACL', 'a:2:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}s:8:"zend_acl";a:2:{i:0;s:5:"0.1.0";i:1;s:5:"0.2.0";}}', 'Enabling this plugin might lock you out of the\n                        Admin Panel. Make sure you have an admin account\n						before enabling this plugin.', 'Disabling the Simple ACL plugin might make all\n                        sections of your website accessible to unauthorized\n                        users, are you sure you want to disable this plugin?', '0', '0.1.0'),
+(3, 'Kohana Debug Toolbar', 'debug_toolbar', 'A nice alternative to the Kohana Profiler', 'a:0:{}', 'Enabling this module will add a debug toolbar\n                        to all your pages, try to enable this only in testing\n                        environments. Are you sure you want to enable this plugin?', 'Disable the Debug Toolbal?', '1', '0.2.1'),
+(4, 'YurikoCMS Navigation Content', 'content_navigation', 'Adds the ability to create navigation content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Navigation Content plugin?', '1', '0.1.0'),
+(5, 'YurikoCMS Basic Content', 'content_basic', 'Adds the ability to create basic text content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Basic Content plugin?', '1', '0.1.0');
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE IF NOT EXISTS `roles` (
@@ -160,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `site_settings` (
 INSERT INTO `site_settings` (`id`, `key`, `value`) VALUES
 (1, 'site_name', 'Zeelots Site'),
 (2, 'site_description', 'Just a sample site'),
-(3, 'site_theme', 'yuriko_cms');
+(3, 'site_theme', 'default');
 
 DROP TABLE IF EXISTS `themes`;
 CREATE TABLE IF NOT EXISTS `themes` (
@@ -230,34 +246,19 @@ ALTER TABLE `content_page_inheritances`
   ADD CONSTRAINT `page_inheritances_ibfk_1` FOREIGN KEY (`content_page_id`) REFERENCES `content_pages` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `page_inheritances_ibfk_2` FOREIGN KEY (`inherited_page_id`) REFERENCES `content_pages` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
---
--- Constraints for table `content_pivots`
---
 ALTER TABLE `content_pivots`
   ADD CONSTRAINT `has_nodes_ibfk_1` FOREIGN KEY (`content_node_id`) REFERENCES `content_nodes` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `has_pages_ibfk_2` FOREIGN KEY (`content_page_id`) REFERENCES `content_pages` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
---
--- Constraints for table `roles_users`
---
 ALTER TABLE `roles_users`
   ADD CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
---
--- Constraints for table `user_labels`
---
 ALTER TABLE `user_labels`
   ADD CONSTRAINT `user_labels_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
---
--- Constraints for table `user_settings`
---
 ALTER TABLE `user_settings`
   ADD CONSTRAINT `user_settings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
---
--- Constraints for table `user_tokens`
---
 ALTER TABLE `user_tokens`
   ADD CONSTRAINT `user_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
