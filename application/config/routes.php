@@ -32,6 +32,10 @@ $config['admin'] = array
 		'method' => 'home',
 		'id' => FALSE,
 	),
+	'regex' => array
+	(
+		'id' => '.*'
+	),
 );
 /*
  * @TODO: these two routes need a way to detect segments.

@@ -130,10 +130,14 @@ class Pages_Controller extends Admin_Controller {
 		}
 		$this->template->content = View::factory('admin/content/pages/remove_inheritance');
 	}
-	public function add_node($id = NULL)
+	public function add_node()
 	{
+		$id = URI::segment('page', NULL);
+		$type = URI::segment('type', NULL);
 		$page = ORM::factory('content_page', $id);
+
 		if(!$page->loaded) Event::run('system.404');
+
 		if (isset($_POST['page_add_content_node']))
 		{
 			$post = $this->input->post();
@@ -168,17 +172,11 @@ class Pages_Controller extends Admin_Controller {
 				}
 			}
 		}
-		$node_groups = array();
-		$content_types = ORM::factory('content_type')->find_all();
-		foreach($content_types as $type)
-		{
-			$node_groups[$type->name] = ORM::factory($type->name.'_content')->find_all();
-		}
-		ORM::factory('content_node')->find_all();
 		$sections = Kohana::config('theme.sections');
-
+		$items = ORM::factory($type.'_Content')->find_all();
 		$this->template->content = View::factory('admin/content/pages/add_node');
-		$this->template->content->node_groups = $node_groups;
+		$this->template->content->node_dropdown = View::factory('admin/content/nodes/'.$type.'_content_dropdown')
+			->set('items', $items);
 		$this->template->content->sections = $sections;
 	}
 	public function remove_node($id)

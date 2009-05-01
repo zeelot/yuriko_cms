@@ -28,10 +28,7 @@
 				html::image('media/images/fam_silk/bin.png', 'Remove')); ?></td>
 		</tr>
 		<?php endforeach; ?>
-		<tr>
-			<th colspan="3"><?php echo html::anchor('admin/pages/add_node/'.$page->id,
-				'Add a Node'); ?></th>
-		</tr>
+		<?php Event::run('yuriko.pages_edit_add_nodes_table', $page); ?>
 	</table>
 	<h2>Inherited Pages</h2>
 	<p class="info">

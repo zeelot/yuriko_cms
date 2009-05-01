@@ -5,16 +5,7 @@
 		<input type="hidden" name="page_add_content_node" value="TRUE" />
 		<legend>Add Content Node</legend>
 		<label for="page.node">
-		Node:
-		<select name="node" id="page.node">
-			<?php foreach($node_groups as $group => $nodes): ?>
-			<optgroup label="<?php echo $group; ?>">
-				<?php foreach($nodes as $node): ?>
-				<option value="<?php echo $node->node_id; ?>"><?php echo $node->name; ?> - <?php echo $node->node->alias; ?></option>
-				<?php endforeach; ?>
-			</optgroup>			
-			<?php endforeach; ?>
-		</select>
+		Node: <?php echo $node_dropdown; ?>
 		</label>
 		<label for="page.section">
 		Section:
