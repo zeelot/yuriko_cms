@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `basic_contents` (
   `html` longtext collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 DROP TABLE IF EXISTS `content_formats`;
 CREATE TABLE IF NOT EXISTS `content_formats` (
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `content_nodes` (
   `alias` varchar(127) collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `alias` (`alias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 INSERT INTO `content_nodes` (`id`, `content_type_id`, `content_id`, `name`, `alias`) VALUES
 (1, 2, 1, 'root', 'navigation/root');
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `content_pivots` (
   PRIMARY KEY  (`id`),
   KEY `has_nodes_FKIndex2` (`content_node_id`),
   KEY `has_pages_FKIndex2` (`content_page_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 DROP TABLE IF EXISTS `content_types`;
 CREATE TABLE IF NOT EXISTS `content_types` (
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `navigation_contents` (
   `anchor` varchar(255) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `tag` (`tag`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 INSERT INTO `navigation_contents` (`id`, `node_id`, `page_id`, `level`, `lft`, `rgt`, `tag`, `view`, `name`, `anchor`) VALUES
 (1, 1, 0, 0, 1, 2, 'root', 'default', 'root', NULL);
@@ -124,10 +124,10 @@ CREATE TABLE IF NOT EXISTS `plugins` (
 
 INSERT INTO `plugins` (`id`, `name`, `dir`, `description`, `dependencies`, `notice_enable`, `notice_disable`, `enabled`, `version`) VALUES
 (1, 'Zend ACL', 'zend_acl', 'A Port of the Zend ACL Module', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'You should only enable this plugin if it is required\n                        by other plugins. Continue enabling this plugin?', 'Disable this plugin?', '0', '0.1.0'),
-(2, 'Simple ACL', 'simple_acl', 'A simple Router Based ACL', 'a:2:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}s:8:"zend_acl";a:2:{i:0;s:5:"0.1.0";i:1;s:5:"0.2.0";}}', 'Enabling this plugin might lock you out of the\n                        Admin Panel. Make sure you have an admin account\n						before enabling this plugin.', 'Disabling the Simple ACL plugin might make all\n                        sections of your website accessible to unauthorized\n                        users, are you sure you want to disable this plugin?', '0', '0.1.0'),
-(3, 'Kohana Debug Toolbar', 'debug_toolbar', 'A nice alternative to the Kohana Profiler', 'a:0:{}', 'Enabling this module will add a debug toolbar\n                        to all your pages, try to enable this only in testing\n                        environments. Are you sure you want to enable this plugin?', 'Disable the Debug Toolbal?', '1', '0.2.1'),
-(4, 'YurikoCMS Navigation Content', 'content_navigation', 'Adds the ability to create navigation content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Navigation Content plugin?', '1', '0.1.0'),
-(5, 'YurikoCMS Basic Content', 'content_basic', 'Adds the ability to create basic text content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Basic Content plugin?', '1', '0.1.0');
+(2, 'Simple ACL', 'simple_acl', 'A simple Router Based ACL', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Enabling this plugin might lock you out of the\n                        Admin Panel. Make sure you have an admin account\n						before enabling this plugin.', 'Disabling the Simple ACL plugin might make all\n                        sections of your website accessible to unauthorized\n                        users, are you sure you want to disable this plugin?', '0', '0.1.0'),
+(3, 'Kohana Debug Toolbar', 'debug_toolbar', 'A nice alternative to the Kohana Profiler', 'a:0:{}', 'Enabling this module will add a debug toolbar\n                        to all your pages, try to enable this only in testing\n                        environments. Are you sure you want to enable this plugin?', 'Disable the Debug Toolbal?', '0', '0.2.1'),
+(4, 'YurikoCMS Navigation Content', 'content_navigation', 'Adds the ability to create navigation content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Navigation Content plugin?', '0', '0.1.0'),
+(5, 'YurikoCMS Basic Content', 'content_basic', 'Adds the ability to create basic text content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Basic Content plugin?', '0', '0.1.0');
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE IF NOT EXISTS `roles` (
@@ -153,9 +153,7 @@ CREATE TABLE IF NOT EXISTS `roles_users` (
 
 INSERT INTO `roles_users` (`role_id`, `user_id`) VALUES
 (1, 60),
-(1, 63),
-(2, 60),
-(2, 63);
+(2, 60);
 
 DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE IF NOT EXISTS `sessions` (
@@ -207,28 +205,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=64 ;
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `logins`, `last_login`) VALUES
-(60, 'admin', 'fc320cff004e31b7811d4770f6d3a6a77d10566fc54eedfd43', 'admin@admin.com', 39, 1238914359),
-(63, 'zeelot', '4a007c2707b09a0cce2cc81b392e917aff1b5affd9ca4025dd', 'zeelot3k@gmail.com', 11, 1241016426);
-
-DROP TABLE IF EXISTS `user_labels`;
-CREATE TABLE IF NOT EXISTS `user_labels` (
-  `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) unsigned NOT NULL,
-  `name` varchar(32) collate utf8_unicode_ci NOT NULL,
-  `value` varchar(127) collate utf8_unicode_ci NOT NULL,
-  PRIMARY KEY  (`id`,`user_id`),
-  KEY `user_labels_FKIndex1` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
-DROP TABLE IF EXISTS `user_settings`;
-CREATE TABLE IF NOT EXISTS `user_settings` (
-  `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) unsigned NOT NULL,
-  `label` varchar(32) collate utf8_unicode_ci NOT NULL,
-  `value` varchar(127) collate utf8_unicode_ci NOT NULL,
-  PRIMARY KEY  (`id`,`user_id`),
-  KEY `user_settings_FKIndex1` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+(60, 'admin', '6c955d175a7baf1fd440e5d9f8eba598d86248949e500c822d', 'admin@admin.com', 39, 1238914359);
 
 DROP TABLE IF EXISTS `user_tokens`;
 CREATE TABLE IF NOT EXISTS `user_tokens` (
@@ -253,12 +230,6 @@ ALTER TABLE `content_pivots`
 ALTER TABLE `roles_users`
   ADD CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
-ALTER TABLE `user_labels`
-  ADD CONSTRAINT `user_labels_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
-ALTER TABLE `user_settings`
-  ADD CONSTRAINT `user_settings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 ALTER TABLE `user_tokens`
   ADD CONSTRAINT `user_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
