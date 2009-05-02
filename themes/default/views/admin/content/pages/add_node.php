@@ -14,6 +14,14 @@
 			<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
 			<?php endforeach; ?>
 		</select>
+		<label for="node_view">
+		View:
+		<select name="view" id="node_view">
+			<?php foreach($views as $view): ?>
+			<option value="<?php echo basename($view); ?>"><?php echo basename($view); ?></option>
+			<?php endforeach; ?>
+		</select>
+		</label>
 		</label>
 		<button type="submit" name="add" value="add">Add</button>
 	</fieldset>

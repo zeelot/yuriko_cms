@@ -172,12 +172,15 @@ class Pages_Controller extends Admin_Controller {
 				}
 			}
 		}
+		$views = Kohana::list_files('views/templates/page');
 		$sections = Kohana::config('theme.sections');
 		$items = ORM::factory($type.'_Content')->find_all();
+
 		$this->template->content = View::factory('admin/content/pages/add_node');
 		$this->template->content->node_dropdown = View::factory('admin/content/nodes/'.$type.'_content_dropdown')
 			->set('items', $items);
 		$this->template->content->sections = $sections;
+		$this->template->content->views = $views;
 	}
 	public function remove_node($id)
 	{
