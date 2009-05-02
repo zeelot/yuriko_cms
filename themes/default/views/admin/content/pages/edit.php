@@ -1,18 +1,8 @@
 <div>
 	<h1>Edit Page: <?php echo $page->name; ?></h1>
-	<?php echo form::open(); ?>
-	<fieldset>
-		<input type="hidden" name="edit_content_page" value="TRUE" />
-		<legend>Page Info</legend>
-		<label>
-			Name: <input type="text" name="name" value="<?php echo $page->name; ?>" />
-		</label>
-		<label>
-			Alias: <input type="text" name="alias" value="<?php echo $page->alias; ?>" />
-		</label>
-		<button type="submit" name="save" value="save">Save</button>
-	</fieldset>
-	<?php echo form::close(); ?>
+	<?php echo View::factory('admin/content/pages/form')
+		->set('page', $page)
+		->set('templates', $templates); ?>
 	<h2>Content Nodes</h2>
 	<table class="admin">
 		<tr>

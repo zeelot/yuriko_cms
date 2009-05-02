@@ -17,7 +17,7 @@ class Pages_Controller extends Admin_Controller {
 	public function create()
 	{
 		$page = ORM::factory('content_page');
-		if (isset($_POST['new_page_content']))
+		if (isset($_POST['yuriko_page']))
 		{
 			$post = $this->input->post();
 			//simple way to repopulate form...I hope it works
@@ -38,33 +38,18 @@ class Pages_Controller extends Admin_Controller {
 			}
 
 		}
-		$this->template->content = View::factory('admin/content/pages/create');
-		$this->template->content->page = $page;
-	}
-	public function delete($id = NULL)
-	{
-		$page = ORM::factory('content_page', $id);
-		if (!$page->loaded) Event::run('system.404');
+		$templates = Kohana::list_files('views/templates/page');
 
-		if(isset($_POST['confirm']))
-		{
-			$page->delete();
-			notice::add('Page Deleted Successfully!', 'success');
-			url::redirect('admin/pages/manage');
-		}
-		elseif(isset($_POST['cancel']))
-		{
-			notice::add('Action Cancelled!', 'success');
-			url::redirect('admin/pages/manage');
-		}
-		$this->template->content = View::factory('admin/content/pages/delete');
+		$this->template->content = View::factory('admin/content/pages/form');
+		$this->template->content->page = $page;
+		$this->template->content->templates = $templates;
 	}
 	public function edit($id = FALSE)
 	{
 		$page = ORM::factory('content_page', $id);
 		if (!$page->loaded) Event::run('system.404');
 
-		if (isset($_POST['edit_content_page']))
+		if (isset($_POST['yuriko_page']))
 		{
 			$post = $this->input->post();
 			$page->name = $post['name'];
@@ -83,10 +68,31 @@ class Pages_Controller extends Admin_Controller {
 				}
 			}
 		}
+		$templates = Kohana::list_files('views/templates/page');
+
 		$this->template->content = View::factory('admin/content/pages/edit');
 		$this->template->content->page = $page;
 		$this->template->content->pivots = $page->content_pivots;
 		$this->template->content->sections = Kohana::config('theme.sections');
+		$this->template->content->templates = $templates;
+	}
+	public function delete($id = NULL)
+	{
+		$page = ORM::factory('content_page', $id);
+		if (!$page->loaded) Event::run('system.404');
+
+		if(isset($_POST['confirm']))
+		{
+			$page->delete();
+			notice::add('Page Deleted Successfully!', 'success');
+			url::redirect('admin/pages/manage');
+		}
+		elseif(isset($_POST['cancel']))
+		{
+			notice::add('Action Cancelled!', 'success');
+			url::redirect('admin/pages/manage');
+		}
+		$this->template->content = View::factory('admin/content/pages/delete');
 	}
 	public function add_inheritance($id = NULL)
 	{
@@ -172,7 +178,7 @@ class Pages_Controller extends Admin_Controller {
 				}
 			}
 		}
-		$views = Kohana::list_files('views/templates/page');
+		$views = Kohana::list_files('views/content/'.$type);
 		$sections = Kohana::config('theme.sections');
 		$items = ORM::factory($type.'_Content')->find_all();
 
