@@ -15,6 +15,5 @@ $config['simple_acl'] = array
 	'dependencies'  => array
 	(
 		'core'     => array('0.1.0'),
-		'zend_acl' => array('0.1.0', '0.2.0'),//this means zend_acl must be between these 2 versions
 	)
 );
