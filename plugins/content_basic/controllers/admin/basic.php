@@ -37,7 +37,7 @@ class Basic_Controller extends Admin_Controller {
 		$content = ORM::factory('basic_content', $id);
 		if (!$content->loaded)Event::run('system.404');//incorrect $id
 
-		if(isset($_POST['edit_basic_content']))
+		if(isset($_POST['yuriko_basic_content']))
 		{
 			//update the page
 			$post = $this->input->post();
@@ -57,7 +57,8 @@ class Basic_Controller extends Admin_Controller {
 			}
 		}
 
-		$this->template->content = View::factory('admin/content/basic/edit');
+		$this->template->content = View::factory('admin/content/basic/form');
+		$this->template->content->action = 'edit'
 		$this->template->content->item = $content;
 		$this->template->content->formats = ORM::factory('content_format')
 												->select_list('id', 'name');
@@ -65,10 +66,10 @@ class Basic_Controller extends Admin_Controller {
 	}
 	public function create()
 	{
-		if(isset($_POST['create_basic_content']))
-		{
-			//create a new Basic_Content object
-			$content = ORM::factory('basic_content');
+		//create a new Basic_Content object
+		$content = ORM::factory('basic_content');
+		if(isset($_POST['yuriko_basic_content']))
+		{			
 			$post = $this->input->post();
 			if($content->validate($post))
 			{
@@ -85,7 +86,10 @@ class Basic_Controller extends Admin_Controller {
 				}
 			}
 		}
-		$this->template->content = View::factory('admin/content/basic/create');
+		$content->load_values($_POST);
+		$this->template->content = View::factory('admin/content/basic/form');
+		$this->template->content->action = 'create';
+		$this->template->content->item = $content;
 		$this->template->content->formats = ORM::factory('content_format')
 												->select_list('id', 'name');
 	}

@@ -1,7 +1,8 @@
+
 <div>
 <?php echo form::open(); ?>
 	<fieldset>
-		<legend>New Navigation Item</legend>
+		<legend>Edit Navigation Item "<?php echo $item->name; ?>"</legend>
 		<p class="info">
 		The <strong>Tag</strong> field is a unique identifier for the Navigation Item.
 		Usually	it is good practice to use the path to the item as the tag (this
@@ -9,22 +10,22 @@
 		located under the Main Menu).  The <strong>Name</strong> field is the
 		text the visitors will see in the menu.
 		</p>
+		<input type="hidden" name="yuriko_navigation_content" value="TRUE" />
+		<label>Tag: <input name="tag" type="text" value="<?php echo $item->tag; ?>" /></label>
+		<label>Name: <input name="name" type="text" value="<?php echo $item->name; ?>" /></label>
 		<p class="info">
 		The <strong>Parent</strong> is the location you want this item to be placed in.
-		root will start a new Navigation Tree (like Admin Menu).
-		All the links under Admin Menu will have a Parent of 'Admin Menu'.
-		You can have as many sub-menu's as you like.
+		root will start a new Navigation Tree.
 		</p>
-		<input type="hidden" name="new_navigation_content" value="TRUE" />
-		<label>Tag: <input name="tag" type="text" value="<?php echo (isset($_POST['tag']))?$_POST['tag']:NULL;?>" /></label>
-		<label>Name: <input name="name" type="text" value="<?php echo (isset($_POST['name']))?$_POST['name']:NULL;?>" /></label>
-		<label for="nav.parent">
+		<label for="nav_parent">
 			Parent:
-			<select name="parent_id" id="nav.parent">
-				<?php foreach($items as $item): ?>
-				<option value="<?php echo $item->id; ?>">
-				<?php echo str_repeat('----', $item->level); ?>
-				<?php echo $item->name; ?>
+			<select name="parent_id" id="nav_parent">
+				<?php foreach($items as $i): ?>
+				<option value="<?php echo $i->id; ?>" <?php 
+					echo ($i->id == $item->parent->id)? 'selected="selected"':NULL;
+				?>>
+				<?php echo str_repeat('----', $i->level); ?>
+				<?php echo $i->name; ?>
 				</option>
 				<?php endforeach; ?>
 			</select>
@@ -39,15 +40,15 @@
 			<select name="page_id">
 				<option value="0" >None</option>
 				<?php foreach ($pages as $id => $alias ): ?>
-				<option value="<?php echo $id; ?>" ><?php echo $alias; ?></option>
+				<option value="<?php echo $id; ?>" <?php echo($item->page_id == $id)? 'selected="selected"' : NULL ?>><?php echo $alias; ?></option>
 				<?php endforeach; ?>
 			</select>
 		</label>
 		<label>
 			Manual Link:
-			<input name="anchor" type="text" value="<?php echo (isset($_POST['anchor']))?$_POST['anchor']:NULL;?>" /></label>
+			<input name="anchor" type="text" value="<?php echo $item->anchor; ?>" /></label>
 		</label>
 	</fieldset>
-	<label><button>Create</button></label>
+	<label><button>Save</button></label>
 <?php echo form::close(); ?>
 </div>

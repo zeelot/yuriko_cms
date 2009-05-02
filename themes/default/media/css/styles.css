@@ -18,6 +18,7 @@ table.admin {width:100%;}
 .notices ul, .notices ul li {margin:0px; padding:0px;}
 
 label input, label select{display:block; width:15em;}
+label textarea{display: block;}
 button{margin-top:15px;}
 
 #main_frame{
