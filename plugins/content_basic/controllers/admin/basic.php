@@ -58,7 +58,7 @@ class Basic_Controller extends Admin_Controller {
 		}
 
 		$this->template->content = View::factory('admin/content/basic/form');
-		$this->template->content->action = 'edit'
+		$this->template->content->action = 'edit';
 		$this->template->content->item = $content;
 		$this->template->content->formats = ORM::factory('content_format')
 												->select_list('id', 'name');
