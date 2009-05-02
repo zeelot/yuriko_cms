@@ -5,13 +5,13 @@
 		<legend>Edit Navigation Item "<?php echo $item->name; ?>"</legend>
 		<p class="info">
 		The <strong>Tag</strong> field is a unique identifier for the Navigation Item.
-		Usually	it is good practice to use the path to the item as the tag (this
-		ensures the tag will be unique). Ex: main.home (as a tag for the Home link
-		located under the Main Menu).  The <strong>Name</strong> field is the
-		text the visitors will see in the menu.
+		Ex: main.home (as a tag for the Home link located under the Main Menu).
 		</p>
 		<input type="hidden" name="yuriko_navigation_content" value="TRUE" />
 		<label>Tag: <input name="tag" type="text" value="<?php echo $item->tag; ?>" /></label>
+		<p>
+		The <strong>Name</strong> field is the text the visitors will see in the menu.
+		</p>
 		<label>Name: <input name="name" type="text" value="<?php echo $item->name; ?>" /></label>
 		<p class="info">
 		The <strong>Parent</strong> is the location you want this item to be placed in.
