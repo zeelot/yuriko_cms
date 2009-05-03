@@ -94,9 +94,9 @@ $config['extension_prefix'] = 'MY_';
  */
 $config['modules'] = array
 (
+	MODPATH.'user',
 	MODPATH.'auth',
 	MODPATH.'router3',
 	MODPATH.'yuriko_core',
-	MODPATH.'user',
 	MODPATH.'theme',
 );
