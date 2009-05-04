@@ -1,7 +1,7 @@
 <?php
 
 
-class Navigation_Content_Model extends ORM_MPTT implements Content_Model{
+class Navigation_Content_Model extends ORM_MPTT{
 
 	protected $left_column = 'lft';
     protected $right_column = 'rgt';

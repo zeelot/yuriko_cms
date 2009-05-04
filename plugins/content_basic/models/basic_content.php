@@ -1,7 +1,7 @@
 <?php
 
 
-class Basic_Content_Model extends ORM implements Content_Model{
+class Basic_Content_Model extends ORM{
 
 	protected $belongs_to = array('format' => 'content_format', 'node' => 'content_node');
 
