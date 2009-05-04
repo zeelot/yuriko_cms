@@ -14,7 +14,7 @@
 		Template:
 		<select name="template" id="page_template">
 			<?php foreach($templates as $template): ?>
-			<option value="<?php echo basename($template); ?>"><?php echo basename($template); ?></option>
+			<option value="<?php echo basename(rtrim($template, '.php')); ?>"><?php echo basename($template); ?></option>
 			<?php endforeach; ?>
 		</select>
 		<button type="submit" name="submit">Save</button>
