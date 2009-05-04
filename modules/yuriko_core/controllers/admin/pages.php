@@ -144,37 +144,21 @@ class Pages_Controller extends Admin_Controller {
 
 		if(!$page->loaded) Event::run('system.404');
 
-		if (isset($_POST['page_add_content_node']))
+		if (isset($_POST['yuriko_page_add_node']))
 		{
 			$post = $this->input->post();
 			$pivot = ORM::factory('content_pivot');
-			//see if the exact same content already exists on this page
-			$exists = $pivot->where(array
-				(
-					'content_page_id'    => $page->id,
-					'content_node_id'    => $post['node'],
-					'section' => $post['section'],
-				))->find();
-			if($exists->loaded)
+			if ($pivot->validate($post))
 			{
-				//already exists
-				notice::add('That content is already there!', 'notice');
+				$pivot->save();
+				notice::add('Content Node Added Successfully', 'success');
+				url::redirect('admin/pages/edit/'.$page->id);
 			}
 			else
 			{
-				//add the new node to the page in the right section =D
-				$pivot->content_page_id = $page->id;
-				$pivot->content_node_id = $post['node'];
-				$pivot->section = $post['section'];
-				//@TODO: fix this for in-model validation! callbacks n such
-				if($pivot->save())
+				foreach($post->errors('page_errors') as $error)
 				{
-					notice::add('Content Node Added Successfully', 'success');
-					url::redirect('admin/pages/edit/'.$page->id);
-				}
-				else
-				{
-					notice::add('Error adding content!', 'error');
+					notice::add($error, 'error');
 				}
 			}
 		}
@@ -185,6 +169,7 @@ class Pages_Controller extends Admin_Controller {
 		$this->template->content = View::factory('admin/content/pages/add_node');
 		$this->template->content->node_dropdown = View::factory('admin/content/nodes/'.$type.'_content_dropdown')
 			->set('items', $items);
+		$this->template->content->page = $page;
 		$this->template->content->sections = $sections;
 		$this->template->content->views = $views;
 	}

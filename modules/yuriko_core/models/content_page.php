@@ -13,7 +13,8 @@ class Content_Page_Model extends ORM {
 		$array = Validation::factory($array)
 			->pre_filter('trim')
 			->add_rules('name', 'required', 'length[1,127]', 'chars[a-zA-Z0-9_./]')
-			->add_rules('alias', 'required', 'length[1,127]', 'chars[a-zA-Z0-9_./]');
+			->add_rules('alias', 'required', 'length[1,127]', 'chars[a-zA-Z0-9_./]')
+			->add_rules('template', array($this, 'template_exists'));
 		//if this is a new page the name and alias should be unique
 		if(!$this->loaded)
 		{
@@ -21,6 +22,15 @@ class Content_Page_Model extends ORM {
 			->add_rules('alias', array($this, 'unique_alias'));
 		}
 		return parent::validate($array, $save);
+	}
+	/**
+	 * Checks if the template exists to render this page
+	 * 
+	 * @param <string> $view - the view file in templates/pages/ 
+	 */
+	public function template_exists($view)
+	{
+		return (bool) Kohana::find_file('views', 'templates/page/'.$view);
 	}
 	public function add_inheritance(array & $array)
 	{

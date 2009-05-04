@@ -2,14 +2,15 @@
 <div>
 	<?php echo form::open(); ?>
 	<fieldset>
-		<input type="hidden" name="page_add_content_node" value="TRUE" />
+		<input type="hidden" name="yuriko_page_add_node" value="TRUE" />
+		<input type="hidden" name="content_page_id" value="<?php echo $page->id; ?>" />
 		<legend>Add Content Node</legend>
-		<label for="page.node">
+		<label for="page_node">
 		Node: <?php echo $node_dropdown; ?>
 		</label>
-		<label for="page.section">
+		<label for="page_section">
 		Section:
-		<select name="section" id="page.section">
+		<select name="section" id="page_section">
 			<?php foreach($sections as $id => $name): ?>
 			<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
 			<?php endforeach; ?>
