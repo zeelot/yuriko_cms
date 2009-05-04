@@ -42,7 +42,7 @@ miu = {
 	}
 }
 $(document).ready(function()	{
-	$('.markitup').livequery(function(){
+	$('.markitup').each(function(){
 		$(this).markItUp(mySettings);
 	});
 });
