@@ -6,12 +6,13 @@
 <head>
 <?php echo assets::all(); ?>
 
-<title>Zeelot's Special Sandbox!</title>
+<title>YurikoCMS</title>
 </head>
 
 <body>
     <div class="container_16 frontend" id="main_frame">
 		<div class="grid_16">
+			<?php echo html::image('themes/yuriko_cms/media/images/yuriko_logo.png'); ?>
 			<?php echo notice::render(); ?> 
 		</div>
 		<?php if(count($sections[1]) > 0): ?>
