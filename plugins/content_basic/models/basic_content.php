@@ -75,9 +75,5 @@ class Basic_Content_Model extends ORM{
 					'content_type_id' => Auto_Modeler::factory('content_type', 'basic')->id,
 				))->count_records('content_nodes');
 	}
-	public function render()
-	{
-		echo View::factory('content/basic/'.$this->view)->set('node', $this);
-	}
 
 }

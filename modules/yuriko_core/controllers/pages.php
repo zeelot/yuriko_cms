@@ -49,10 +49,10 @@ class Pages_Controller extends Website_Controller{
 				 * a menu displayed at the top of the page and a menu on the
 				 * side of the page.
 				 */
-				$node_view = View::factory('templates/node/'.$pivot->view);
+				$node_view = View::factory('templates/node/'.$node->template);
 				
 				$node_view->content = Component::factory('content/'.$type->name)
-					->method('index', array($node->content_id, $args));
+					->method('index', array($node->content_id, $pivot, $args));
 				$sections[$pivot->section][] = $node_view;
 			}
 			foreach (Kohana::config('theme.sections') as $key => $val)

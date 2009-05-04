@@ -19,7 +19,7 @@
 		View:
 		<select name="view" id="node_view">
 			<?php foreach($views as $view): ?>
-			<option value="<?php echo basename($view); ?>"><?php echo basename($view); ?></option>
+			<option value="<?php echo basename(rtrim($view, '.php')); ?>"><?php echo basename($view); ?></option>
 			<?php endforeach; ?>
 		</select>
 		</label>

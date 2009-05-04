@@ -114,11 +114,4 @@ class Navigation_Content_Model extends ORM_MPTT{
 		}
 		return parent::unique_key($id);
 	}
-
-	public function render()
-	{
-		echo View::factory('content/navigation/'.$this->view)
-			->set('node', $this);
-	}
-
 }
