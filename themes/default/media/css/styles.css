@@ -25,7 +25,31 @@ button{margin-top:15px;}
   border:2px solid #CCE8FB;
   background: #FFF; margin-top:20px;
 }
-
+/* HEADER */
+.header .navigation{
+	margin-top:10px;
+	overflow:hidden;
+}
+.header .navigation ul{
+	border:1px solid #CCC;
+	background: #DFECFF;
+	margin:10px; padding:0px;
+	display:block; overflow:hidden;
+}
+.header .navigation ul li{
+	display:inline; float:left;
+	margin:0px; padding:10px 15px;
+	border-right:1px solid #CCC;
+}
+.header .navigation ul li:hover{
+	background: #EFFCFF;
+}
+.header .navigation a{
+	display:block;
+}
+.header .navigation a:link, .header .navigation a:visited{
+	text-decoration:none; font-weight:800; font-size:1.3em;
+}
 /* FORMS */
 .side_panel label input{display:block; width:15em;}
 .content label textarea{width:50em}

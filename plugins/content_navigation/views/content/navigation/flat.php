@@ -1,13 +1,13 @@
 <?php
 /* 
  * This file renders a flat menu without submenus.
- * It will render an MPTT tree but will show all items on the same level.
+ * For MPTT Trees this file will not go beyond the first level
  */
 
 ?>
 <div class="navigation">
 	<ul>
-	<?php foreach($node->subtree()->find_all() as $child): ?>
+	<?php foreach($node->children as $child): ?>
 		<li>
 		<?php if(($child->anchor) OR ($child->page_id > 0)): ?>
 		<?php echo ($child->page_id > 0)
