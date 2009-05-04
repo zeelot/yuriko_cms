@@ -1,6 +1,5 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
-DROP TABLE IF EXISTS `basic_contents`;
 CREATE TABLE IF NOT EXISTS `basic_contents` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `node_id` int(11) unsigned NOT NULL,
@@ -13,7 +12,9 @@ CREATE TABLE IF NOT EXISTS `basic_contents` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
-DROP TABLE IF EXISTS `content_formats`;
+INSERT INTO `basic_contents` (`id`, `node_id`, `format_id`, `view`, `name`, `content`, `html`) VALUES
+(1, 2, 1, 'default', 'home', '#Home#', '<h1>Home</h1>\n');
+
 CREATE TABLE IF NOT EXISTS `content_formats` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
@@ -25,21 +26,21 @@ INSERT INTO `content_formats` (`id`, `name`) VALUES
 (2, 'html'),
 (1, 'markdown');
 
-DROP TABLE IF EXISTS `content_nodes`;
 CREATE TABLE IF NOT EXISTS `content_nodes` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `content_type_id` int(11) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
   `name` varchar(127) collate utf8_unicode_ci NOT NULL,
   `alias` varchar(127) collate utf8_unicode_ci NOT NULL,
+  `template` varchar(127) collate utf8_unicode_ci NOT NULL default 'default',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `alias` (`alias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
-INSERT INTO `content_nodes` (`id`, `content_type_id`, `content_id`, `name`, `alias`) VALUES
-(1, 2, 1, 'root', 'navigation/root');
+INSERT INTO `content_nodes` (`id`, `content_type_id`, `content_id`, `name`, `alias`, `template`) VALUES
+(1, 2, 1, 'root', 'navigation/root', 'default'),
+(2, 1, 1, 'home', 'basic/home', 'default');
 
-DROP TABLE IF EXISTS `content_pages`;
 CREATE TABLE IF NOT EXISTS `content_pages` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `alias` varchar(127) collate utf8_unicode_ci NOT NULL,
@@ -48,12 +49,11 @@ CREATE TABLE IF NOT EXISTS `content_pages` (
   `locked` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `alias` (`alias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 INSERT INTO `content_pages` (`id`, `alias`, `name`, `template`, `locked`) VALUES
 (1, 'home', 'Home', 'default', 0);
 
-DROP TABLE IF EXISTS `content_page_inheritances`;
 CREATE TABLE IF NOT EXISTS `content_page_inheritances` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `content_page_id` int(11) unsigned NOT NULL,
@@ -62,9 +62,8 @@ CREATE TABLE IF NOT EXISTS `content_page_inheritances` (
   KEY `pages_has_inheritances_FKIndex2` (`inherited_page_id`),
   KEY `page_inheritances_FKIndex2` (`content_page_id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
-DROP TABLE IF EXISTS `content_pivots`;
 CREATE TABLE IF NOT EXISTS `content_pivots` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `content_page_id` int(11) unsigned NOT NULL,
@@ -74,9 +73,11 @@ CREATE TABLE IF NOT EXISTS `content_pivots` (
   PRIMARY KEY  (`id`),
   KEY `has_nodes_FKIndex2` (`content_node_id`),
   KEY `has_pages_FKIndex2` (`content_page_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
-DROP TABLE IF EXISTS `content_types`;
+INSERT INTO `content_pivots` (`id`, `content_page_id`, `content_node_id`, `section`, `view`) VALUES
+(1, 1, 2, 2, 'default');
+
 CREATE TABLE IF NOT EXISTS `content_types` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(50) collate utf8_unicode_ci NOT NULL,
@@ -88,7 +89,6 @@ INSERT INTO `content_types` (`id`, `name`) VALUES
 (1, 'basic'),
 (2, 'navigation');
 
-DROP TABLE IF EXISTS `navigation_contents`;
 CREATE TABLE IF NOT EXISTS `navigation_contents` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `node_id` int(11) unsigned NOT NULL,
@@ -97,17 +97,15 @@ CREATE TABLE IF NOT EXISTS `navigation_contents` (
   `lft` tinyint(10) NOT NULL,
   `rgt` tinyint(10) NOT NULL,
   `tag` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `view` varchar(127) collate utf8_unicode_ci NOT NULL default 'default',
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
   `anchor` varchar(255) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `tag` (`tag`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
-INSERT INTO `navigation_contents` (`id`, `node_id`, `page_id`, `level`, `lft`, `rgt`, `tag`, `view`, `name`, `anchor`) VALUES
-(1, 1, 0, 0, 1, 2, 'root', 'default', 'root', NULL);
+INSERT INTO `navigation_contents` (`id`, `node_id`, `page_id`, `level`, `lft`, `rgt`, `tag`, `name`, `anchor`) VALUES
+(1, 1, 0, 0, 1, 2, 'root', 'root', NULL);
 
-DROP TABLE IF EXISTS `plugins`;
 CREATE TABLE IF NOT EXISTS `plugins` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(127) collate utf8_unicode_ci NOT NULL,
@@ -129,7 +127,6 @@ INSERT INTO `plugins` (`id`, `name`, `dir`, `description`, `dependencies`, `noti
 (4, 'YurikoCMS Navigation Content', 'content_navigation', 'Adds the ability to create navigation content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Navigation Content plugin?', '0', '0.1.0'),
 (5, 'YurikoCMS Basic Content', 'content_basic', 'Adds the ability to create basic text content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Basic Content plugin?', '0', '0.1.0');
 
-DROP TABLE IF EXISTS `roles`;
 CREATE TABLE IF NOT EXISTS `roles` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(32) collate utf8_unicode_ci NOT NULL,
@@ -142,7 +139,6 @@ INSERT INTO `roles` (`id`, `name`, `description`) VALUES
 (1, 'login', 'Login privileges, granted after account confirmation'),
 (2, 'admin', 'Administrative user, has access to everything.');
 
-DROP TABLE IF EXISTS `roles_users`;
 CREATE TABLE IF NOT EXISTS `roles_users` (
   `role_id` int(11) unsigned NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
@@ -155,7 +151,6 @@ INSERT INTO `roles_users` (`role_id`, `user_id`) VALUES
 (1, 60),
 (2, 60);
 
-DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE IF NOT EXISTS `sessions` (
   `session_id` varchar(127) collate utf8_unicode_ci NOT NULL,
   `last_activity` int(10) NOT NULL,
@@ -163,7 +158,6 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   PRIMARY KEY  (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `site_settings`;
 CREATE TABLE IF NOT EXISTS `site_settings` (
   `id` int(11) NOT NULL auto_increment,
   `key` varchar(50) collate utf8_unicode_ci NOT NULL,
@@ -176,7 +170,6 @@ INSERT INTO `site_settings` (`id`, `key`, `value`) VALUES
 (2, 'site_description', 'Just a sample site'),
 (3, 'site_theme', 'default');
 
-DROP TABLE IF EXISTS `themes`;
 CREATE TABLE IF NOT EXISTS `themes` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(50) character set utf8 collate utf8_unicode_ci default NULL,
@@ -191,7 +184,6 @@ INSERT INTO `themes` (`id`, `name`, `dir`) VALUES
 (2, 'Zeelot''s Sandbox Theme', 'zeelots_sandbox'),
 (3, 'Zeelot''s Other Theme', 'zeelots_other_theme');
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `username` varchar(32) collate utf8_unicode_ci NOT NULL,
@@ -202,12 +194,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `uniq_username` (`username`),
   UNIQUE KEY `uniq_email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=64 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=61 ;
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `logins`, `last_login`) VALUES
-(60, 'admin', '6c955d175a7baf1fd440e5d9f8eba598d86248949e500c822d', 'admin@admin.com', 39, 1238914359);
+(60, 'admin', 'f4d378a7ea69193b328cd31b98967844f897288c767642b855', 'admin@admin.com', 39, 1238914359);
 
-DROP TABLE IF EXISTS `user_tokens`;
 CREATE TABLE IF NOT EXISTS `user_tokens` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `user_id` int(11) unsigned NOT NULL,
