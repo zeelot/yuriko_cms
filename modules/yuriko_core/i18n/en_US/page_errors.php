@@ -2,13 +2,16 @@
 
 $lang = array
 (
-	'title' => array
+	'name' => array
 	(
-		'required' => 'You need to title the page.',
-		'default'  => 'Invalid Input.',
+		'length'   => 'Name Length',
+		'chars'   => 'Name Chars',
+		'required' => 'You need to specify an alias for the page.',
 	),
 	'alias' => array
 	(
+		'length'   => 'Alias Length',
+		'chars'   => 'Name Chars',
 		'required' => 'You need to specify an alias for the page.',
 	),
 );
