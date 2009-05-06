@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /*
  * Associates a view with a group of assets to be included when that view is used.
  * This should also cascade with the default theme so each new theme only has
