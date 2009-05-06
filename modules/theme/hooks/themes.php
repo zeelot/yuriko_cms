@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
  * This is the hook responsible for enabling themes throughout the site
  */

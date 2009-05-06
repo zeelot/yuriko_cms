@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 
 class Widget_User_Controller extends Widget_Controller{
 
