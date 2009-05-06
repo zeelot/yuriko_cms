@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
  * The modular_form helper class is for modules to add form fields to
  * forms from other modules or from the main application.
