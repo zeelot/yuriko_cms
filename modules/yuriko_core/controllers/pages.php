@@ -52,7 +52,7 @@ class Pages_Controller extends Website_Controller{
 				$node_view = View::factory('templates/node/'.$node->template);
 				
 				$node_view->content = Component::factory('content/'.$type->name)
-					->method('index', array($node->content_id, $pivot, $args));
+					->method('index', array($node->content_id, $pivot->view, $args));
 				$sections[$pivot->section][] = $node_view;
 			}
 			foreach (Kohana::config('theme.sections') as $key => $val)
@@ -66,12 +66,19 @@ class Pages_Controller extends Website_Controller{
 		}
 	}
 
-	public function load_node($alias = FALSE)
+	public function load_node($route = FALSE)
 	{
 		$this->auto_render = FALSE;
+		$segs = explode(':', $route);
+		$args = NULL;
+		if (isset($segs[1])) $args = $segs[1];
+		$alias = rtrim($segs[0], '/');
+
 		$node = ORM::factory('content_node', $alias);
 		if(!$node->id) Event::run('system.404');
+		$type = $node->content_type;
 
-		echo View::factory('templates/node/'.$node->template)->set('node', $node->find_content());
+		echo Component::factory('content/'.$type->name)
+				->method('index', array($node->content_id, 'default', $args));
 	}
 }

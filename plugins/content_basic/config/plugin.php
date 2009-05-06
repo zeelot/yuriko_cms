@@ -7,9 +7,9 @@ $config['content_basic'] = array
 	'description'   => 'Adds the ability to create basic text content for your pages',
 	'notice_enable' => 'Are you sure you want to enable this plugin?',
 	'notice_disable'=> 'Disable the Basic Content plugin?',
-	'version'       => '0.1.0',
+	'version'       => '0.1.1',
 	'dependencies'  => array
 	(
-		'core'     => array('0.1.0'),
+		'core'     => array('0.1.1'),
 	)
 );

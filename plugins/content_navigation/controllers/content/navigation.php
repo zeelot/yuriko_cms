@@ -7,14 +7,14 @@ class Content_Navigation_Controller extends Controller {
 	/**
 	 *
 	 * @param <mixed> $id The primary_key value of the Navigation_Content_Model
-	 * @param <ORM> $pivot The pivot table row for this model
+	 * @param <string> $view the view to use to render the content
 	 * @param <array> $args the arguments for rendering the view
 	 */
-	public function index($id = NULL, $pivot = NULL, $args = NULL)
+	public function index($id = NULL, $view = 'default', $args = NULL)
 	{
 		$model = ORM::factory('navigation_content', $id);
-		if (!$model->loaded OR !$pivot->loaded) return FALSE;
-		echo View::factory('content/navigation/'.$pivot->view)
+		if (!$model->loaded) return FALSE;
+		echo View::factory('content/navigation/'.$view)
 			->set('node', $model);
 	}
 }
