@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /*
  * Possible definitions for 3rd Party Plugins:
  * 

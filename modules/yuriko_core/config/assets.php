@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /*
  * Global assets are the ones available to all themes.
  * A theme only has to specify the group name and all the assets in the
