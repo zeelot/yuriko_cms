@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 abstract class Website_Controller extends Template_Controller{
 
 	// Template view name
