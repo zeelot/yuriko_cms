@@ -1,5 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
+/**
+* @package    YurikoCMS
+* @author     Lorenzo Pisani - Zeelot
+* @license    http://yurikocms.com/license
+*/
+
 class notice_Core{
 
 	/*

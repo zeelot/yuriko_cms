@@ -1,11 +1,13 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Fragment Cache Helper Class.  This class allows you to cache specific
- * sections of your View file.
- *
- * @package helpers
- * @author Zeelot
- **/
+* Fragment Cache Helper Class.  This class allows you to cache specific
+* sections of your View file.
+*
+* @package    YurikoCMS
+* @author     Lorenzo Pisani - Zeelot
+* @license    http://yurikocms.com/license
+*/
+
 class frache_Core {
 
 	//this is the stack of names (for nested fragment support)

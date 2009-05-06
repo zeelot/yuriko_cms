@@ -1,12 +1,14 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
+ *
  * The modular_form helper class is for modules to add form fields to
  * forms from other modules or from the main application.
  *
- * @package		Modular_Form
- * @author		Zeelot
- *
+* @package    YurikoCMS
+* @author     Lorenzo Pisani - Zeelot
+* @license    http://yurikocms.com/license
  */
+
 class form_module{
 
 	/**

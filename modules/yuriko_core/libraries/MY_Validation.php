@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
+/**
+* @package    YurikoCMS
+* @author     Lorenzo Pisani - Zeelot
+* @license    http://yurikocms.com/license
+ * @TODO remove this when updating cms to K2.4
+*/
+
 class Validation extends Validation_Core{
 
 	/**

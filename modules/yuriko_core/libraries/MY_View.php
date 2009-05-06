@@ -1,5 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
+/**
+* @package    YurikoCMS
+* @author     Lorenzo Pisani - Zeelot
+* @license    http://yurikocms.com/license
+*/
+
 class View extends View_Core{
 	
 	//hold an array of loaded views (this helps me decide which assets to load)
