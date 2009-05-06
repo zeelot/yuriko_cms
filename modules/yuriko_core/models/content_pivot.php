@@ -23,7 +23,7 @@ class Content_Pivot_Model extends ORM {
 		$array = Validation::factory($array)
 			->add_rules('content_page_id', 'required', 'digit', array($this, 'page_exists'))
 			->add_rules('content_node_id', 'required', 'digit', array($this, 'node_exists'))
-			->add_rules('section', 'digit')
+			->add_rules('section', 'required', 'digit')
 			->add_rules('view', array($this, 'view_exists'))
 			->add_callbacks('content_page_id', array($this, 'unique_pivot'));
 
@@ -67,7 +67,7 @@ class Content_Pivot_Model extends ORM {
 			->count_records('content_pivots');
 		if ($exists)
 		{
-			$array->add_error($field, 'pivot_exists');
+			$array->add_error($field, 'pivot_unique');
 		}
 	}
 

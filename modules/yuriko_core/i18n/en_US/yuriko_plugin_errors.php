@@ -2,6 +2,36 @@
 
 $lang = array
 (
+	'name' => array
+	(
+		'required' => 'Plugin Name is required',
+		'length'   => 'Name length needs to be between %s and %s characters.',
+		'chars'    => 'Name field only allows these characters: %s.',
+	),
+	'dir' => array
+	(
+		'required' => 'Plugin Directory is required',
+		'length'   => 'Dir length needs to be between %s and %s characters.',
+		'chars'    => 'Dir field only allows these characters: %s.',
+	),
+	'description' => array
+	(
+		'required' => 'Plugin Description is required.',
+		'length'   => 'Description can only be between %s and %s characters.',
+	),
+	'notice_enable' => array
+	(
+		'length'   => 'Enable Notice needs to be between %s and %s characters.',
+	),
+	'notice_disable' => array
+	(
+		'length'   => 'Disable Notice needs to be between %s and %s characters.',
+	),
+	'version' => array
+	(
+		'required' => 'Plugin Version is required.',
+		'length'   => 'Version needs to be between %s and %s characters.',
+	),
 	'enabled' => array
 	(
 		'core_upgrade'         => 'Plugin seems to be made for newer versions of the CMS (%s).

@@ -21,7 +21,7 @@ class Basic_Controller extends Admin_Controller {
 			}
 			else
 			{
-				$errors = $post->errors('form_errors');
+				$errors = $post->errors('yuriko_content_basic_errors');
 				foreach($errors as $error)
 				{
 					notice::add($error, 'error');

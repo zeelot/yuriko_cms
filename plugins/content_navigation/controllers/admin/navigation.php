@@ -30,7 +30,7 @@ class Navigation_Controller extends Admin_Controller {
 			}
 			else
 			{
-				foreach($post->errors() as $error)
+				foreach($post->errors('yuriko_content_navigation_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}
@@ -68,7 +68,7 @@ class Navigation_Controller extends Admin_Controller {
 			}
 			else
 			{
-				$errors = $post->errors('form_errors');
+				$errors = $post->errors('yuriko_content_navigation_errors');
 				foreach($errors as $error)
 				{
 					notice::add($error, 'error');

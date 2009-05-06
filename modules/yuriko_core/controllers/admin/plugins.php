@@ -37,7 +37,7 @@ class Plugins_Controller extends Admin_Controller {
 			}
 			else
 			{
-				foreach($status->errors('plugin_errors') as $error)
+				foreach($status->errors('yuriko_plugin_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}

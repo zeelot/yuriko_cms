@@ -31,7 +31,7 @@ class Pages_Controller extends Admin_Controller {
 			}
 			else
 			{
-				foreach($post->errors('form_errors') as $error)
+				foreach($post->errors('yuriko_page_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}
@@ -62,7 +62,7 @@ class Pages_Controller extends Admin_Controller {
 			}
 			else
 			{
-				foreach($post->errors('page_errors') as $error)
+				foreach($post->errors('yuriko_page_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}
@@ -108,7 +108,7 @@ class Pages_Controller extends Admin_Controller {
 			}
 			else
 			{
-				foreach($post->errors('page_errors') as $error)
+				foreach($post->errors('yuriko_page_inheritance_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}
@@ -156,7 +156,7 @@ class Pages_Controller extends Admin_Controller {
 			}
 			else
 			{
-				foreach($post->errors('page_errors') as $error)
+				foreach($post->errors('yuriko_pivot_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}
