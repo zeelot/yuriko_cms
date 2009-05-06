@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
  * This hook loads all the plugins that are enabled in the DB
  * and also runs any hook inside those plugins.
