@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
  * \brief Wraps a Controller object and allows to grab the output of its methods.
  *
