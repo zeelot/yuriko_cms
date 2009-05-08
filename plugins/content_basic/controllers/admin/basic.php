@@ -73,27 +73,6 @@ class Basic_Controller extends Admin_Controller {
 		$this->template->content->formats = ORM::factory('content_format')
 												->select_list('id', 'name');
 	}
-	public function delete_node($id = NULL)
-	{
-		$content = ORM::factory('basic_content', $id);
-		if (!$content->loaded) Event::run('system.404');
-		$node = ORM::factory('content_node', $content->node_id);
-
-		if(isset($_POST['confirm']))
-		{
-			$content->node_id = 0;
-			$content->save();
-			$node->delete();
-			notice::add('Node Deleted Successfully!', 'success');
-			url::redirect('admin/basic/manage');
-		}
-		elseif(isset($_POST['cancel']))
-		{
-			notice::add('Action Cancelled!', 'success');
-			url::redirect('admin/basic/manage');
-		}
-		$this->template->content = View::factory('admin/content/nodes/delete');
-	}
 	public function delete($id = NULL)
 	{
 		$content = ORM::factory('basic_content', $id);
