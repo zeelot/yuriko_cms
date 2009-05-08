@@ -13,25 +13,14 @@
  *
  */
 $config['views'] = array(); //DO NOT DO THIS IN OTHER THEMES!!
-$config['views']['admin/templates/default'] = array
+$config['views']['templates/page/default']   =
+$config['views']['templates/static/default'] =
+$config['views']['admin/templates/default']  = array
 (
 	'globals'			=> array
 	(
 		'reset',
 		'960',			//the 960 css files
-		'typography',
-	),
-	'stylesheets'		=> array
-	(
-		'themes/default/media/css/styles' => 100,
-	),
-);
-$config['views']['templates/page/default'] = array
-(
-	'globals'			=> array
-	(
-		'reset',
-		'960',
 		'typography',
 	),
 	'stylesheets'		=> array
