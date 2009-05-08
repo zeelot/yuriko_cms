@@ -12,9 +12,6 @@ CREATE TABLE IF NOT EXISTS `basic_contents` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
-INSERT INTO `basic_contents` (`id`, `node_id`, `format_id`, `view`, `name`, `content`, `html`) VALUES
-(1, 2, 1, 'default', 'home', '#Home#', '<h1>Home</h1>\n');
-
 CREATE TABLE IF NOT EXISTS `content_formats` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
@@ -35,11 +32,10 @@ CREATE TABLE IF NOT EXISTS `content_nodes` (
   `template` varchar(127) collate utf8_unicode_ci NOT NULL default 'default',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `alias` (`alias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 INSERT INTO `content_nodes` (`id`, `content_type_id`, `content_id`, `name`, `alias`, `template`) VALUES
-(1, 2, 1, 'root', 'navigation/root', 'default'),
-(2, 1, 1, 'home', 'basic/home', 'default');
+(1, 2, 1, 'root', 'navigation/root', 'default');
 
 CREATE TABLE IF NOT EXISTS `content_pages` (
   `id` int(11) unsigned NOT NULL auto_increment,
@@ -73,10 +69,7 @@ CREATE TABLE IF NOT EXISTS `content_pivots` (
   PRIMARY KEY  (`id`),
   KEY `has_nodes_FKIndex2` (`content_node_id`),
   KEY `has_pages_FKIndex2` (`content_page_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
-
-INSERT INTO `content_pivots` (`id`, `content_page_id`, `content_node_id`, `section`, `view`) VALUES
-(1, 1, 2, 2, 'default');
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 CREATE TABLE IF NOT EXISTS `content_types` (
   `id` int(11) unsigned NOT NULL auto_increment,
@@ -101,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `navigation_contents` (
   `anchor` varchar(255) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `tag` (`tag`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 INSERT INTO `navigation_contents` (`id`, `node_id`, `page_id`, `level`, `lft`, `rgt`, `tag`, `name`, `anchor`) VALUES
 (1, 1, 0, 0, 1, 2, 'root', 'root', NULL);
@@ -124,8 +117,8 @@ INSERT INTO `plugins` (`id`, `name`, `dir`, `description`, `dependencies`, `noti
 (1, 'Zend ACL', 'zend_acl', 'A Port of the Zend ACL Module', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'You should only enable this plugin if it is required\n                        by other plugins. Continue enabling this plugin?', 'Disable this plugin?', '0', '0.1.0'),
 (2, 'Simple ACL', 'simple_acl', 'A simple Router Based ACL', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Enabling this plugin might lock you out of the\n                        Admin Panel. Make sure you have an admin account\n						before enabling this plugin.', 'Disabling the Simple ACL plugin might make all\n                        sections of your website accessible to unauthorized\n                        users, are you sure you want to disable this plugin?', '0', '0.1.0'),
 (3, 'Kohana Debug Toolbar', 'debug_toolbar', 'A nice alternative to the Kohana Profiler', 'a:0:{}', 'Enabling this module will add a debug toolbar\n                        to all your pages, try to enable this only in testing\n                        environments. Are you sure you want to enable this plugin?', 'Disable the Debug Toolbal?', '0', '0.2.1'),
-(4, 'YurikoCMS Navigation Content', 'content_navigation', 'Adds the ability to create navigation content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Navigation Content plugin?', '0', '0.1.0'),
-(5, 'YurikoCMS Basic Content', 'content_basic', 'Adds the ability to create basic text content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.0";}}', 'Are you sure you want to enable this plugin?', 'Disable the Basic Content plugin?', '0', '0.1.0');
+(4, 'YurikoCMS Navigation Content', 'content_navigation', 'Adds the ability to create navigation content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.1";}}', 'Are you sure you want to enable this plugin?', 'Disable the Navigation Content plugin?', '0', '0.1.1'),
+(5, 'YurikoCMS Basic Content', 'content_basic', 'Adds the ability to create basic text content for your pages', 'a:1:{s:4:"core";a:1:{i:0;s:5:"0.1.1";}}', 'Are you sure you want to enable this plugin?', 'Disable the Basic Content plugin?', '0', '0.1.1');
 
 CREATE TABLE IF NOT EXISTS `roles` (
   `id` int(11) unsigned NOT NULL auto_increment,
@@ -166,8 +159,8 @@ CREATE TABLE IF NOT EXISTS `site_settings` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 INSERT INTO `site_settings` (`id`, `key`, `value`) VALUES
-(1, 'site_name', 'Zeelots Site'),
-(2, 'site_description', 'Just a sample site'),
+(1, 'site_name', 'YurikoCMS'),
+(2, 'site_description', 'Alpha'),
 (3, 'site_theme', 'default');
 
 CREATE TABLE IF NOT EXISTS `themes` (
@@ -197,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=61 ;
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `logins`, `last_login`) VALUES
-(60, 'admin', 'f4d378a7ea69193b328cd31b98967844f897288c767642b855', 'admin@admin.com', 39, 1238914359);
+(60, 'admin', '59c9682c2a7cb6762b80fc51dce96e4c228506618e8ddb0ffc', 'admin@admin.com', 40, 1241744181);
 
 CREATE TABLE IF NOT EXISTS `user_tokens` (
   `id` int(11) unsigned NOT NULL auto_increment,
