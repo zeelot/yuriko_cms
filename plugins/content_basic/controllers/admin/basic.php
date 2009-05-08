@@ -8,26 +8,6 @@ class Basic_Controller extends Admin_Controller {
 	 */
 	public function manage()
 	{
-		if(isset($_POST['new_basic_form']))
-		{
-			//create a new Basic_Content object
-			$content = ORM::factory('basic_content');
-			$post = $this->input->post();
-			if($content->validate($post))
-			{
-				$content->save();
-				notice::add('Basic Content Created!', 'success');
-				url::redirect('admin/basic/edit/'.$content->id);
-			}
-			else
-			{
-				$errors = $post->errors('yuriko_content_basic_errors');
-				foreach($errors as $error)
-				{
-					notice::add($error, 'error');
-				}
-			}
-		}
 		$contents = ORM::factory('basic_content')->find_all();
 		$this->template->content = View::factory('admin/content/basic/manage');
 		$this->template->content->contents = $contents;
