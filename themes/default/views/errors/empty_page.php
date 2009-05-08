@@ -6,7 +6,7 @@
  */
 
 ?>
-<div class="grid_8 section">
+<div class="grid_8 alpha">
 	<h1 class="error">Missing Content!</h1>
 	<p>
 		This page seems to have no content. Either because the admin just
@@ -16,15 +16,12 @@
 		this page.
 	</p>
 </div>
-<div class="grid_8 section">
+<div class="grid_8 omega">
 	<h1>Admins</h1>
 	<p>
-		<strong>Steps to create a page with content:</strong>
-		<ul>
-			<li>Create a page.</li>
-			<li>Create the content.</li>
-			<li>Attach Nodes to the correct contents.</li>
-			<li>Add Nodes to the page into Sections.</li>
-		</ul>
+		Log in to the admin panel and add content to this page.  If you no longer
+		want this page to exist you need to delete it from the <strong>Pages</strong>
+		section.  For more details, read the <strong>Documentation</strong> pages
+		at <a href="http://www.yurikocms.com" target="_blank">www.YurikoCMS.com</a>.
 	</p>
 </div>
