@@ -17,6 +17,10 @@ class Content_Pivot_Model extends ORM {
 		'content_page',
 		'content_node',
 	);
+	protected $has_many = array
+	(
+		'content_arguments',
+	);
 
 	public function validate(array & $array, $save = FALSE)
 	{

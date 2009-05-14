@@ -11,6 +11,7 @@ class Content_Node_Model extends ORM {
 	protected $has_many = array
 	(
 		'content_pivots',
+		'content_arguments'
 	);
 	protected $belongs_to = array('content_type');
 
