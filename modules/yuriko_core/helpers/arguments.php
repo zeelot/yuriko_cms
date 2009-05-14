@@ -26,13 +26,16 @@ class arguments_Core {
 		$model = $node->find_content();
 		$get_key = Kohana::config('plugin.content_'
 		       .$node->content_type->name
-			   .'.get_key');
+			   .'.arguments.key');
 		//$_GET params should be specified like:
 		//?basic[node_id][param]=value
 		$input = Input::instance();
 		$get = $input->get($get_key);
 		$get = (isset($get[$node->name]))? $get[$node->name] : array();
-		$arguments = array();
+		$arguments = Kohana::config('plugin.content_'
+		       .$node->content_type->name
+			   .'.arguments.defaults');
+		is_array($arguments) OR $arguments = array();
 		foreach ($node->content_arguments as $arg)
 		{
 			$arguments[$arg->key] = $arg->value;
