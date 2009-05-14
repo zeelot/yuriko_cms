@@ -11,5 +11,6 @@ $config['content_feed'] = array
 	'dependencies'  => array
 	(
 		'core'     => array('0.1.1'),
-	)
+	),
+	'get_key' => 'feed',
 );

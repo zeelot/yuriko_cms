@@ -18,78 +18,56 @@ class Content_Feed_Controller extends Controller {
 		if (!$model->loaded) return FALSE;
 		$this->cache = new Cache;
 
+		$limit = (isset($args['limit']))? $args['limit'] : 5;
 
 		// Load the feed from cache
 		$feed = $this->cache->get('feed--'.$model->name);
 		if (empty($feed))
 		{
-			// Queue the load feed for loading
-			$this->_load_feed('feed--'.$model->name, $model->url);
+			$feed = $this->_load_feed($model->name, $model->url);
+			$this->cache->set('feed--'.$model->name, $feed, array('feeds'));
 		}
-		$model->items = empty($feed) ? array() : feed::parse($this->cache->get('feed--'.$model->name), 10);
+		$model->items = feed::parse($feed, $limit);
 
 		echo View::factory('content/feed/'.$view)
 			->set('data', $model);
-		// Load feeds after display
-		Event::add('system.shutdown', array($this, '_load_feed'));
 	}
 
 	/**
 	 *  Taken from the kohana website branch on kohanaphp.com
 	 *  THANKS!
 	 */
-	public function _load_feed($id = NULL, $url = NULL)
+	public function _load_feed($id, $url)
 	{
 		static $feeds;
 
-		is_array($feeds) or $feeds = array();
+		is_array($feeds) OR $feeds = array();
 
-		if (empty($id) AND empty($url))
-		{
-			// Disable error reporting
-			$ER = error_reporting(0);
+		// Initialize CURL
+		$curl = curl_init();
 
-			// Send all current output
-			while (ob_get_level() > 0) ob_end_flush();
+		// Set CURL options
+		curl_setopt_array($curl, array
+		(
+			CURLOPT_USERAGENT      => Kohana::$user_agent,
+			CURLOPT_TIMEOUT        => 10,
+			CURLOPT_CONNECTTIMEOUT => 6,
+			CURLOPT_RETURNTRANSFER => TRUE,
+		));
 
-			// Flush the buffer
-			flush();
+		// Change the URL
+		curl_setopt($curl, CURLOPT_URL, $url);
 
-			// Initialize CURL
-			$curl = curl_init();
+		$feed = curl_exec($curl);
 
-			// Set CURL options
-			curl_setopt_array($curl, array
-			(
-				CURLOPT_USERAGENT      => Kohana::$user_agent,
-				CURLOPT_TIMEOUT        => 10,
-				CURLOPT_CONNECTTIMEOUT => 6,
-				CURLOPT_RETURNTRANSFER => TRUE,
-				CURLOPT_MUTE           => TRUE,
-			));
+		// Close CURL
+		curl_close($curl);
 
-			foreach ($feeds as $id => $url)
-			{
-				// Change the URL
-				curl_setopt($curl, CURLOPT_URL, $url);
-
-				if ($feed = curl_exec($curl))
-				{
-					// Cache the retrieved feed
-					$this->cache->set($id, $feed);
-				}
-			}
-
-			// Close CURL
-			curl_close($curl);
-
-			// Restore error reporting
-			error_reporting($ER);
-		}
-		else
+		if ($feed)
 		{
 			// Add the URL to the feeds
-			$feeds[$id] = $url;
+			$feeds[$id] = $feed;
 		}
+		return $feed;
 	}
 }
