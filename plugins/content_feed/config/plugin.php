@@ -12,5 +12,13 @@ $config['content_feed'] = array
 	(
 		'core'     => array('0.1.1'),
 	),
-	'get_key' => 'feed',
+	'arguments' => array
+	(
+		//default arguments
+		'defaults' => array
+		(
+			'limit' => 5,
+		),
+		'key' => 'feed',
+	),
 );

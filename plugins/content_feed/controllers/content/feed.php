@@ -18,8 +18,6 @@ class Content_Feed_Controller extends Controller {
 		if (!$model->loaded) return FALSE;
 		$this->cache = new Cache;
 
-		$limit = (isset($args['limit']))? $args['limit'] : 5;
-
 		// Load the feed from cache
 		$feed = $this->cache->get('feed--'.$model->name);
 		if (empty($feed))
@@ -27,7 +25,7 @@ class Content_Feed_Controller extends Controller {
 			$feed = $this->_load_feed($model->name, $model->url);
 			$this->cache->set('feed--'.$model->name, $feed, array('feeds'));
 		}
-		$model->items = feed::parse($feed, $limit);
+		$model->items = feed::parse($feed, $args['limit']);
 
 		echo View::factory('content/feed/'.$view)
 			->set('data', $model);
