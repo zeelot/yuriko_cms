@@ -14,6 +14,7 @@
 		<label>Title: <input name="title" type="text" value="<?php echo $item->title; ?>" /></label>
 		<label>URL: <input name="url" type="text" value="<?php echo $item->url; ?>" /></label>
 	</fieldset>
+	<?php echo (isset($node_arguments))? $node_arguments:NULL; ?>
 	<label><button>Save</button></label>
 <?php echo form::close(); ?>
 </div>

@@ -21,9 +21,44 @@ class Feed_Controller extends Admin_Controller {
 			$post = $this->input->post();
 			if($content->validate($post))
 			{
-				$content->save();
-				notice::add('Feed Saved!', 'success');
-				url::redirect('admin/feed/manage');
+				$arg_rows = array();
+				$passed = true;
+				$arguments = $this->input->post('arguments');
+				foreach ($arguments as $key => $value)
+				{
+					if ($value == '' OR empty($value)) continue;
+					//build the array
+					$array = array
+					(
+						//type is added for validation purposes
+						'type' => 'feed',
+						'content_node_id' => $content->node_id,
+						'key' => $key,
+						'value' => $value,
+					);
+					$arg = new Content_Argument_Model;
+					if (!$arg->validate($array))
+					{
+						//don't save the models
+						$passed = false;
+						foreach($array->errors() as $error)
+						{
+							notice::add($error, 'error');
+						}
+					}
+					$arg_rows[] = $arg;
+				}
+				if ($passed)
+				{
+					//save everything
+					foreach ($arg_rows as $row)
+					{
+						$row->save();
+					}
+					$content->save();
+					notice::add('Feed Saved!', 'success');
+					url::redirect('admin/feed/manage');
+				}
 			}
 			else
 			{
@@ -38,19 +73,61 @@ class Feed_Controller extends Admin_Controller {
 		$this->template->content = View::factory('admin/content/feed/form');
 		$this->template->content->action = 'edit';
 		$this->template->content->item = $content;
+		$this->template->content->node_arguments =
+			View::factory('admin/content/nodes/feed_content_arguments');
 	}
 	public function create()
 	{
-		//create a new Basic_Content object
+		//create a new Feed_Content object
 		$content = ORM::factory('feed_content');
 		if(isset($_POST['yuriko_feed_content']))
 		{
 			$post = $this->input->post();
 			if($content->validate($post))
 			{
-				$content->save();
-				notice::add('Feed Added!', 'success');
-				url::redirect('admin/feed/manage');
+				$content->save();//delete if arguments fail validation
+
+				$arg_rows = array();
+				$passed = true;
+				$arguments = $this->input->post('arguments');
+				foreach ($arguments as $key => $value)
+				{
+					if ($value == '' OR empty($value)) continue;
+					//build the array
+					$array = array
+					(
+						//type is added for validation purposes
+						'type' => 'feed',
+						'content_node_id' => $content->node_id,
+						'key' => $key,
+						'value' => $value,
+					);
+					$arg = new Content_Argument_Model;
+					if (!$arg->validate($array))
+					{
+						//will delete the models
+						$passed = false;
+						foreach($array->errors() as $error)
+						{
+							notice::add($error, 'error');
+						}
+					}
+					$arg_rows[] = $arg;
+				}
+				if ($passed)
+				{
+					//save everything
+					foreach ($arg_rows as $row)
+					{
+						$row->save();
+					}
+					notice::add('Feed Added!', 'success');
+					url::redirect('admin/feed/manage');
+				}
+				else
+				{
+					$content->delete();
+				}
 			}
 			else
 			{
@@ -65,8 +142,8 @@ class Feed_Controller extends Admin_Controller {
 		$this->template->content = View::factory('admin/content/feed/form');
 		$this->template->content->action = 'create';
 		$this->template->content->item = $content;
-		$this->template->content->formats = ORM::factory('content_format')
-												->select_list('id', 'name');
+		$this->template->content->node_arguments =
+			View::factory('admin/content/nodes/feed_content_arguments');
 	}
 	public function delete($id = NULL)
 	{
