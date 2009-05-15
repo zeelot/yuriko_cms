@@ -24,7 +24,8 @@
 		</select>
 		</label>
 		</label>
-		<button type="submit" name="add" value="add">Add</button>
 	</fieldset>
+	<?php echo (isset($node_arguments))? $node_arguments:NULL; ?>
+	<button type="submit" name="add" value="add">Add</button>
 	<?php echo form::close(); ?>
 </div>

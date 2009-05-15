@@ -150,9 +150,52 @@ class Pages_Controller extends Admin_Controller {
 			$pivot = ORM::factory('content_pivot');
 			if ($pivot->validate($post))
 			{
-				$pivot->save();
-				notice::add('Content Node Added Successfully', 'success');
-				url::redirect('admin/pages/edit/'.$page->id);
+				//pivot is valid, validate arguments
+				//we save the pivot because we need it's id in the arguments
+				$pivot->save();//delete this if the arguments fail
+				//hold all the args for later saving
+				//because we only want to save if they all validate
+				$arg_rows = array();
+				$passed = true;
+				$arguments = $this->input->post('arguments');
+				foreach ($arguments as $key => $value)
+				{
+					if ($value == '' OR empty($value)) continue;
+					//build the array
+					$array = array
+					(
+						//type is added for validation purposes
+						'type' => $type,
+						'content_pivot_id' => $pivot->id,
+						'key' => $key,
+						'value' => $value,
+					);
+					$arg = new Content_Argument_Model;
+					if (!$arg->validate($array))
+					{
+						//won't save the models
+						$passed = false;
+						foreach($array->errors() as $error)
+						{
+							notice::add($error, 'error');
+						}
+					}
+					$arg_rows[] = $arg;
+				}
+				if ($passed)
+				{
+					//save everything
+					foreach ($arg_rows as $row)
+					{
+						$row->save();
+					}
+					notice::add('Content Node Added Successfully', 'success');
+					url::redirect('admin/pages/edit/'.$page->id);
+				}
+				else
+				{
+					$pivot->delete();
+				}
 			}
 			else
 			{
@@ -167,8 +210,11 @@ class Pages_Controller extends Admin_Controller {
 		$items = ORM::factory($type.'_Content')->find_all();
 
 		$this->template->content = View::factory('admin/content/pages/add_node');
-		$this->template->content->node_dropdown = View::factory('admin/content/nodes/'.$type.'_content_dropdown')
+		$this->template->content->node_dropdown =
+			View::factory('admin/content/nodes/'.$type.'_content_dropdown')
 			->set('items', $items);
+		$this->template->content->node_arguments =
+			View::factory('admin/content/nodes/'.$type.'_content_arguments');
 		$this->template->content->page = $page;
 		$this->template->content->sections = $sections;
 		$this->template->content->views = $views;

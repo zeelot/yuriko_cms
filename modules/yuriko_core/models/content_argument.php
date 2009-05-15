@@ -32,6 +32,8 @@ class Content_Argument_Model extends ORM {
 			->add_rules('value', 'required', 'length[1,255]', 'chars[a-zA-Z 0-9_./]')
 			->add_rules('content_node_id', 'digit', array($this, 'node_exists'))
 			->add_rules('content_pivot_id', 'digit', array($this, 'pivot_exists'));
+		//run an event so that this plugin can add it's own validation
+		Event::run('yuriko.'.$array['type'].'_argument_validation', $array);
 		return parent::validate($array, $save);
 	}
 

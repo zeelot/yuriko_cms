@@ -52,7 +52,7 @@ class Pages_Controller extends Website_Controller{
 				$node_view = View::factory('templates/node/'.$node->template);
 				
 				$node_view->content = Component::factory('content/'.$type->name)
-					->method('index', array($node->content_id, $pivot->view, $args));
+					->method('index', array($node->content_id, $pivot->view, arguments::get($pivot)));
 				$sections[$pivot->section][] = $node_view;
 			}
 			foreach (Kohana::config('theme.sections') as $key => $val)
