@@ -26,7 +26,19 @@ class Feed_Controller extends Admin_Controller {
 				$arguments = $this->input->post('arguments');
 				foreach ($arguments as $key => $value)
 				{
-					if ($value == '' OR empty($value)) continue;
+					//find any existing argument with this key and node_id
+					$arg = ORM::factory('content_argument')
+						->where(array
+							(
+								'content_node_id' => $content->node_id,
+								'key' => $key,
+							)
+						)->find();
+					if ($value == '' OR empty($value)){
+						//the argument was deleted in the form..delete the row
+						$arg->delete();
+						continue;
+					}
 					//build the array
 					$array = array
 					(
@@ -36,7 +48,6 @@ class Feed_Controller extends Admin_Controller {
 						'key' => $key,
 						'value' => $value,
 					);
-					$arg = new Content_Argument_Model;
 					if (!$arg->validate($array))
 					{
 						//don't save the models
@@ -74,7 +85,8 @@ class Feed_Controller extends Admin_Controller {
 		$this->template->content->action = 'edit';
 		$this->template->content->item = $content;
 		$this->template->content->node_arguments =
-			View::factory('admin/content/nodes/feed_content_arguments');
+			View::factory('admin/content/nodes/feed_content_arguments')
+				->set('args', arguments::get_model_args($content->node));
 	}
 	public function create()
 	{
