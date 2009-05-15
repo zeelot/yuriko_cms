@@ -10,7 +10,7 @@ $config['content_feed'] = array
 	'version'       => '0.1.0',
 	'dependencies'  => array
 	(
-		'core'     => array('0.1.1'),
+		'core'     => array('0.2.0'),
 	),
 	'arguments' => array
 	(

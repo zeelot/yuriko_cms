@@ -7,9 +7,18 @@ $config['content_navigation'] = array
 	'description'   => 'Adds the ability to create navigation content for your pages',
 	'notice_enable' => 'Are you sure you want to enable this plugin?',
 	'notice_disable'=> 'Disable the Navigation Content plugin?',
-	'version'       => '0.1.1',
+	'version'       => '0.1.2',
 	'dependencies'  => array
 	(
-		'core'     => array('0.1.1'),
-	)
+		'core'     => array('0.2.0'),
+	),
+	'arguments' => array
+	(
+		//default arguments
+		'defaults' => array
+		(
+
+		),
+		'key' => 'navigation',
+	),
 );
