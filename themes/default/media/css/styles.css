@@ -2,8 +2,18 @@ body{
   background:#FFF4D7;
 }
 label{display:block;}
-.content {
-	
+dl, div.feed div{
+	border: 1px solid #EEE;
+	padding:5px 5px;
+	background:#EFE;
+}
+dl di{
+	font-weight:800;
+	font-size:0.9em;
+}
+dl dd{
+	font-size:0.8em;
+	border-bottom: 1px solid #DEDEDE;
 }
 .message{
 	margin:5px 0px;
