@@ -24,6 +24,16 @@ class arguments_Core {
 		//get the node and model rows
 		$node = $pivot->content_node;
 		$model = $node->find_content();
+		//load the default arguments
+		$arguments = Kohana::config('plugin.content_'
+		       .$node->content_type->name
+			   .'.arguments.defaults');
+		is_array($arguments) OR $arguments = array();
+		//node args replace default args
+		$arguments = array_merge($arguments, self::get_model_args($node));
+		//pivot args replace node args
+		$arguments = array_merge($arguments, self::get_model_args($pivot));
+		//get args replace all args
 		$get_key = Kohana::config('plugin.content_'
 		       .$node->content_type->name
 			   .'.arguments.key');
@@ -32,21 +42,25 @@ class arguments_Core {
 		$input = Input::instance();
 		$get = $input->get($get_key);
 		$get = (isset($get[$node->name]))? $get[$node->name] : array();
-		$arguments = Kohana::config('plugin.content_'
-		       .$node->content_type->name
-			   .'.arguments.defaults');
-		is_array($arguments) OR $arguments = array();
-		foreach ($node->content_arguments as $arg)
-		{
-			$arguments[$arg->key] = $arg->value;
-		}
-		//pivot args replace node args
-		foreach ($pivot->content_arguments as $arg)
-		{
-			$arguments[$arg->key] = $arg->value;
-		}
 		//get args replace all args
 		$arguments = array_merge($arguments, $get);
 		return $arguments;
+	}
+
+	/**
+	 * Returns the arguments assigned to a specific ORM model.
+	 * The model must 'has_many' content_arguments
+	 *
+	 *
+	 * @param <ORM> $obj - the model to return arguments for
+	 */
+	public static function get_model_args(ORM &$obj)
+	{
+		$args = array();
+		foreach ($obj->content_arguments as $arg)
+		{
+			$args[$arg->key] = $arg->value;
+		}
+		return $args;
 	}
 }
