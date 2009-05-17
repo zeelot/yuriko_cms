@@ -18,21 +18,6 @@
 		</div>
         <div class="grid_4 side_panel">
 			<?php echo View::factory('admin/nav/main'); ?>
-			<?php echo widget::get('user_info'); ?>
-			<p>
-				<a href="http://validator.w3.org/check?uri=referer" class="noicon">
-				<img
-					src="http://www.w3.org/Icons/valid-xhtml10"
-					alt="Valid XHTML 1.0 Transitional" />
-				</a>
-			</p>
-			<p>
-				<a href="http://jigsaw.w3.org/css-validator" class="noicon">
-				<img
-					src="http://jigsaw.w3.org/css-validator/images/vcss"
-					alt="Valid CSS!" />
-				</a>
-			</p>
         </div>
         <div class="grid_12 content">
             <?php echo (isset($content))? $content : null; ?>

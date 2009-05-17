@@ -10,7 +10,7 @@
  *		'version'		=> <plugin_version>
  *		'dependencies'	=> array
  *		(
- *			'core'				=> <version>,
+ *			'core'				=> array(<version>, <version>)
  *			<another_plugin>	=> <version>,
  *			<and_another>		=> array(<min_version>, <max_version>),
  *		)
