@@ -4,7 +4,7 @@ class content_feed_hook{
 
 	public function __construct()
 	{
-		Event::add('admin.nav.content', array($this, 'render_nav_items'));
+		Event::add('yuriko.admin_nav_content', array($this, 'render_nav_items'));
 		Event::add('yuriko.pages_edit_add_nodes_table', array($this, 'add_to_page_edit'));
 		Event::add('yuriko.feed_argument_validation', array($this, 'argument_rules'));
 	}

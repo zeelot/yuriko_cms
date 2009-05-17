@@ -4,7 +4,7 @@ class content_basic_hook{
 
 	public function __construct()
 	{
-		Event::add('admin.nav.content', array($this, 'render_nav_items'));
+		Event::add('yuriko.admin_nav_content', array($this, 'render_nav_items'));
 		Event::add('yuriko.pages_edit_add_nodes_table', array($this, 'add_to_page_edit'));
 	}
 	public function render_nav_items()
