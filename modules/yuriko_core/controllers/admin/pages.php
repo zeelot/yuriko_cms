@@ -158,6 +158,7 @@ class Pages_Controller extends Admin_Controller {
 				$arg_rows = array();
 				$passed = true;
 				$arguments = $this->input->post('arguments');
+				(!$arguments) AND $arguments = array();
 				foreach ($arguments as $key => $value)
 				{
 					if ($value == '' OR empty($value)) continue;
