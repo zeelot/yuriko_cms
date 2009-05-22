@@ -8,6 +8,9 @@
 
 class Plugin_Model extends ORM {
 
+	protected $has_one = array('plugin_status');
+	protected $ignored_columns = array('arguments');
+
 	public function unique_key($id)
 	{
 		if ( ! empty($id) AND is_string($id) AND ! ctype_digit($id))
@@ -24,7 +27,6 @@ class Plugin_Model extends ORM {
 		{
 			$value = serialize($value);
 		}
-
 		parent::__set($key, $value);
 	}
 	public function __get($key)
@@ -33,33 +35,50 @@ class Plugin_Model extends ORM {
 		{
 			return unserialize(parent::__get($key));
 		}
-		else
-		{
-			return parent::__get($key);
-		}
+		return parent::__get($key);
 	}
 
 	public function validate(array & $array, $save = FALSE)
 	{
 		$array = Validation::factory($array)
-			->pre_filter('trim', 'name', 'dir', 'description', 'version')
 			->add_rules('name', 'required', 'length[1,127]', 'chars[a-zA-Z 0-9_./]')
 			->add_rules('dir', 'required', 'length[1,127]', 'chars[a-zA-Z0-9_./]')
-			->add_rules('dependencies', 'is_array')
+			->add_rules('version', 'required', 'length[1,15]')
 			->add_rules('description', 'required', 'length[1,1000]')
+			->add_rules('dependencies', 'is_array')
+			->add_rules('arguments', 'is_array')
+			->add_rules('plugin_status_id', 'digit')
 			->add_rules('notice_enable', 'length[1,1000]')
 			->add_rules('notice_disable', 'length[1,1000]')
-			->add_rules('version', 'required', 'length[1,15]');
+			->add_rules('installer', 'chars[01]');
+		switch ($array['action']) {
+			case 'sync':
+
+				break;
+			case 'install':
+				break;
+			case 'enable':
+				$array->add_callbacks('plugin_status_id', array($this, 'enable_callback'));
+				break;
+			case 'disable':
+				$array->add_callbacks('plugin_status_id', array($this, 'disable_callback'));
+				break;
+			default:
+				break;
+		}
 		return parent::validate($array, $save);
 	}
-
 	public function is_enabled()
 	{
-		return (bool)$this->enabled;
+		return ((bool)$this->plugin_status->name == 'enabled');
 	}
 	public function is_disabled()
 	{
-		return !$this->is_enabled();
+		return ((bool)$this->plugin_status->name == 'disabled');
+	}
+	public function is_uninstalled()
+	{
+		return ((bool)$this->plugin_status->name == 'uninstalled');
 	}
 	public function enable_callback(Validation $array, $field)
 	{
@@ -114,7 +133,9 @@ class Plugin_Model extends ORM {
 	 */
 	public function disable_callback(Validation $array, $field)
 	{
-		$plugins = ORM::factory('plugin')->where('enabled', 1)->find_all();
+		$plugins = ORM::factory('plugin')
+			->where('plugin_status_id', ORM::factory('plugin_status', 'enabled')->id)
+			->find_all();
 		//check each plugins dependencies
 		foreach($plugins as $plugin)
 		{
@@ -125,44 +146,6 @@ class Plugin_Model extends ORM {
 			}
 		}
 	}
-	public function enable()
-	{
-		$array = $this->as_array();
-
-		$array = Validation::factory($array)
-			->add_rules('enabled', array($this, 'is_disabled'))
-			->add_callbacks('enabled', array($this, 'enable_callback'));
-		//return the validation object on failure
-		if($array->validate())
-		{
-			$this->enabled = 1;
-			$this->save();
-			return TRUE;
-		}
-		else
-		{
-			return $array;
-		}
-	}
-	public function disable()
-	{
-		$array = $this->as_array();
-
-		$array = Validation::factory($array)
-			->add_rules('enabled', array($this, 'is_enabled'))
-			->add_callbacks('enabled', array($this, 'disable_callback'));
-		//return the validation object on failure
-		if($array->validate())
-		{
-			$this->enabled = 0;
-			$this->save();
-			return TRUE;
-		}
-		else
-		{
-			return $array;
-		}
-	}
 	/**
 	 * Syncs the database table with the plugins directory.
 	 * This should only be done in the admin panel to make sure
@@ -170,36 +153,54 @@ class Plugin_Model extends ORM {
 	 */
 	public function sync()
 	{
-		//delete everything in the db first (truncate resets id too)
-		Database::instance()->query('TRUNCATE TABLE plugins');
-		//original modules so we can restore this
-		$loaded = Kohana::config('core.modules');
-		//we need to get to the config files for all the plugins so they must
-		//all be loaded first
-		$plugins = array();
-		foreach(filesystem::get_folders(DOCROOT.'plugins/') as $plugin)
+		//store all the statuses of the current plugin
+		$plugin_statuses = array();
+		$plugins = ORM::factory('plugin')->find_all();
+		foreach ($plugins as $plugin)
 		{
-			$plugins[] = DOCROOT.'plugins/'.$plugin;
+			$plugin_statuses[$plugin->dir] = $plugin->plugin_status_id;
+		}
+		//delete everything in the db (truncate resets id too)
+		Database::instance()->query('TRUNCATE TABLE plugins');
+		//original modules so we can restore this easily
+		$loaded = Kohana::config('core.modules');
+		$plugins = filesystem::get_folders(DOCROOT.'plugins/');
+		$ps = array();
+		//this is getting really hacky
+		foreach ($plugins as $p)
+		{
+			$ps[] = DOCROOT.'plugins/'.$p;
 		}
 		//load the plugin so we can get the information
-		Kohana::config_set('core.modules', array_merge(Kohana::config('core.modules'), $plugins));
-		
-		foreach(Kohana::config('plugin') as $key => $plugin)
+		Kohana::config_set('core.modules',
+			array_merge(Kohana::config('core.modules'), $ps));
+		foreach($plugins as $plugin)
 		{
+			$config = Kohana::config('plugin.'.$plugin);
+			
+			//add status to the config
+			if (isset($plugin_statuses[$plugin]))
+			{
+				$config['plugin_status_id'] = $plugin_statuses[$plugin];
+			}
+			else
+			{
+				//set to uninstalled
+				$config['plugin_status_id'] = ORM::factory('plugin_status', 'uninstalled')->id;
+			}
+			//the array key is the dir
+			$config['dir'] = $plugin;
+			//this lets validation know what rules to add
+			$config['action'] = 'sync';
 			//add each plugin to the DB
 			$new = ORM::factory('plugin');
-			if($new->validate($plugin))
+			if($new->validate($config))
 			{
-				//if the plugin is in the $loaded array, set enabled to true
-				if(in_array(DOCROOT.'plugins/'.$plugin['dir'], $loaded))
-				{
-					$new->enabled = 1;
-				}
 				$new->save();
 			}
 			else
 			{
-				foreach ($plugin->errors('plugin_errors') as $error)
+				foreach ($config->errors('plugin_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}

@@ -14,14 +14,14 @@
 			<?php echo html::anchor('admin/plugins/info/'.$plugin->id,
 				html::image('media/images/fam_silk/information.png',
 					array('alt' => 'Info', 'title' => 'Info'))); ?>
-			<?php if(!$plugin->enabled): ?>
-			<?php echo html::anchor('admin/plugins/enable/'.$plugin->id,
-				html::image('media/images/fam_silk/add.png',
-					array('alt' => 'Enable', 'title' => 'Add'))); ?>
-			<?php else: ?>
+			<?php if($plugin->plugin_status->name == 'enabled'): ?>
 			<?php echo html::anchor('admin/plugins/disable/'.$plugin->id,
 				html::image('media/images/fam_silk/delete.png',
 					array('alt' => 'Remove', 'title' => 'Remove'))); ?>
+			<?php else: ?>
+			<?php echo html::anchor('admin/plugins/enable/'.$plugin->id,
+				html::image('media/images/fam_silk/add.png',
+					array('alt' => 'Enable', 'title' => 'Add'))); ?>
 			<?php endif; ?>
 			</td>
 		</tr>

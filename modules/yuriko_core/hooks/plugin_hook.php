@@ -16,8 +16,9 @@ class plugin_hook{
 	public function load()
 	{
 		$plugins = array();
-		// Get the list of plugins from the db
-		foreach (ORM::factory('plugin')->where('enabled', 1)->find_all() as $plugin)
+		// Get the list of enabled plugins from the db
+		$enabled_status = ORM::factory('plugin_status', 'enabled');
+		foreach (ORM::factory('plugin')->where('plugin_status_id', $enabled_status->id)->find_all() as $plugin)
 		{
 			$plugins[] = DOCROOT.'plugins/'.$plugin->dir;
 		}

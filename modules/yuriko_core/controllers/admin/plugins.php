@@ -27,45 +27,77 @@ class Plugins_Controller extends Admin_Controller {
 	public function enable($id = NULL)
 	{
 		$plugin = ORM::factory('plugin', $id);
-		if ((!$plugin->loaded) OR ($plugin->enabled)) Event::run('system.404');
-
-		if(isset($_POST['confirm']))
+		if ((!$plugin->loaded) OR ($plugin->plugin_status->name == 'enabled'))
+			Event::run('system.404');
+		//if the plugin has an install script, run it.
+		//stop running when $_SESSION['yuriko.plugin_installed'] is TRUE
+		if (
+			$plugin->plugin_status->name == 'uninstalled'
+			AND $plugin->installer == 1
+			AND (bool)!Session::instance()->get('yuriko.plugin_installed')
+			)
 		{
-			if (TRUE === $status = $plugin->enable())
+			//temporarily load the module to get to the installer files
+			Kohana::config_set('core.modules',
+				array_merge(Kohana::config('core.modules'),
+				 array(DOCROOT.'plugins/'.$plugin->dir)));
+			//run installation
+			$installation = Component::factory('admin/installer/'.$plugin->dir)
+				->method('install', array($plugin));
+			$this->template->content = $installation;
+		}
+		else
+		{
+			if (isset($_POST['confirm']))
 			{
-				notice::add('Plugin Enabled', 'success');
-			}
-			else
-			{
-				foreach($status->errors('yuriko_plugin_errors') as $error)
+				//enable the plugin and remove the session item
+				$array = $plugin->as_array();
+				$array['action'] = 'enable';
+				$array['plugin_status_id'] = ORM::factory('plugin_status', 'enabled')->id;
+				if ($plugin->validate($array))
 				{
-					notice::add($error, 'error');
+					$plugin->save();
+					notice::add('Plugin Enabled', 'success');
 				}
+				else
+				{
+					foreach($array->errors('plugin_errors') as $error)
+					{
+						notice::add($error, 'error');
+					}
+				}
+				Session::instance()->delete('yuriko.plugin_installed');
+				url::redirect('admin/plugins/manage');
 			}
-			url::redirect('admin/plugins/manage');
+			elseif(isset($_POST['cancel']))
+			{
+				Session::instance()->delete('yuriko.plugin_installed');
+				notice::add('Action Cancelled!', 'success');
+				url::redirect('admin/plugins/manage');
+			}
+			$this->template->content = View::factory('admin/plugins/enable');
+			$this->template->content->plugin = $plugin;
 		}
-		elseif(isset($_POST['cancel']))
-		{
-			notice::add('Action Cancelled!', 'success');
-			url::redirect('admin/plugins/manage');
-		}
-		$this->template->content = View::factory('admin/plugins/enable');
-		$this->template->content->plugin = $plugin;
 	}
 	public function disable($id = NULL)
 	{
 		$plugin = ORM::factory('plugin', $id);
-		if ((!$plugin->loaded) OR (!$plugin->enabled)) Event::run('system.404');
-
-		if(isset($_POST['confirm']))
+		if ((!$plugin->loaded) OR (!$plugin->plugin_status->name == 'enabled'))
+			Event::run('system.404');
+		if (isset($_POST['confirm']))
 		{
-			if (TRUE === $status = $plugin->disable())
+			//disable the plugin
+			$array = $plugin->as_array();
+			$array['action'] = 'disable';
+			$array['plugin_status_id'] = ORM::factory('plugin_status', 'disabled')->id;
+			if ($plugin->validate($array))
 			{
+				$plugin->save();
 				notice::add('Plugin Disabled', 'success');
 			}
 			else
 			{
-				foreach($status->errors('plugin_errors') as $error)
+				foreach($array->errors('plugin_errors') as $error)
 				{
 					notice::add($error, 'error');
 				}
