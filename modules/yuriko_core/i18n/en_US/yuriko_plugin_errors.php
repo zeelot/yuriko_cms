@@ -32,7 +32,7 @@ $lang = array
 		'required' => 'Plugin Version is required.',
 		'length'   => 'Version needs to be between %s and %s characters.',
 	),
-	'enabled' => array
+	'plugin_status_id' => array
 	(
 		'core_upgrade'         => 'Plugin seems to be made for newer versions of the CMS (%s).
                                    Try upgrading CMS or looking for an older version of this plugin.',

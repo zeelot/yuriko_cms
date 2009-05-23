@@ -11,7 +11,9 @@ class Plugins_Controller extends Admin_Controller {
 	public function manage()
 	{
 		ORM::factory('plugin')->sync();
-		$plugins = ORM::factory('plugin')->find_all();
+		$plugins = ORM::factory('plugin')
+			->orderby(array('plugin_status_id' => 'DESC'))
+			->find_all();
 		$this->template->content = View::factory('admin/plugins/manage');
 		$this->template->content->plugins = $plugins;
 	}
@@ -61,7 +63,7 @@ class Plugins_Controller extends Admin_Controller {
 				}
 				else
 				{
-					foreach($array->errors('plugin_errors') as $error)
+					foreach($array->errors('yuriko_plugin_errors') as $error)
 					{
 						notice::add($error, 'error');
 					}
@@ -133,8 +135,26 @@ class Plugins_Controller extends Admin_Controller {
 		}
 		else
 		{
-			//installation complete, redirect
-			notice::add('Plugin Installed', 'success');
+			//change plugin status
+			$array = $plugin->as_array();
+			$array['action'] = 'install';
+			//if plugin is already enabled, leave the status alone
+			if ($plugin->plugin_status->name != 'enabled')
+			{
+				$array['plugin_status_id'] = ORM::factory('plugin_status', 'disabled')->id;
+			}
+			if ($plugin->validate($array))
+			{
+				$plugin->save();
+				notice::add('Plugin Installed', 'success');
+			}
+			else
+			{
+				foreach($array->errors('plugin_errors') as $error)
+				{
+					notice::add($error, 'error');
+				}
+			}
 			url::redirect('admin/plugins/manage');
 		}
 	}
@@ -148,6 +168,10 @@ class Plugins_Controller extends Admin_Controller {
 			Event::run('system.404');
 		if ((bool)!Session::instance()->get('yuriko.plugin_setup'))
 		{
+			//temporarily load the module to get to the uninstaller files
+			Kohana::config_set('core.modules',
+				array_merge(Kohana::config('core.modules'),
+				 array(DOCROOT.'plugins/'.$plugin->dir)));
 			//run uninstallation
 			$installation = Component::factory('admin/installer/'.$plugin->dir)
 				->method('uninstall', array($plugin));

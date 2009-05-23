@@ -8,6 +8,7 @@ $config['content_feed'] = array
 	'notice_enable' => 'Are you sure you want to enable this plugin?',
 	'notice_disable'=> 'Disable the Feed Content plugin?',
 	'version'       => '0.1.0',
+	'installer'		=> 1,
 	'dependencies'  => array
 	(
 		'core'     => array('0.2.0'),

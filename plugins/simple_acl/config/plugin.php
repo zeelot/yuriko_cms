@@ -15,5 +15,6 @@ $config['simple_acl'] = array
 	'dependencies'  => array
 	(
 		'core'     => array('0.1.0'),
+		'auth'     => array('1.0.0'),
 	)
 );

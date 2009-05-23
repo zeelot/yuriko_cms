@@ -8,6 +8,7 @@ $config['content_navigation'] = array
 	'notice_enable' => 'Are you sure you want to enable this plugin?',
 	'notice_disable'=> 'Disable the Navigation Content plugin?',
 	'version'       => '0.1.2',
+	'installer'		=> 1,
 	'dependencies'  => array
 	(
 		'core'     => array('0.2.0'),

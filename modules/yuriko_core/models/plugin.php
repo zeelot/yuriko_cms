@@ -47,15 +47,17 @@ class Plugin_Model extends ORM {
 			->add_rules('description', 'required', 'length[1,1000]')
 			->add_rules('dependencies', 'is_array')
 			->add_rules('arguments', 'is_array')
-			->add_rules('plugin_status_id', 'digit')
 			->add_rules('notice_enable', 'length[1,1000]')
 			->add_rules('notice_disable', 'length[1,1000]')
-			->add_rules('installer', 'chars[01]');
+			->add_rules('installer', 'chars[01]')
+			->add_rules('plugin_status_id', 'chars[1-3]');
 		switch ($array['action']) {
 			case 'sync':
 
 				break;
 			case 'install':
+				break;
+			case 'uninstall':
 				break;
 			case 'enable':
 				$array->add_callbacks('plugin_status_id', array($this, 'enable_callback'));
@@ -103,14 +105,14 @@ class Plugin_Model extends ORM {
 				$dep = ORM::factory('plugin', $dependency);
 				if(!$dep->loaded)
 				{
-					//the plugin is not installed
+					//the plugin does not exist in the plugins folder
 					$array->add_error($field, 'dependency_install', array($dependency, $version[0]));
 				}
 				else
 				{
-					if(!$dep->enabled)
+					if($dep->plugin_status->name != 'enabled')
 					{
-						//the plugin needs to be loaded
+						//the plugin needs to be enabled
 						$array->add_error($field, 'dependency_enable', array($dep->name, $version[0]));
 					}
 					if(version_compare($version[0], $dep->version, '>'))
@@ -188,6 +190,13 @@ class Plugin_Model extends ORM {
 				//set to uninstalled
 				$config['plugin_status_id'] = ORM::factory('plugin_status', 'uninstalled')->id;
 			}
+			//if installer is not set and id = uninstalled, set it to disabled
+			if ((!isset($config['installer']) OR (bool)$config['installer'] == 0)
+				AND	($config['plugin_status_id'] == ORM::factory('plugin_status', 'uninstalled')->id))
+			{
+				$config['plugin_status_id'] = ORM::factory('plugin_status', 'disabled')->id;
+			}
+
 			//the array key is the dir
 			$config['dir'] = $plugin;
 			//this lets validation know what rules to add
