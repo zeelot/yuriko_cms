@@ -6,3 +6,4 @@ Icon?
 .buildpath
 .project
 /application/config/*.php
+/plugins/*
