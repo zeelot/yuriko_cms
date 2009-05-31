@@ -1,7 +1,7 @@
 
-<div>
+<div class="yuriko_plugin_info">
 	<h1><?php echo $plugin->name; ?></h1>
-	<p><strong>Description: </strong><?php echo $plugin->description; ?></p>
+	<div class="description"><?php echo $description; ?></div>
 	<ul>
 		<li><strong>Version:</strong> <?php echo $plugin->version; ?></li>
 		<li><strong>Directory:</strong> <?php echo $plugin->dir; ?></li>

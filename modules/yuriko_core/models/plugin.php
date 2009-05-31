@@ -44,11 +44,8 @@ class Plugin_Model extends ORM {
 			->add_rules('name', 'required', 'length[1,127]', 'chars[a-zA-Z 0-9_./]')
 			->add_rules('dir', 'required', 'length[1,127]', 'chars[a-zA-Z0-9_./]')
 			->add_rules('version', 'required', 'length[1,15]')
-			->add_rules('description', 'required', 'length[1,1000]')
 			->add_rules('dependencies', 'is_array')
 			->add_rules('arguments', 'is_array')
-			->add_rules('notice_enable', 'length[1,1000]')
-			->add_rules('notice_disable', 'length[1,1000]')
 			->add_rules('installer', 'chars[01]')
 			->add_rules('plugin_status_id', 'chars[1-3]');
 		switch ($array['action']) {

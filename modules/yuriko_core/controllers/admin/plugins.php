@@ -22,8 +22,14 @@ class Plugins_Controller extends Admin_Controller {
 	{
 		$plugin = ORM::factory('plugin', $id);
 		if (!$plugin->loaded) event::run('system.404');
+		//make sure the plugin is enabled to get the description
+		Kohana::config_set('core.modules',
+			array_merge(Kohana::config('core.modules'),
+				array(DOCROOT.'plugins/'.$plugin->dir)));
 		$this->template->content = View::factory('admin/plugins/info');
 		$this->template->content->plugin = $plugin;
+		$this->template->content->description =
+				View::factory('admin/plugins/'.$plugin->dir.'/description');
 	}
 
 	public function enable($id = NULL)
@@ -50,6 +56,10 @@ class Plugins_Controller extends Admin_Controller {
 		}
 		else
 		{
+			//make sure the plugin is enabled to get the notice
+			Kohana::config_set('core.modules',
+				array_merge(Kohana::config('core.modules'),
+					array(DOCROOT.'plugins/'.$plugin->dir)));
 			if (isset($_POST['confirm']))
 			{
 				//enable the plugin and remove the session item
@@ -78,7 +88,8 @@ class Plugins_Controller extends Admin_Controller {
 				url::redirect('admin/plugins/manage');
 			}
 			$this->template->content = View::factory('admin/plugins/enable');
-			$this->template->content->plugin = $plugin;
+			$this->template->content->notice =
+				View::factory('admin/plugins/'.$plugin->dir.'/enable');
 		}
 	}
 	public function disable($id = NULL)
@@ -113,7 +124,8 @@ class Plugins_Controller extends Admin_Controller {
 			url::redirect('admin/plugins/manage');
 		}
 		$this->template->content = View::factory('admin/plugins/disable');
-		$this->template->content->plugin = $plugin;
+		$this->template->content->notice =
+				View::factory('admin/plugins/'.$plugin->dir.'/disable');
 	}
 	public function install($id = NULL)
 	{

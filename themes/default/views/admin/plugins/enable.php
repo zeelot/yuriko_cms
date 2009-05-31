@@ -4,8 +4,6 @@
  */
 ?>
 <div>
-	<p class="notice">
-	<?php echo $plugin->notice_enable; ?>
-	</p>
+	<?php echo $notice; ?>
 	<?php echo View::factory('forms/simple_confirmation'); ?>
 </div>
