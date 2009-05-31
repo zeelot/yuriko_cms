@@ -37,13 +37,33 @@ class arguments_Core {
 		$get_key = Kohana::config('plugin.content_'
 		       .$node->content_type->name
 			   .'.arguments.key');
-		//$_GET params should be specified like:
-		//?basic[node_id][param]=value
-		$input = Input::instance();
-		$get = $input->get($get_key);
-		$get = (isset($get[$node->name]))? $get[$node->name] : array();
+		//remove any args that not allowed
+		$allowed = Kohana::config('plugin.content_'
+		       .$node->content_type->name
+			   .'.arguments.get');
+		if ( !is_array($allowed))
+		{
+			//no $_GET args are allowed for this plugin
+			$get_args = array();
+		}
+		else
+		{
+			//$_GET params should be specified like:
+			//?basic[node_id][param]=value
+			$input = Input::instance();
+			$get = $input->get($get_key);
+			$get_args = (isset($get[$node->name]))? $get[$node->name] : array();
+			foreach ($get_args as $key => $value)
+			{
+				if ( !array_key_exists($key, $allowed))
+				{
+					unset($get_args[$key]);
+				}
+			}
+		}
+		
 		//get args replace all args
-		$arguments = array_merge($arguments, $get);
+		$arguments = array_merge($arguments, $get_args);
 		return $arguments;
 	}
 
