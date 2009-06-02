@@ -7,3 +7,4 @@ Icon?
 .project
 /application/config/*.php
 /plugins/*
+/application/views/media
