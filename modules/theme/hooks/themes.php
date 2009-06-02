@@ -8,7 +8,7 @@ class themes_hook {
 	{
 		// Hook into routing
 		Event::add('system.ready', array($this, 'load_themes'));
-		Event::add('system.pre_controller', array($this, 'add_form_module'));
+		Event::add('yuriko.admin_settings', array($this, 'add_form'));
 	}
 
 	public function load_themes()
@@ -21,15 +21,14 @@ class themes_hook {
 		}
 	}
 
-	public function add_form_module()
+	public function add_form()
 	{
 		$themes = filesystem::get_folders(DOCROOT.'themes/');
 		$sel = ORM::factory('site_setting', 'site_theme')->value;
 		$view = View::factory('form_modules/site_settings/theme_selection')
 			->set('themes', $themes)
-			->set('sel', $sel);
-		//add the themes dropdown to the site_settings form
-		form_module::set('site_settings', $view);
+			->set('sel', $sel)
+			->render(TRUE);
   }
 }
 new themes_hook;
