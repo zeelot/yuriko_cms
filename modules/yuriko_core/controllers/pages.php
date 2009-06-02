@@ -12,12 +12,9 @@ class Pages_Controller extends Website_Controller{
 	 * loads the specified page
 	 *
 	 */
-	public function load($route = FALSE)
+	public function load($alias = FALSE)
 	{
-		$segs = explode(':', $route);
-		$args = NULL;
-		if (isset($segs[1])) $args = $segs[1];
-		$alias = rtrim($segs[0], '/');
+		$alias = rtrim($alias, '/');
 		$page = ORM::factory('content_page', $alias);
 		if (!$page->id) Event::run('system.404');
 		if (!$page->has_content())
@@ -37,7 +34,6 @@ class Pages_Controller extends Website_Controller{
 			$pivots = ORM::factory('content_pivot')
 			->in('content_page_id', $pages)
 			->find_all();
-			$sections = array();
 			foreach ($pivots as $pivot)
 			{
 				$node = $pivot->content_node;
@@ -50,35 +46,23 @@ class Pages_Controller extends Website_Controller{
 				 * side of the page.
 				 */
 				$node_view = View::factory('templates/node/'.$node->template);
-				
 				$node_view->content = Component::factory('content/'.$type->name)
 					->method('index', array($node->content_id, $pivot->view, arguments::get($pivot)));
-				$sections[$pivot->section][] = $node_view;
+				section::set(Kohana::config('theme.sections.'.$pivot->section),$node_view);
 			}
-			foreach (Kohana::config('theme.sections') as $key => $val)
-			{
-				if(!isset($sections[$key]))
-				{
-					$sections[$key] = array();
-				}
-			}
-			$this->template->sections = $sections;
 		}
 	}
 
-	public function load_node($route = FALSE)
+	public function load_node($alias = FALSE)
 	{
 		$this->auto_render = FALSE;
-		$segs = explode(':', $route);
-		$args = NULL;
-		if (isset($segs[1])) $args = $segs[1];
-		$alias = rtrim($segs[0], '/');
+		$alias = rtrim($alias, '/');
 
 		$node = ORM::factory('content_node', $alias);
 		if(!$node->id) Event::run('system.404');
 		$type = $node->content_type;
 
 		echo Component::factory('content/'.$type->name)
-				->method('index', array($node->content_id, 'default', $args));
+				->method('index', array($node->content_id, 'default', arguments::get_model_args($node)));
 	}
 }
