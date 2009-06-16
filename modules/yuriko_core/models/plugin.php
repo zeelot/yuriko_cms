@@ -9,6 +9,7 @@
 class Plugin_Model extends ORM {
 
 	protected $has_one = array('plugin_status');
+	protected $has_many = array('content_nodes');
 	protected $ignored_columns = array('arguments');
 
 	public function unique_key($id)
