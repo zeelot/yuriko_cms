@@ -131,6 +131,7 @@ class Plugins_Controller extends Admin_Controller {
 	{
 		$plugin = ORM::factory('plugin', $id);
 		if ((!$plugin->loaded)) Event::run('system.404');
+		
 		if (
 			$plugin->installer == 1
 			AND (bool)!Session::instance()->get('yuriko.plugin_setup')
@@ -167,6 +168,7 @@ class Plugins_Controller extends Admin_Controller {
 					notice::add($error, 'error');
 				}
 			}
+			Session::instance()->delete('yuriko.plugin_setup');
 			url::redirect('admin/plugins/manage');
 		}
 	}
@@ -207,6 +209,7 @@ class Plugins_Controller extends Admin_Controller {
 					notice::add($error, 'error');
 				}
 			}
+			Session::instance()->delete('yuriko.plugin_setup');
 			url::redirect('admin/plugins/manage');
 		}
 	}
