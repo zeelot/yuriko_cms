@@ -37,7 +37,7 @@ class Pages_Controller extends Website_Controller{
 			foreach ($pivots as $pivot)
 			{
 				$node = $pivot->content_node;
-				$type = $node->content_type;
+				$plugin = $node->plugin;
 				/**
 				 * load the view defined in the pivots table
 				 * so that a view can be defined when adding a node to a page.
@@ -46,8 +46,8 @@ class Pages_Controller extends Website_Controller{
 				 * side of the page.
 				 */
 				$node_view = View::factory('templates/node/'.$node->template);
-				$node_view->content = Component::factory('content/'.$type->name)
-					->method('index', array($node->content_id, $pivot->view, arguments::get($pivot)));
+				$node_view->content = Component::factory($plugin->dir)
+					->method('pivot', array($pivot));
 				section::set(Kohana::config('theme.sections.'.$pivot->section),$node_view);
 			}
 		}

@@ -11,6 +11,15 @@ class Plugin_Model extends ORM {
 	protected $has_one = array('plugin_status');
 	protected $ignored_columns = array('arguments');
 
+	public function unique_key($id)
+	{
+		if ( ! empty($id) AND is_string($id) AND ! ctype_digit($id))
+		{
+			return 'dir';
+		}
+		return parent::unique_key($id);
+	}
+	
 	public function __set($key, $value)
 	{
 		if ($key === 'dependencies')
@@ -31,7 +40,8 @@ class Plugin_Model extends ORM {
 	public function validate(array & $array, $save = FALSE)
 	{
 		$array = Validation::factory($array)
-			->add_rules('id', 'required', 'length[32]', 'chars[a-zA-Z0-9_./]')
+			->add_rules('id', 'required', 'length[32]', 'chars[a-f0-9]')
+			->add_rules('dir', 'required', 'length[1,127]', 'chars[a-zA-Z0-9_./]')
 			->add_rules('name', 'required', 'length[1,127]', 'chars[a-zA-Z 0-9_./]')
 			->add_rules('version', 'required', 'length[1,15]')
 			->add_rules('dependencies', 'is_array')
@@ -147,7 +157,7 @@ class Plugin_Model extends ORM {
 		$plugins = ORM::factory('plugin')->find_all();
 		foreach ($plugins as $plugin)
 		{
-			$plugin_statuses[$plugin->id] = $plugin->plugin_status_id;
+			$plugin_statuses[$plugin->dir] = $plugin->plugin_status_id;
 		}
 		//delete everything in the db (truncate resets id too)
 		Database::instance()->query('TRUNCATE TABLE plugins');
@@ -186,6 +196,7 @@ class Plugin_Model extends ORM {
 
 			//use the dir as the id
 			$config['id'] = md5($plugin);
+			$config['dir'] = $plugin;
 			//this lets validation know what rules to add
 			$config['action'] = 'sync';
 			//add each plugin to the DB

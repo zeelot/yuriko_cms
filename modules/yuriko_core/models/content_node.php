@@ -13,7 +13,7 @@ class Content_Node_Model extends ORM {
 		'content_pivots',
 		'content_arguments'
 	);
-	protected $belongs_to = array('content_type');
+	protected $belongs_to = array('plugin');
 
 	public function validate(array & $array, $save = FALSE)
 	{
@@ -22,7 +22,7 @@ class Content_Node_Model extends ORM {
 			->add_rules('name', 'required')
 			->add_rules('alias', 'required')
 			->add_rules('content_id', 'required', 'digit')
-			->add_rules('content_type_id', 'required', 'digit');
+			->add_rules('plugin_id', 'required', 'digit');
 		//if this is a new page the name and alias should be unique
 		if(!$this->loaded)
 		{
