@@ -19,7 +19,7 @@ class Arguments_Core {
 	public function instance()
 	{
 		static $instance;
-		empty ($instance) AND $instance = new Arguments();
+		if ($instance === NULL) $instance = new Arguments();
 		return $instance;
 	}
 
