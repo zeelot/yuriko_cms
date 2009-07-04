@@ -6,57 +6,91 @@ class assets_Core
 	static protected $stylesheets = array();
 	static protected $loaded_dependencies = FALSE;
 
-	/*
-	 * adds a group of scripts from the assets config file
+	/**
+	 * Defines a group of css files so views can depend on it.
+	 *
+	 * @param string $name - the name of the group
+	 * @param array $files - the files in this group
+	 * @param mixed $options - nothing yet
 	 */
-	static public function add($tag)
+	public static function define_css_group($name, array $files, $options = NULL)
 	{
-		if ($files = Kohana::config('assets.global.'.$tag))
+		$current = (array)Kohana::config('assets.groups.css.'.$name);
+		Kohana::config_set('assets.groups.css.'.$name,
+			array_merge($current, $files));
+	}
+	/**
+	 * Defines a group of js files so views can depend on it.
+	 *
+	 * @param string $name - the name of the group
+	 * @param array $files - the files in this group
+	 * @param mixed $options - nothing yet
+	 */
+	public static function define_js_group($name, array $files, $options = NULL)
+	{
+		$current = (array)Kohana::config('assets.groups.js'.$name);
+		Kohana::config_set('assets.groups.js.'.$name,
+			array_merge($current, $files));
+	}
+	/**
+	 * Defines a dependency for a set of views so that any time the
+	 * particular view is used, the assets helper knows that it requires
+	 * certain css files to be loaded as well.
+	 *
+	 * @param array $views - the views to define dependencies for
+	 * @param array $groups - the css groups that these views depend on
+	 */
+	public static function define_css_dependency(array $views, array $groups)
+	{
+		foreach ($views as $view)
 		{
-			$weight = $files['weight'];
-			if (isset($files['stylesheets']))
-			{
-				foreach($files['stylesheets'] as $file)
-				{
-					self::add_stylesheet($file, $weight);
-				}
-			}
-			if (isset($files['scripts']))
-			{
-				foreach($files['scripts'] as $file)
-				{
-					self::add_script($file, $weight);
-				}
-			}
+			$current = (array)Kohana::config('assets.dependencies.css.'.$view);
+			Kohana::config_set('assets.dependencies.css.'.$view,
+				array_merge($current, $groups));
 		}
 	}
-
-	static public function add_script($file, $weight = 0)
+	/**
+	 * Same as define_css_dependency but for js files
+	 *
+	 * @param array $views - the views to define dependencies for
+	 * @param array $groups - the js groups that these views depend on
+	 */
+	public static function define_js_dependency(array $views, array $groups)
 	{
-		if (arr::in_array($file, self::$scripts)) return;
-		self::$scripts[$weight][] = $file;
-	}
-
-	static public function add_stylesheet($file, $weight = 0)
-	{
-		if (arr::in_array($file, self::$stylesheets)) return;
-		self::$stylesheets[$weight][] = $file;
-	}
-
-	static public function scripts()
-	{
-		ksort(self::$scripts);
-		$output = '';
-		foreach (self::$scripts as $script)
+		foreach ($views as $view)
 		{
-			$output .= '	'.html::script($script);
+			$current = (array)Kohana::config('assets.dependencies.js.'.$view);
+			Kohana::config_set('assets.dependencies.js.'.$view,
+				array_merge($current, $groups));
 		}
-		return $output;
 	}
-	
+	/**
+	 * Adds a css file to the array of files to include for this request.
+	 *
+	 * @param string $file - the css file
+	 */
+	public static function add_stylesheet($file)
+	{
+		if (!in_array($file, self::$stylesheets))
+			self::$stylesheets[] = $file;
+	}
+	/**
+	 * Adds a js file to the array of files to include for this request.
+	 *
+	 * @param string $file - the js file
+	 */
+	public static function add_script($file)
+	{
+		if (!in_array($file, self::$scripts))
+			self::$scripts[] = $file;
+	}
+	/**
+	 * Generated the html for the page header to include all the css files.
+	 *
+	 * @return string - the html to include in the page haeder
+	 */
 	static public function stylesheets()
 	{
-		ksort(self::$stylesheets);
 		$output = '';
 		foreach (self::$stylesheets as $stylesheet)
 		{
@@ -64,43 +98,78 @@ class assets_Core
 		}
 		return $output;
 	}
-
-	static public function all()
+	/**
+	 * Generated the html for the page header to include all the js files.
+	 *
+	 * @return string - the html to include in the page haeder
+	 */
+	static public function scripts()
 	{
-		
+		$output = '';
+		foreach (self::$scripts as $script)
+		{
+			$output .= '	'.html::script($script);
+		}
+		return $output;
+	}
+	/**
+	 * Calculates all the dependencies and returns the html for both css and js.
+	 *
+	 * @return string - the html to include in the page header
+	 */
+	public static function all()
+	{
 		self::load_dependencies();
 		return self::stylesheets().self::scripts();
 	}
-
-	static public function load_dependencies()
+	/**
+	 * Adds a css group to the array of css files to include for this request
+	 *
+	 * @param string $name - name of group
+	 */
+	public static function enable_css_group($name)
 	{
-		if (self::$loaded_dependencies) return;
-		foreach(View::$loaded as $view)
+		$files = (array)Kohana::config('assets.groups.css.'.$name);
+		foreach ($files as $file)
 		{
-			$required = Kohana::config('assets.views.'.$view);
-			if ($required)
+			self::add_stylesheet($file);
+		}
+	}
+	/**
+	 * Adds a js group to the array of css files to include for this request
+	 *
+	 * @param string $name - name of group
+	 */
+	public static function enable_js_group($name)
+	{
+		$files = (array)Kohana::config('assets.groups.js.'.$name);
+		foreach ($files as $file)
+		{
+			self::add_script($file);
+		}
+	}
+	/**
+	 * Calculates all the dependencies based on which views were loaded
+	 * for this request. Only runs once per request (should be done at the end)
+	 * Called automatically by assets::all()
+	 */
+	public static function load_dependencies()
+	{
+		if (!self::$loaded_dependencies)
+		{
+			foreach(View::$loaded as $view)
 			{
-				if (isset($required['globals']))
+				$required_css = (array)Kohana::config('assets.dependencies.css.'.$view);
+				foreach ($required_css as $group)
 				{
-					foreach($required['globals'] as $global)
-					{
-						self::add($global);
-					}
+					self::enable_css_group($group);
 				}
-				if (isset($required['stylesheets']))
+				$required_js = (array)Kohana::config('assets.dependencies.js.'.$view);
+				foreach ($required_js as $group)
 				{
-					foreach($required['stylesheets'] as $stylesheet => $weight)
-					{
-						self::add_stylesheet($stylesheet, $weight);
-					}
+					self::enable_js_group($group);
 				}
-				if (isset($required['scripts']))
-				{
-					foreach($required['scripts'] as $script => $weight)
-					{
-						self::add_script($script, $weight);
-					}
-				}
+				self::$loaded_dependencies = TRUE;
 			}
 		}
 	}
