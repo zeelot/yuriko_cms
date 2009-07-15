@@ -1,0 +1,3 @@
+[submodule "plugins/basic_content"]
+	path = plugins/basic_content
+	url = git://github.com/Zeelot/yuriko-basic_content.git
