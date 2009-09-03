@@ -7,3 +7,9 @@
 [submodule "modules/yuriko_admin"]
 	path = modules/yuriko_admin
 	url = git://github.com/Zeelot/yuriko_admin.git
+[submodule "modules/j-orm"]
+	path = modules/j-orm
+	url = git://github.com/jheathco/kohana-orm.git
+[submodule "modules/j-database"]
+	path = modules/j-database
+	url = git://github.com/jheathco/kohana-database.git
