@@ -65,3 +65,9 @@ button{margin-top:15px;}
 .markItUp  {
 	width:55em;
 }
+
+
+pre {
+	border:3px solid #ACD8DF; background: #DCF8FF;
+	padding:5px; color: #444;
+}
