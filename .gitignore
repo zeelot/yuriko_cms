@@ -1,9 +1,0 @@
-nbproject
-.DS_Store
-Icon?
-.svn
-.directory
-.buildpath
-.project
-/application/config/*.php
-/application/views/media
