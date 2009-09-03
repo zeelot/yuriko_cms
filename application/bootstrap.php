@@ -51,7 +51,7 @@ Kohana::$config->attach(new Kohana_Config_File);
 Kohana::modules(array(
 	 'core'       => MODPATH.'yuriko_core',
 	 'admin'      => MODPATH.'yuriko_admin',
-	 'database'   => MODPATH.'database',
+	 'j-database'   => MODPATH.'j-database',
 	 'j-orm'        => MODPATH.'j-orm',
 	));
 
