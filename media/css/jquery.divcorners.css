@@ -1,0 +1,30 @@
+.dCorner {
+	position: relative;
+	zoom: 1;
+}
+.dcItem {
+	position: absolute;
+	display: none;
+}
+.dcItem img {
+	width: 100%;
+	height: 100%;
+}
+.dctop, .dcbottom {
+	left: 0px;
+}
+.dctop, .dctop-left, .dctop-right {
+	top: 0px;
+}
+.dcbottom, .dcbottom-left, .dcbottom-right {
+	bottom: 0px;
+}
+.dcleft, .dcright {
+	top: 0px;
+}
+.dcleft, .dctop-left, .dcbottom-left {
+	left: 0px;
+}
+.dcright, .dctop-right, .dcbottom-right {
+	right: 0px;
+}
