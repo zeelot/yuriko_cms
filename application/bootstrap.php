@@ -33,7 +33,11 @@ spl_autoload_register(array('Kohana', 'auto_load'));
  * - boolean  profile     enable or disable internal profiling               TRUE
  * - boolean  caching     enable or disable internal caching                 FALSE
  */
-Kohana::init(array('base_url' => '/'));
+Kohana::init(array
+(
+	'base_url' => '/',
+	'index_file' => FALSE,
+));
 
 /**
  * Attach the file write to logging. Multiple writers are supported.
@@ -49,11 +53,13 @@ Kohana::$config->attach(new Kohana_Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	 'core'       => MODPATH.'yuriko_core',
-	 'admin'      => MODPATH.'yuriko_admin',
-	 'j-database'   => MODPATH.'j-database',
-	 'j-orm'        => MODPATH.'j-orm',
-	));
+	'userguide'  => MODPATH.'userguide',
+	'dev'        => MODPATH.'yuriko_dev',
+	'core'       => MODPATH.'yuriko_core',
+	'admin'      => MODPATH.'yuriko_admin',
+	'j-database' => MODPATH.'j-database',
+	'j-orm'      => MODPATH.'j-orm',
+));
 
 /**
  * Setup the YurikoCMS page route
