@@ -13,3 +13,6 @@
 [submodule "modules/j-database"]
 	path = modules/j-database
 	url = git://github.com/jheathco/kohana-database.git
+[submodule "modules/userguide"]
+	path = modules/userguide
+	url = git://github.com/kohana/userguide.git
