@@ -11,7 +11,7 @@
  * @license    http://yurikocms.com/license
  */
 
-DB::query(5, 'TRUNCATE `node_route_parameters`')->execute();
+DB::query(5,'TRUNCATE `node_route_parameters`')->execute();
 DB::query(5, 'TRUNCATE `nodes`')->execute();
 DB::query(5, 'TRUNCATE `page_nodes`')->execute();
 DB::query(5, 'TRUNCATE `pages`')->execute();

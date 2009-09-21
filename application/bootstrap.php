@@ -53,8 +53,8 @@ Kohana::$config->attach(new Kohana_Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	'userguide'  => MODPATH.'userguide',
-	'dev'        => MODPATH.'yuriko_dev',
+	//'userguide'  => MODPATH.'userguide',
+	//'dev'        => MODPATH.'yuriko_dev',
 	'core'       => MODPATH.'yuriko_core',
 	'admin'      => MODPATH.'yuriko_admin',
 	'j-database' => MODPATH.'j-database',

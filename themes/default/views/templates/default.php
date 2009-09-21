@@ -34,7 +34,6 @@
 		<!-- END SECTION -->
 		<!-- BEGIN SECTION -->
 		<div class="grid_4 section side_panel">
-			<?php notice::render(); ?>
 			<?php foreach(section::get('Side Panel') as $node): ?>
 				<?php echo $node; ?>
 			<?php endforeach; ?>
@@ -49,5 +48,11 @@
 		<!-- END SECTION -->
 		<div class="clear"></div>
     </div>
+	<div class="dev">
+		<pre>
+		<?=Kohana::debug($_POST);?>
+		</pre>
+		<?php if (Kohana::$profiling) echo View::factory('profiler/stats') ?>
+	</div>
 </body>
 </html>
