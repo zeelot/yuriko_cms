@@ -64,13 +64,17 @@ Kohana::modules(array(
 /**
  * Setup the YurikoCMS page route
  */
-Route::set('page', '(<permalink>)', array('permalink' => '.*'))
+Route::set('page', '(<uri>)', array
+	(
+		'uri' => '.*',
+	))
 	->defaults(array(
 		'controller' => 'page',
 		'action'     => 'index',
 		'directory'  => 'yuriko',
 	));
 
+	
 /**
  * Execute the main request using PATH_INFO. If no URI source is specified,
  * the URI will be automatically detected.

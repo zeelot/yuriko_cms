@@ -1,18 +1,1 @@
-[submodule "system"]
-	path = system
-	url = git://github.com/kohana/core.git
-[submodule "modules/yuriko_core"]
-	path = modules/yuriko_core
-	url = git://github.com/Zeelot/yuriko_core.git
-[submodule "modules/yuriko_admin"]
-	path = modules/yuriko_admin
-	url = git://github.com/Zeelot/yuriko_admin.git
-[submodule "modules/j-orm"]
-	path = modules/j-orm
-	url = git://github.com/jheathco/kohana-orm.git
-[submodule "modules/j-database"]
-	path = modules/j-database
-	url = git://github.com/jheathco/kohana-database.git
-[submodule "modules/userguide"]
-	path = modules/userguide
-	url = git://github.com/kohana/userguide.git
+
