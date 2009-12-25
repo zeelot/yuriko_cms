@@ -6,14 +6,14 @@
  *
  * @see  http://docs.kohanaphp.com/install#application
  */
-$application = 'application';
+$application = 'kohana/application';
 
 /**
  * The directory in which your modules are located.
  *
  * @see  http://docs.kohanaphp.com/install#modules
  */
-$modules = 'modules';
+$modules = 'kohana/modules';
 
 /**
  * The directory in which the Kohana resources are located. The system
@@ -21,7 +21,7 @@ $modules = 'modules';
  *
  * @see  http://docs.kohanaphp.com/install#system
  */
-$system = 'system';
+$system = 'kohana/system';
 
 /**
  * The default extension of resource files. If you change this, all resources
@@ -79,22 +79,20 @@ if (file_exists('install'.EXT))
 	return include 'install'.EXT;
 }
 
-// Define the start time of the application
-define('KOHANA_START_TIME', microtime(TRUE));
-
 // Load the base, low-level functions
 require SYSPATH.'base'.EXT;
 
-// Load the main Kohana class
+// Load the core Kohana class
 require SYSPATH.'classes/kohana/core'.EXT;
 
 if (is_file(APPPATH.'classes/kohana'.EXT))
 {
-	// Load the Kohana class extension
+	// Application extends the core
 	require APPPATH.'classes/kohana'.EXT;
 }
 else
 {
+	// Load empty core extension
 	require SYSPATH.'classes/kohana'.EXT;
 }
 
