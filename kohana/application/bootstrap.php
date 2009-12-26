@@ -54,6 +54,7 @@ Kohana::$config->attach(new Kohana_Config_File);
  */
 Kohana::modules(array(
 	MODPATH.'yuriko_core',
+	MODPATH.'yuriko_admin',
 	MODPATH.'assets',
 	// temporarily load the default theme
 	DOCROOT.'yurikocms/themes/default',
