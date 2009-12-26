@@ -47,11 +47,11 @@ class Yuriko_Assets {
 		( ! $this->_loaded_dependencies) AND $this->load_dependencies();
 
 		// sort the assets
-		usort($this->assets, array($this, 'sort_assets'));
+		usort($this->_assets, array($this, 'sort_assets'));
 
 		$output = "\n";
 
-		foreach ($this->assets as $group)
+		foreach ($this->_assets as $group)
 		{
 			$styles = Arr::get($group, 'css_files', array());
 			$scripts = Arr::get($group, 'js_files', array());
@@ -114,7 +114,7 @@ class Yuriko_Assets {
 	protected function load_dependencies($force = FALSE)
 	{
 		// run this method the first time only
-		if ($this->loaded_dependencies AND ! $force)
+		if ($this->_loaded_dependencies AND ! $force)
 			return;
 
 		
@@ -186,9 +186,9 @@ class Yuriko_Assets {
 
 			if ($include_dirs)
 			{
-				if (self::is_in_directories($include_dirs, $testing_views))
+				if ($this->is_in_directories($include_dirs, $testing_views))
 				{
-					self::add_group($key);
+					$this->add_group($key);
 					
 					// skip to next asset
 					continue;
@@ -201,7 +201,7 @@ class Yuriko_Assets {
 				// @TODO: implement
 			}
 		}
-		self::$loaded_dependencies = TRUE;
+		$this->_loaded_dependencies = TRUE;
 	}
 
 	/**

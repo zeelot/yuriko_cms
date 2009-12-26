@@ -1,1 +1,4 @@
 
+[submodule "kohana/system"]
+	path = kohana/system
+	url = git://github.com/kohana/core.git
