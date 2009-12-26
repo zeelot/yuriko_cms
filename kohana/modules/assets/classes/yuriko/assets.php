@@ -50,7 +50,7 @@ class Yuriko_Assets {
 		usort($this->_assets, array($this, 'sort_assets'));
 
 		$output = "\n";
-
+		
 		foreach ($this->_assets as $group)
 		{
 			$styles = Arr::get($group, 'css_files', array());
@@ -117,7 +117,6 @@ class Yuriko_Assets {
 		if ($this->_loaded_dependencies AND ! $force)
 			return;
 
-		
 		// the Views that where used
 		$views = (array)View::$loaded;
 
@@ -135,9 +134,9 @@ class Yuriko_Assets {
 			$exclude_dirs = Arr::get($asset['rules'], 'exclude_directories');
 			$exclude_regex = Arr::get($asset['rules'], 'exclude_regex');
 
-			$include_views = Arr::get($asset['rules'], 'include_views');
-			$include_dirs = Arr::get($asset['rules'], 'include_directories');
-			$include_regex = Arr::get($asset['rules'], 'include_regex');
+			$include_views = Arr::get($asset['rules'], 'views');
+			$include_dirs = Arr::get($asset['rules'], 'directories');
+			$include_regex = Arr::get($asset['rules'], 'regex');
 
 			// @TODO: cache stuff
 
@@ -211,13 +210,16 @@ class Yuriko_Assets {
 	 * @param string $view - the view path
 	 * @return bool
 	 */
-	public function is_in_directories(array $directories, $view)
+	public function is_in_directories(array $directories, array $views)
 	{
 		foreach ($directories as $dir)
 		{
-			// check if $dir is in the path of $view
-			if (strpos(dirname($view), $dir) !== FALSE)
-				return TRUE;
+			foreach ($views as $view)
+			{
+				// check if $dir is in the path of $view
+				if (strpos(dirname($view), $dir) !== FALSE)
+					return TRUE;
+			}
 		}
 		return FALSE;
 	}

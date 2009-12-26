@@ -25,8 +25,8 @@ return array
 	(
 		'css_files' => array
 		(
-			'media/css/styles' => array(),
-			'media/css/ie6-styles.css' => array
+			'yurikocms/themes/default/media/css/styles.css'		=> array(),
+			'yurikocms/themes/default/media/css/ie6-styles.css' => array
 			(
 				// adds IE 6 conditionals around the stylesheet
 				'wrapper' => array
@@ -50,9 +50,9 @@ return array
 	(
 		'css_files' => array
 		(
-			'media/css/reset.css'	=> array(),
-			'media/css/typography'	=> array(),
-			'media/css/960.css'		=>array(),
+			'yurikocms/themes/default/media/css/reset.css'	=> array(),
+			'yurikocms/themes/default/media/css/typography'	=> array(),
+			'yurikocms/themes/default/media/css/960.css'	=>array(),
 		),
 		'weight' => 0,
 		'rules' => array

@@ -14,7 +14,7 @@
     <div class="container_16" id="main_frame">
 		<!-- BEGIN SECTION -->
 		<div class="grid_16 section header">
-			<?php echo html::image('media/images/yuriko_logo.png', array('alt' => 'YurikoCMS')); ?>
+			<?php echo html::image('yurikocms/themes/default/media/images/yuriko_logo.png', array('alt' => 'YurikoCMS')); ?>
 		</div>
 		<!-- END SECTION -->
 		<!-- BEGIN SECTION -->
