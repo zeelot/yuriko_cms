@@ -53,11 +53,15 @@ Kohana::$config->attach(new Kohana_Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	
+	MODPATH.'yuriko_core',
+	MODPATH.'assets',
+	// temporarily load the default theme
+	DOCROOT.'yurikocms/themes/default',
 ));
 
 /**
- * Setup the YurikoCMS page route
+ * Setup the YurikoCMS page route, this is a catch all route that any
+ * custom routes need to preceed.
  */
 Route::set('page', '(<uri>)', array
 	(
