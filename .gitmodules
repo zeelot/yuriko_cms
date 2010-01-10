@@ -5,3 +5,6 @@
 [submodule "kohana/modules/sprig"]
 	path = kohana/modules/sprig
 	url = git://github.com/shadowhand/sprig.git
+[submodule "kohana/modules/event"]
+	path = kohana/modules/event
+	url = git://github.com/Zeelot/event.git
