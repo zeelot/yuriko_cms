@@ -18,7 +18,7 @@
 		</div>
 		<!-- END SECTION -->
 		<div class="grid_16">
-			<?php echo $content; ?>
+			<?php echo isset($content)? $content : NULL; ?>
 		</div>
 		<div class="clear"></div>
     </div>

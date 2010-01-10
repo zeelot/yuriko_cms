@@ -62,17 +62,28 @@ Kohana::modules(array(
 	MODPATH.'yuriko_dev',
 	MODPATH.'yuriko_admin',
 	MODPATH.'assets',
-	// temporarily load the default theme
-	DOCROOT.'yurikocms/themes/default',
 	// this module should load last because it has the catch-all route
 	MODPATH.'yuriko_core',
 ));
-	
+
 /**
  * Execute the main request using PATH_INFO. If no URI source is specified,
  * the URI will be automatically detected.
  */
-echo Request::instance()
-	->execute()
-	->send_headers()
-	->response;
+$request = Request::instance();
+
+Event::instance('yuriko.bootstrap.request.execute')
+	->bind('request', $request)
+	->execute();
+$request = $request->execute();
+
+Event::instance('yuriko.bootstrap.request.send_headers')
+	->bind('request', $request)
+	->execute();
+$request = $request->send_headers();
+
+Event::instance('yuriko.bootstrap.request.render')
+	->bind('request', $request)
+	->execute();
+
+echo $request->response;

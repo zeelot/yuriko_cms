@@ -7,31 +7,25 @@
  * @license    http://yurikocms.com/license
  */
 
-/**
- * Add all the enabled plugins to the modules
- */
+// Add all the enabled plugins to the modules
 $enabled = Sprig::factory('plugin', array('status' => 'enabled'))
 	->load(NULL, FALSE);
 
 $modules = Kohana::modules();
+
+// Start with the default template at the top
+$array = array('default_theme' => DOCROOT.'yurikocms/themes/default');
+
 foreach ($enabled as $plugin)
 {
-	$modules[$plugin->name] = DOCROOT.'yurikocms/plugins/'.$plugin->name;
-}
-
-class testclass{
-	public static function foobar()
-	{
-		echo 'hello';
-	}
+	$array[$plugin->name] = DOCROOT.'yurikocms/plugins/'.$plugin->name;
 }
 
 Event::instance('yuriko_core.init.loading_plugins')
-	//->callback(array('testclass', 'foobar'))
 	->bind('modules', $modules)
 	->execute();
 
-Kohana::modules($modules);
+Kohana::modules($array + $modules);
 
 // Clean up
 unset($modules, $enabled);
