@@ -53,27 +53,20 @@ Kohana::$config->attach(new Kohana_Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	MODPATH.'yuriko_core',
+	'/home/zeelot3k/code/yuriko/modules/yform',
+	MODPATH.'event',
+	MODPATH.'dbforge',
+	MODPATH.'database',
+	MODPATH.'migration',
+	MODPATH.'sprig',
+	MODPATH.'yuriko_dev',
 	MODPATH.'yuriko_admin',
 	MODPATH.'assets',
 	// temporarily load the default theme
 	DOCROOT.'yurikocms/themes/default',
+	// this module should load last because it has the catch-all route
+	MODPATH.'yuriko_core',
 ));
-
-/**
- * Setup the YurikoCMS page route, this is a catch all route that any
- * custom routes need to preceed.
- */
-Route::set('page', '(<uri>)', array
-	(
-		'uri' => '.*',
-	))
-	->defaults(array(
-		'controller' => 'page',
-		'action'     => 'index',
-		'directory'  => 'yuriko',
-	));
-
 	
 /**
  * Execute the main request using PATH_INFO. If no URI source is specified,
