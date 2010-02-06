@@ -7,20 +7,11 @@
  * @license    http://yurikocms.com/license
  */
 
-return array
-(
-	'theme' => array
-	(
-		'version'       => '0.2.0',
-		'installer'     => TRUE,
-		'arguments_key' => 'theme',
-		'dependencies' => array
-		(
-			'core' => array
-			(
-				'min' => '0.2.0',
-			),
-		),
-		''
-	),
-);
+ abstract class Controller_Yuriko_Admin extends Controller_Yuriko_Template {
+
+	/**
+	 * @var  string  page template
+	 */
+	public $template = 'templates/admin';
+
+} // End Controller_Yuriko_Admin

@@ -75,11 +75,13 @@ $request = Request::instance();
 Event::instance('yuriko.bootstrap.request.execute')
 	->bind('request', $request)
 	->execute();
+
 $request = $request->execute();
 
 Event::instance('yuriko.bootstrap.request.send_headers')
 	->bind('request', $request)
 	->execute();
+
 $request = $request->send_headers();
 
 Event::instance('yuriko.bootstrap.request.render')
@@ -87,3 +89,6 @@ Event::instance('yuriko.bootstrap.request.render')
 	->execute();
 
 echo $request->response;
+
+// Clean up
+unset($request);

@@ -7,7 +7,7 @@
  * @license    http://yurikocms.com/license
  */
 
- abstract class Yuriko_Controller_Template extends Kohana_Controller_Template {
+ abstract class Controller_Yuriko_Template extends Controller_Template {
 
 	/**
 	 * @var  string  page template
@@ -31,4 +31,4 @@
 		parent::after();
 	}
 
-} // End Controller_Template
+} // End Controller_Yuriko_Template

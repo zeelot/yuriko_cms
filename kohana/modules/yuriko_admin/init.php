@@ -7,7 +7,7 @@
  * @license    http://yurikocms.com/license
  */
 
-Route::set('admin', 'admin(/<controller>(/<action>))')
+Route::set('admin', 'admin(/<controller>(/<action>(/<id>)))')
 	->defaults(array(
 		'controller' => 'main',
 		'action'     => 'index',

@@ -7,7 +7,7 @@
  * @license    http://yurikocms.com/license
  */
  
-class Controller_Yuriko_Page extends Controller_Template {
+class Controller_Yuriko_Page extends Controller_Yuriko_Template {
 
 	//can't auto render because template is in DB
 	public $auto_render = FALSE;

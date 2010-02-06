@@ -3,7 +3,7 @@
 /**
  * @package    YurikoCMS
  * @author     Lorenzo Pisani - Zeelot
- * @copyright  (c) 2008-2009 Lorenzo Pisani
+ * @copyright  (c) 2008-2010 Lorenzo Pisani
  * @license    http://yurikocms.com/license
  */
 
