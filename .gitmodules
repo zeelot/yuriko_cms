@@ -2,18 +2,6 @@
 [submodule "kohana/system"]
 	path = kohana/system
 	url = git://github.com/kohana/core.git
-[submodule "kohana/modules/sprig"]
-	path = kohana/modules/sprig
-	url = git://github.com/shadowhand/sprig.git
-[submodule "kohana/modules/event"]
-	path = kohana/modules/event
-	url = git://github.com/Zeelot/event.git
-[submodule "kohana/modules/dbforge"]
-	path = kohana/modules/dbforge
-	url = git://github.com/ollym/dbforge.git
-[submodule "kohana/modules/migration"]
-	path = kohana/modules/migration
-	url = git://github.com/ollym/migration.git
 [submodule "kohana/modules/database"]
 	path = kohana/modules/database
 	url = git://github.com/kohana/database.git
