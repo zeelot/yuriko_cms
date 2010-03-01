@@ -53,12 +53,8 @@ Kohana::$config->attach(new Kohana_Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	'/home/zeelot3k/code/yuriko/modules/yform',
-	MODPATH.'event',
-	MODPATH.'dbforge',
-	MODPATH.'database',
-	MODPATH.'migration',
-	MODPATH.'sprig',
+	MODPATH.'zeelot-event',
+	MODPATH.'zeelot-orm',
 	MODPATH.'yuriko_dev',
 	MODPATH.'yuriko_admin',
 	MODPATH.'assets',
@@ -72,22 +68,13 @@ Kohana::modules(array(
  */
 $request = Request::instance();
 
-Event::instance('yuriko.bootstrap.request.execute')
-	->bind('request', $request)
-	->execute();
-
+Event::run('yuriko.bootstrap.request.pre_execute', $request);
 $request = $request->execute();
 
-Event::instance('yuriko.bootstrap.request.send_headers')
-	->bind('request', $request)
-	->execute();
-
+Event::instance('yuriko.bootstrap.request.pre_send_headers', $request);
 $request = $request->send_headers();
 
-Event::instance('yuriko.bootstrap.request.render')
-	->bind('request', $request)
-	->execute();
-
+Event::instance('yuriko.bootstrap.request.pre_render', $request);
 echo $request->response;
 
 // Clean up
